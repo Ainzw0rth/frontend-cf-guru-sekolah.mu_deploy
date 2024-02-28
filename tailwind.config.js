@@ -10,6 +10,9 @@ export default {
             'soft': '0 2px 8px 0 rgba(51, 51, 51, 0.1)',
             'medium': '0 18px 20px 1px rgba(51, 51, 51, 0.1)',
             'hard': '0 8px 10px 1px rgba(51, 51, 51, 0.1)',
+            'soft-top': '0 -2px 8px 0 rgba(51, 51, 51, 0.1)',
+            'medium-top': '0 -18px 20px 1px rgba(51, 51, 51, 0.1)',
+            'hard-top': '0 -8px 10px 1px rgba(51, 51, 51, 0.1)',
         }
     },
   },
