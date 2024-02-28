@@ -48,8 +48,8 @@ const ProgramDetail = () => {
         <div className="flex flex-col">
             <ProgramBanner imgUrl={data.imgUrl} judul={data.judul}/>
             <div className="px-5">
-                <h2 className="font-semibold text-heading-4 text-text-100">Tujuan Pembelajaran</h2>
-                <ul className="flex flex-col list-disc ml-4 my-5">
+                <h2 className="font-semibold text-heading-4 text-text-100 mb-5">Tujuan Pembelajaran</h2>
+                <ul className="flex flex-col list-disc ml-4">
                 { 
                     data.tujuan_pembelajaran.map((tujuan, index)  => {
                         return <li className="text-lg text-neutral-900" key={index}>
@@ -58,7 +58,9 @@ const ProgramDetail = () => {
                     })
                 }
                 </ul>
-                <h2 className="font-semibold text-heading-4 text-text-100">Kompetensi</h2>
+                <h2 className="font-semibold text-heading-4 text-text-100 my-5">Kompetensi</h2>
+                <h2 className="font-semibold text-heading-4 text-text-100 my-5">Periode Pengajaran</h2>
+                <h2 className="font-semibold text-heading-4 text-text-100 my-5">Topik Pembelajaran</h2>
             </div>
         </div>
     );

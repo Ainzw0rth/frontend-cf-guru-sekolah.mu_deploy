@@ -23,7 +23,7 @@ const BottomNav = () => {
             <ul className="h-full flex items-center justify-around">
                 <BottomNavItem icon={programImg} url="/program" alt="Program Nav"/>
                 <BottomNavItem icon={homeImg} url="/" alt="Home Nav"/>
-                <BottomNavItem icon={profileImg} url="/" alt="Profile Nav"/>
+                <BottomNavItem icon={profileImg} url="/profile" alt="Profile Nav"/>
             </ul>
         </div>
     );
