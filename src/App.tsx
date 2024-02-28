@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import ProgramDetail from "./pages/ProgramDetail";
 import ProgramList from "./pages/ProgramList";
+import AppHead from "./components/AppHead";
 
 const router = createBrowserRouter([
     {path: '/', element: <Home/>},
@@ -10,7 +11,11 @@ const router = createBrowserRouter([
 ])
 
 const App = () => {
-    return <RouterProvider router={router} />;
-}
+    return (
+        <>
+            <AppHead/>
+            <RouterProvider router={router} />
+        </>
+    )}
 
 export default App;
