@@ -95,8 +95,8 @@ const ProgramDetail = () => {
                 <h2 className="font-semibold text-heading-4 text-text-100 my-5">Topik Pembelajaran</h2>
                 <div className="flex flex-col gap-4 mb-6">
                 {
-                    data.topik.map((topik) => {
-                        return <FoldableTopic title={topik.title} activities={topik.activities}/>
+                    data.topik.map((topik, index) => {
+                        return <FoldableTopic title={topik.title} activities={topik.activities} key={index}/>
                     })
                 }
                 </div>
