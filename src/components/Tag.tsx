@@ -5,7 +5,7 @@ export interface TagProps {
 
 const Tag = (props : TagProps) => {
     return (
-        <div className={`rounded-full w-fit bg-cobalt6  px-4 py-2.5
+        <div className={`rounded-full w-fit bg-cobalt6  px-4 py-2
             text-persian-blue-500 font-bold flex justify-around items-center`}
         >
             {
@@ -16,7 +16,7 @@ const Tag = (props : TagProps) => {
                     className="w-4 h-4"
                 />
             }
-            {props.label}
+            <span className="text-label-6">{props.label}</span>
         </div>
     )
 }
