@@ -1,4 +1,5 @@
 import AppBar from "../components/AppBar";
+import Breadcrumb from "../components/Breadcrumb";
 import FoldableTopic from "../components/FoldableTopic";
 import Tag from "../components/Tag";
 
@@ -67,9 +68,17 @@ const ProgramDetail = () => {
         return PROGRAM_DUMMY;
     }
     const data = fetchProgramData();
+
+    const breadcrumb = [
+        {label: 'Home', link: '/'},
+        {label: 'Program', link: '/program'},
+        {label: data.judul, link: `/program/${data.slug}`}
+    ];
+
     return (
         <div className="flex flex-col">
             <AppBar title={data.judul}/>
+            <Breadcrumb items={breadcrumb}/>
             <ProgramBanner imgUrl={data.imgUrl} judul={data.judul}/>
             <div className="px-5">
                 <h2 className="font-semibold text-heading-4 text-text-100 mb-5">Tujuan Pembelajaran</h2>
