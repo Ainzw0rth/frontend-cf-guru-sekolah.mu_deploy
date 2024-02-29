@@ -11,7 +11,8 @@ export interface BreadcrumbItem {
 
 const Breadcrumb = (props : BreadcrumbProps) => {
     return (
-        <div className="px-5 py-2 bg-neutral6 overflow-scroll whitespace-nowrap">
+        <div className="px-5 py-2 bg-neutral6 overflow-x-auto whitespace-nowrap">
+            <div className="inline-block">
         {
             props.items.map((item, index) => {
                 return (
@@ -36,6 +37,7 @@ const Breadcrumb = (props : BreadcrumbProps) => {
                 </>
             )})
         }
+            </div>
         </div>
     )
 }
