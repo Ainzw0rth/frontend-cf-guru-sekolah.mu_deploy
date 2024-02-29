@@ -83,8 +83,8 @@ const ProgramDetail = () => {
                 <h2 className="font-semibold text-heading-4 text-text-100 my-5">Kompetensi</h2>
                 <div className="flex flex-wrap gap-2">
                     {
-                        data.kompetensi.map((kompetensi) => {
-                            return <Tag label={kompetensi}/>
+                        data.kompetensi.map((kompetensi, index) => {
+                            return <Tag label={kompetensi} key={index}/>
                         })
                     }
                 </div>
