@@ -1,3 +1,4 @@
+import AppBar from "../components/AppBar";
 import FoldableTopic from "../components/FoldableTopic";
 import Tag from "../components/Tag";
 
@@ -68,6 +69,7 @@ const ProgramDetail = () => {
     const data = fetchProgramData();
     return (
         <div className="flex flex-col">
+            <AppBar title={data.judul}/>
             <ProgramBanner imgUrl={data.imgUrl} judul={data.judul}/>
             <div className="px-5">
                 <h2 className="font-semibold text-heading-4 text-text-100 mb-5">Tujuan Pembelajaran</h2>
