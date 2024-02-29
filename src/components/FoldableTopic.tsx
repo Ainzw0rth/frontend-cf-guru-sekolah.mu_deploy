@@ -1,8 +1,9 @@
-import { AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 
+import { motion, AnimatePresence } from "framer-motion";
+
 import chevron from "../assets/chevron.png";
-import { Link } from "react-router-dom";
 
 interface ActivityLink {
     title: string;
@@ -26,16 +27,24 @@ const FoldableTopic = (props : FoldableTopicProps) => {
                 <h3 className="font-semibold text-body-2 text-text-100">
                     {props.title}
                 </h3>
-                <img 
+                <motion.img 
                     src={chevron} 
                     alt="Arrow icon"
                     className="h-2"
+                    animate={isFolded ? {rotate: 0} : {rotate: 180}}
+                    transition={{duration: 0.3}}
                 />
             </div>
             <AnimatePresence>
                 {
                     !isFolded &&
-                    <div className="flex flex-col gap-6 py-3 px-5 rounded-lg">
+                    <motion.div 
+                        className="flex flex-col gap-6 px-5 overflow-hidden"
+                        initial={{opacity: 0, height: 0, paddingTop: 0, paddingBottom: 0}}
+                        animate={{opacity: 1, height: "auto", paddingTop: 12, paddingBottom: 12}}
+                        exit={{opacity: 0, height: 0, paddingTop: 0, paddingBottom: 0}}
+                        transition={{duration: 0.3}}
+                    >
                         {
                             props.activities.map((activity, index) => {
                                 return (
@@ -45,7 +54,7 @@ const FoldableTopic = (props : FoldableTopicProps) => {
                                 );
                             })
                         }
-                    </div>
+                    </motion.div>
                 }
             </AnimatePresence>
         </div>
