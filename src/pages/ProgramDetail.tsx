@@ -1,3 +1,5 @@
+import Tag from "../components/Tag";
+
 const PROGRAM_DUMMY = {
     id: 1,
     slug: 'matematika-sd-kelas-1',
@@ -59,6 +61,13 @@ const ProgramDetail = () => {
                 }
                 </ul>
                 <h2 className="font-semibold text-heading-4 text-text-100 my-5">Kompetensi</h2>
+                <div className="flex flex-wrap gap-2">
+                    {
+                        data.kompetensi.map((kompetensi) => {
+                            return <Tag label={kompetensi}/>
+                        })
+                    }
+                </div>
                 <h2 className="font-semibold text-heading-4 text-text-100 my-5">Periode Pengajaran</h2>
                 <h2 className="font-semibold text-heading-4 text-text-100 my-5">Topik Pembelajaran</h2>
             </div>
