@@ -4,20 +4,12 @@ stages:
   - deploy
 
 before_script:
-  # Before running any scripts, set execution policy to bypass
   - powershell -Command "Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force"
 
 build:
   stage: build
   script:
-    # Your build commands here
     - npm install
     - npm run build
-
-deploy:
-  stage: deploy
-  script:
-    # Your deployment commands here
-    - vercel deploy
-    # Reset execution policy if desired
     - powershell -Command "Set-ExecutionPolicy -Scope Process -ExecutionPolicy Restricted -Force"
+    - vercel deploy
