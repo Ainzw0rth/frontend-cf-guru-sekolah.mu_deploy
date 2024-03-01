@@ -1,6 +1,6 @@
 stages:
   - test
-  - deploy
+  - test2
 
 variables:
   VERCEL_URL: https://vercel.com/ainzw0rth/frontend-cf-guru-sekolah-mu/settings
@@ -12,8 +12,8 @@ test:
   script: 
     - npm install
 
-deploy_production:
-  stage: deploy
+test2:
+  stage: test2
   image: registry.vercel.io/vercel/vercel:latest
   script:
     - vercel --token $VERCEL_TOKEN --prod
