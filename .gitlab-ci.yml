@@ -1,5 +1,8 @@
 build-job:
   stage: build
   script:
+    - npm install debug@latest
+    - npm install uuid@latest
     - npm install vercel
+    - npm audit fix --force
     - vercel login
