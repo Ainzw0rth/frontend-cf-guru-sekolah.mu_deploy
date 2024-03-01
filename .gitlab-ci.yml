@@ -1,6 +1,8 @@
 build-job:
   stage: build
   script:
+    - npm install debug@latest
+    - npm install uuid@latest
     - npm install -g vercel
     - vercel login --token UP1QNO8AV6zdrBEAsH9pPFhT
     - vercel --prod
