@@ -9,3 +9,4 @@ build-job:
     - git remote set-url origin https://github.com/Ainzw0rth/frontend-cf-guru-sekolah.mu_deploy.git
     - git add .
     - git commit -m "push from recent frontend"
+    - git push
