@@ -4,5 +4,6 @@ build-job:
     - echo "Hello, $GITLAB_USER_LOGIN!"
     - git config --global user.email "test@gmail.com"
     - git config --global user.name "test"
+    - git checkout develop
     - git remote set-url origin https://github.com/Ainzw0rth/frontend-cf-guru-sekolah.mu_deploy.git
     - git push origin master
