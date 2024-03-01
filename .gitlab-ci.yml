@@ -18,4 +18,4 @@ deploy_production:
   script:
     - vercel --token $VERCEL_TOKEN --prod
   only:
-    - master
+    - dev
