@@ -2,4 +2,4 @@ build-job:
   stage: build
   script:
     - npm install vercel
-    - vercel --prod
+    - vercel login
