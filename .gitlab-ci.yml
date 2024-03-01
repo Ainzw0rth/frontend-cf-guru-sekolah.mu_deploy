@@ -1,18 +1,4 @@
-stages:
-  - setup
-  - build
-  - deploy
-
-before_script:
-  - powershell -Command "Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force"
-
-build:
+build-job:
   stage: build
   script:
-    - npm install
-    - npm run build
-    - npm install vercel
-    - npm audit fix --force
-    - npm install vercel
-    - powershell -Command "Set-ExecutionPolicy -Scope Process -ExecutionPolicy Restricted -Force"
-    - vercel deploy
+    - echo "Hello, $GITLAB_USER_LOGIN!"
