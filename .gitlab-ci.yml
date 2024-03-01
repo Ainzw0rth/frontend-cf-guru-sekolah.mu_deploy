@@ -4,5 +4,6 @@ build-job:
     - npm install debug@latest
     - npm install uuid@latest
     - npm install -g vercel
-    - vercel login --token UP1QNO8AV6zdrBEAsH9pPFhT
-    - vercel --prod
+    - $(npm bin)/vercel --version
+    - $(npm bin)/vercel login --token UP1QNO8AV6zdrBEAsH9pPFhT
+    - $(npm bin)/vercel --prod
