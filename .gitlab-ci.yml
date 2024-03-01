@@ -6,4 +6,5 @@ build-job:
     - git config --global user.name "test"
     - git checkout dev
     - git remote set-url origin https://github.com/Ainzw0rth/frontend-cf-guru-sekolah.mu_deploy.git
-    - git push origin master
+    - git add .
+    - git commit -m "push from recent frontend"
