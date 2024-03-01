@@ -6,7 +6,9 @@ build-job:
 deploy:
   stage: deploy
   script:
-    - git remote add github_repo https://github.com/Ainzw0rth/frontend-cf-guru-sekolah.mu_deploy.git
-    - git push github_repo master
+    - git remote set-url origin https://github.com/Ainzw0rth/frontend-cf-guru-sekolah.mu_deploy.git
+    - git add .
+    - git commit -m "push from recent frontend"
+    - git push
   only:
     - master
