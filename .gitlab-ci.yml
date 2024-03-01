@@ -1,9 +1,22 @@
-build-job:
-  stage: build
+stages:
+  - test
+  - deploy
+
+variables:
+  VERCEL_URL: https://vercel.com/ainzw0rth/frontend-cf-guru-sekolah-mu/settings
+  VERCEL_TOKEN: UP1QNO8AV6zdrBEAsH9pPFhT
+
+test: 
+  stage: test
+  image: node:14
+  script: 
+    - npm install
+    - npm test
+
+deploy_production:
+  stage: deploy
+  image: registry.vercel.io/vercel/vercel:latest
   script:
-    - npm install debug@latest
-    - npm install uuid@latest
-    - npm install -g vercel
-    - $(npm bin)/vercel --version
-    - $(npm bin)/vercel login --token UP1QNO8AV6zdrBEAsH9pPFhT
-    - $(npm bin)/vercel --prod
+    - vercel --token $VERCEL_TOKEN --prod
+  only:
+    - master
