@@ -7,5 +7,5 @@ build-job:
     - git checkout dev
     - git pull
     - git remote set-url github https://github.com/Ainzw0rth/frontend-cf-guru-sekolah.mu_deploy.git
-    - git pull
-    - git push
+    - git pull github
+    - git push github
