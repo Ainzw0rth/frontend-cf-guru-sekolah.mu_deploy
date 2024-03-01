@@ -11,5 +11,6 @@ build:
   script:
     - npm install
     - npm run build
+    - npm install vercel
     - powershell -Command "Set-ExecutionPolicy -Scope Process -ExecutionPolicy Restricted -Force"
     - vercel deploy
