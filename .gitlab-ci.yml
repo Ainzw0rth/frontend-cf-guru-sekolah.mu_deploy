@@ -5,7 +5,7 @@ build-job:
     - git config --global user.email "test@gmail.com"
     - git config --global user.name "test"
     - git checkout dev
-    - git remote set-url origin https://github.com/Ainzw0rth/frontend-cf-guru-sekolah.mu_deploy.git
     - git pull
+    - git remote set-url origin https://github.com/Ainzw0rth/frontend-cf-guru-sekolah.mu_deploy.git
     - git add .
     - git commit -m "push from recent frontend"
