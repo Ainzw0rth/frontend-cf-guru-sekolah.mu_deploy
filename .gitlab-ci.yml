@@ -1,6 +1,5 @@
 stages:
   - test
-  - test2
 
 variables:
   VERCEL_URL: https://vercel.com/ainzw0rth/frontend-cf-guru-sekolah-mu/settings
@@ -13,4 +12,5 @@ test:
     - npm install
     - npm install -g vercel
     - npm list -g --depth 0
-    - vercel --token $VERCEL_TOKEN --prod
+    - ls $(npm bin -g)
+    - $(npm bin -g)/vercel --token $VERCEL_TOKEN --prod
