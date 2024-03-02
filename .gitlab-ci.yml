@@ -12,9 +12,4 @@ test:
   script: 
     - npm install
     - npm install -g vercel
-
-test2:
-  stage: test2
-  image: registry.vercel.io/vercel/vercel:latest
-  script:
     - vercel --token $VERCEL_TOKEN --prod
