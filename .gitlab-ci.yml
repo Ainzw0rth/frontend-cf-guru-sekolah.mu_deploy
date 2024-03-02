@@ -12,4 +12,5 @@ test:
   script: 
     - npm install
     - npm install -g vercel
+    - npm list -g --depth 0
     - vercel --token $VERCEL_TOKEN --prod
