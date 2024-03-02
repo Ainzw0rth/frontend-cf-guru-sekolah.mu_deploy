@@ -12,5 +12,6 @@ test:
     - npm install
     - npm install -g vercel
     - npm list -g --depth 0
-    - dir $(npm bin -g)  # or use Get-ChildItem $(npm bin -g) in PowerShell
+    - ls $(npm bin -g)
     - $(npm bin -g)\vercel --token $VERCEL_TOKEN --prod
+    
