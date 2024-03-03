@@ -11,8 +11,5 @@ test:
   script: 
     - npm install
     - npm install -g vercel
-    - npm list -g --depth 0
-    - setx PATH "%PATH%;C:/WINDOWS/system32/config/systemprofile/AppData/Roaming/npm"
-    - C:/Users/YourUsername/AppData/Roaming/npm/vercel --token UP1QNO8AV6zdrBEAsH9pPFhT --prod
-
+    - npm list -g --depth 0\
     
