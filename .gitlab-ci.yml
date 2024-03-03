@@ -13,6 +13,5 @@ test:
     - npm install -g vercel
     - npm list -g --depth 0
     - setx PATH "%PATH%;C:\Users\YourUsername\AppData\Roaming\npm"
-    - Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
     - vercel --token UP1QNO8AV6zdrBEAsH9pPFhT --prod
     
