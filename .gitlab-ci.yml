@@ -12,6 +12,6 @@ test:
     - npm install
     - npm install -g vercel
     - npm list -g --depth 0
-    - C:\Users\YourUserName\AppData\Roaming\npm\vercel.ps1
+    - setx PATH "%PATH%;C:\Users\YourUsername\AppData\Roaming\npm"
     - vercel --token $VERCEL_TOKEN --prod
     
