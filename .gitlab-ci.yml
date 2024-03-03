@@ -10,6 +10,6 @@ test:
   image: node:14
   script: 
     - npm install
-    - npm install -g vercel
+    - npm install --global vercel@latest
     - npm list -g --depth 0
     
