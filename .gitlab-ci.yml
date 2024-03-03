@@ -11,5 +11,5 @@ test:
   script: 
     - npm install
     - npm install -g vercel
-    - npm list -g --depth 0\
+    - npm list -g --depth 0
     
