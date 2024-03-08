@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import homeBackground from '../assets/home_background.png';
 import TextField from '../components/TextField';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const navigate = useNavigate();
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
@@ -16,7 +19,8 @@ const Login = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Mock login
+        // TODO: Implement login logic
+        navigate('/');
     }
 
     return (
