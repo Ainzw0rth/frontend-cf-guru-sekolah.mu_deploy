@@ -76,7 +76,7 @@ const ProgramDetail = () => {
     ];
 
     return (
-        <div className="flex flex-col">
+        <main className="flex flex-col">
             <AppBar title={data.judul}/>
             <Breadcrumb items={breadcrumb}/>
             <ProgramBanner imgUrl={data.imgUrl} judul={data.judul}/>
@@ -112,7 +112,7 @@ const ProgramDetail = () => {
                 }
                 </div>
             </div>
-        </div>
+        </main>
     );
 }
 
