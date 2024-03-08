@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 
 // Components
 import RootLayout from "./layout/RootLayout";
+import Login from "./pages/Login";
 
 const router = createBrowserRouter([
     {
@@ -17,7 +18,9 @@ const router = createBrowserRouter([
             {path: '/', element: <Home/>},
             {path: '/program', element: <ProgramList/>},
             {path: '/program/:id', element: <ProgramDetail/>},
-            {path: '/profile', element: <Profile/>}
+            {path: '/profile', element: <Profile/>},
+            {path: '/login', element: <Login/>}
+            
         ]
     },
 ])
