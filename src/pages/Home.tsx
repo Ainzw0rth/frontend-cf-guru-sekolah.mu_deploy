@@ -104,7 +104,7 @@ const Home = () => {
       <KegiatanCarousel kegiatans={kegiatans} />
       <div className='flex justify-between items-center w-full mb-4'>
         <h1 className='font-bold text-program-title text-text-100'>Program</h1>
-        <Link  className='flex items-center font-bold text-persian-blue-500' to={'/ListProgram'}>
+        <Link  className='flex items-center font-bold text-persian-blue-500' to={'/program'}>
           Lihat Semua &gt;
         </Link>
       </div>

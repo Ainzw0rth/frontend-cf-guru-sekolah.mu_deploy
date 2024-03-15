@@ -1,12 +1,65 @@
-import { Link } from "react-router-dom";
+import ProgramCard from "../components/ProgramCard";
+import { Program } from "../types/Program";
 
-const ProgramList = () => { 
+const programs: Program[] = [
+    {
+      id: 1,
+      title: 'Program 1',
+      semester: 1,
+      academic_year: '2021/2022',
+      imageUrl: 'https://via.placeholder.com/300',
+    },
+    {
+      id: 2,
+      title: 'Program 2',
+      semester: 2,
+      academic_year: '2021/2022',
+      imageUrl: 'https://via.placeholder.com/300',
+    },
+    {
+      id: 3,
+      title: 'Program 3',
+      semester: 1,
+      academic_year: '2022/2023',
+      imageUrl: 'https://via.placeholder.com/300',
+    },
+    {
+        id: 4,
+        title: 'Program 3',
+        semester: 1,
+        academic_year: '2022/2023',
+        imageUrl: 'https://via.placeholder.com/300',
+    },
+    {
+        id: 5,
+        title: 'Program 3',
+        semester: 1,
+        academic_year: '2022/2023',
+        imageUrl: 'https://via.placeholder.com/300',
+    },
+    {
+        id: 6,
+        title: 'Program 3',
+        semester: 1,
+        academic_year: '2022/2023',
+        imageUrl: 'https://via.placeholder.com/300',
+    },  
+    {
+        id: 7,
+        title: 'Program 3',
+        semester: 1,
+        academic_year: '2022/2023',
+        imageUrl: 'https://via.placeholder.com/300',
+    },
+    // Add more programs as needed
+  ];
+
+const ProgramList = () => {
     return (
-        <div className='h-96 w-full flex flex-col justify-center items-center'>
-            <p className='text-3xl text-black'>Program List</p>
-            <Link to="/program/1" className="text-xl text-persian-blue5 underline">
-                Example Program 1
-            </Link>
+        <div className='grid grid-cols-2 gap-4 overflow-y-auto'>
+            {programs.map((program) => (
+                <ProgramCard key={program.id} program={program} />
+            ))}
         </div>
     );
 }
