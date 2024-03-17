@@ -1,6 +1,7 @@
 import {ChangeEvent, KeyboardEvent, useState} from 'react';
 import ProgramCard from "../components/ProgramCard";
 import { Program } from "../types/Program";
+import { Kegiatan } from '../types/Kegiatan';
 
 const programs: Program[] = [
     {
@@ -52,38 +53,80 @@ const programs: Program[] = [
         academic_year: '2022/2023',
         imageUrl: 'https://via.placeholder.com/300',
     },
-    // Add more programs as needed
-  ];
+];
+
+const kegiatan: Kegiatan[] = [
+    {
+        id: 1,
+        title: 'Kegiatan 1',
+        class: 'SD Kelas 1',
+        program: 'Program 1',
+        topic: 'Topic A',
+        date: '2022-03-20',
+        time: '10:00',
+        imageUrl: 'https://via.placeholder.com/300',
+        taskPercentage: 0,
+    },
+    {
+        id: 2,
+        title: 'Kegiatan 1',
+        class: 'Class B',
+        program: 'Program 1',
+        topic: 'TK A',
+        date: '2022-03-20',
+        time: '10:00',
+        imageUrl: 'https://via.placeholder.com/300',
+        taskPercentage: 0,
+    },
+    {
+        id: 3,
+        title: 'Kegiatan 1',
+        class: 'SD Kelas 1',
+        program: 'Program 3',
+        topic: 'Topic A',
+        date: '2022-03-20',
+        time: '10:00',
+        imageUrl: 'https://via.placeholder.com/300',
+        taskPercentage: 0,
+    },
+    // Add more activities as needed
+];
 
 const ProgramList = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredPrograms, setFilteredPrograms] = useState(programs);
     const [filterValue, setFilterValue] = useState("");
+    const [filterClass, setFilterClass] = useState("");
 
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
     }
 
     const handleSearchClick = () => {
-        filterPrograms(searchTerm);
+        filterPrograms(searchTerm, filterValue, filterClass);
     }
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key == 'Enter') {
-            filterPrograms(searchTerm);
+            filterPrograms(searchTerm, filterValue, filterClass);
         }
     };
 
     const handleFilterChange = (e: ChangeEvent<HTMLSelectElement>) => {
         setFilterValue(e.target.value);
         if (e.target.value === ''){
-            filterPrograms(searchTerm, '');
+            filterPrograms(searchTerm, '', filterClass);
         } else {
-            filterPrograms(searchTerm, e.target.value);
+            filterPrograms(searchTerm, e.target.value, filterClass);
         }
     }
 
-    const filterPrograms = (searchValue: string, filterValue?: string) => {
+    const handleClassFilterChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        setFilterClass(e.target.value);
+        filterPrograms(searchTerm, filterValue, e.target.value);
+    }
+
+    const filterPrograms = (searchValue: string, filterValue?: string, filterClass?: string) => {
         let filtered = programs.filter(program =>
             program.title.toLowerCase().includes(searchValue.toLowerCase())
         );
@@ -99,6 +142,14 @@ const ProgramList = () => {
                 program.academic_year === academicYear
             );
         }
+
+        if (filterClass) {
+            filtered = filtered.filter(program =>
+              kegiatan.some(kegiatan =>
+                kegiatan.class === filterClass && kegiatan.program === program.title
+              )
+            );
+          }
 
         setFilteredPrograms(filtered);
     };
@@ -131,10 +182,21 @@ const ProgramList = () => {
         return options;
     };
 
+    const getClassFilterOptions = () => {
+        const classOptions: string[] = [];
+        kegiatan.forEach(kegiatan => {
+          if (!classOptions.includes(kegiatan.class)) {
+            classOptions.push(kegiatan.class);
+          }
+        });
+        return classOptions;
+    };
+
+
     return (
         <div className='bg-neutral8 h-svh w-full justify-center items-center p-10'>
             <h1 className='font-bold text-program-title text-text-100 mb-5'>Daftar Program</h1>
-            <div className="flex mb-5">
+            <div className="flex flex-wrap mb-5">
                 <input
                     type="text"
                     placeholder="Cari Judul Program"
@@ -148,15 +210,37 @@ const ProgramList = () => {
                     Cari
                 </button>
             </div>
-            <div className="mb-5">
-                <select value={filterValue} onChange={handleFilterChange} className="px-3 py-2 border rounded-md">
+            <div className="flex-auto flex mb-5">
+                <div>
+                    <select 
+                        value={filterValue} 
+                        onChange={handleFilterChange} 
+                        className="px-3 py-2 border rounded-md flex-auto mr-2 mb-2 sm:mb-0"
+                        style={{ fontSize: '0.5 rem' }}
+                    >
                     <option value="">Periode</option>
-                        {getFilterOptions().map((option, index) => (
+                    {getFilterOptions().map((option, index) => (
                         <option key={index} value={option}>
-                        {option}
-                    </option>
-                ))}
-                </select>
+                            {option}
+                        </option>
+                    ))}
+                    </select>
+                </div>
+                <div>
+                    <select
+                        value={filterClass}
+                        onChange={handleClassFilterChange}
+                        className="px-3 py-2 border rounded-md flex-auto mb-2 sm:mb-0"
+                        style={{ fontSize: '0.5 rem' }}
+                    >
+                    <option value="">Kelas</option>
+                    {getClassFilterOptions().map((option, index) => (
+                        <option key={index} value={option}>
+                            {option}
+                        </option>
+                    ))}
+                    </select>
+                </div>
             </div>
             <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto'>
                 {filteredPrograms.map((program) => (
