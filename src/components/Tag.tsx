@@ -21,7 +21,7 @@ const Tag = (props: TagProps) => {
     }
 
     return (
-        <div className={`rounded-full w-fit max-w-64 my-1 px-4 py-2 ${tagColorClass} ${textColorClass} font-bold flex justify-around items-center`}>
+        <div className={`rounded-full w-fit max-[375px]:max-w-48 max-w-64 my-1 px-4 py-2 ${tagColorClass} ${textColorClass} font-bold flex justify-around items-center`}>
             {props.icon && 
                 <img 
                     src={props.icon} 

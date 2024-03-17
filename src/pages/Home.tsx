@@ -80,7 +80,7 @@ const kegiatans: Kegiatan[] = [
 
 const Home = () => {
     return (
-      <div className='bg-neutral8 bg-fixed bg-bottom bg-no-repeat h-svh w-full flex-col justify-center items-center p-10 overflow-y-auto' style={{backgroundImage: `url(${homeBackground})`}}>
+      <div className='bg-neutral8 bg-fixed bg-bottom bg-no-repeat h-svh w-full flex-col justify-center items-center max-[390px]:p-5 p-10 overflow-y-auto' style={{backgroundImage: `url(${homeBackground})`}}>
         <div className="flex items-center justify-left space-x-4 mb-5">
         <Link to={'/Profile'}>
           <div className="w-12 h-12 rounded-full overflow-hidden">
@@ -97,14 +97,14 @@ const Home = () => {
           <h1 className='font-bold text-program-title text-text-100'>Kegiatan Hari ini</h1>
           <p className='text-text-100'>{thisDay}</p>
         </div>
-        <Link  className='flex items-top font-bold text-persian-blue-500 active:text-persian-blue4' to={'/ListProgram'}>
+        <Link  className='flex items-top font-bold text-persian-blue-500 active:text-persian-blue4 text-body-1' to={'/ListProgram'}>
           Lihat Jadwal &gt;
         </Link>
       </div>
       <KegiatanCarousel kegiatans={kegiatans} />
       <div className='flex justify-between items-center w-full mb-4'>
         <h1 className='font-bold text-program-title text-text-100'>Program</h1>
-        <Link  className='flex items-center font-bold text-persian-blue-500' to={'/program'}>
+        <Link  className='flex items-center font-bold text-persian-blue-500 text-body-1' to={'/program'}>
           Lihat Semua &gt;
         </Link>
       </div>

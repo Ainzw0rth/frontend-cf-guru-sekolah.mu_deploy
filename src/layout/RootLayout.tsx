@@ -6,7 +6,7 @@ const RootLayout = () => {
     return (
         <>
             <AppHead/>
-            <div className="max-w-5xl mx-auto">
+            <div className="max-w-screen-sm mx-auto">
                 <Outlet/>
             </div>
             <BottomNav/>
