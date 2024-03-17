@@ -7,4 +7,5 @@ export interface Kegiatan {
     date: string;
     time: string;
     imageUrl: string;
+    taskPercentage: number;
 }

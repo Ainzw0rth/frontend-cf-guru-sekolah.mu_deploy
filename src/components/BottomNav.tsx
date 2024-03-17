@@ -20,14 +20,14 @@ const BottomNavItem = (props: {icon: string, url: string, alt?: string}) => {
 const BottomNav = () => {
     return (
     <>
-        <nav className="w-full h-24 shadow-hard-top rounded-t-3xl fixed bottom-0 bg-white">
+        <nav className="w-full h-24 shadow-hard-top rounded-t-3xl fixed bottom-0 bg-white max-w-screen-sm mx-auto">
             <ul className="h-full flex items-center justify-around">
                 <BottomNavItem icon={homeImg} url="/" alt="Home Nav"/>
                 <BottomNavItem icon={programImg} url="/program" alt="Program Nav"/>
                 <BottomNavItem icon={profileImg} url="/profile" alt="Profile Nav"/>
             </ul>
         </nav>
-        <div className="h-24 w-full"/> {/* whitespace to get rid of elements hidden by bottom nav */}
+        <div className="h-24 w-full max-w-screen-sm mx-auto"/> {/* whitespace to get rid of elements hidden by bottom nav */}
     </>
     );
 }

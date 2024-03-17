@@ -7,7 +7,7 @@ interface KegiatanCardProps {
   kegiatan: Kegiatan;
 }
 
-const ProgramCard: React.FC<KegiatanCardProps> = ({ kegiatan }) => {
+const KegiatanCard: React.FC<KegiatanCardProps> = ({ kegiatan }) => {
     return (
     <div>
       <div className='max-[375px]:w-64 w-80 mx-5 mb-5'>
@@ -34,4 +34,4 @@ const ProgramCard: React.FC<KegiatanCardProps> = ({ kegiatan }) => {
 
 
 
-export default ProgramCard;
+export default KegiatanCard;

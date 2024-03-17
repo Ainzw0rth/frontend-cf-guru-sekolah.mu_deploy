@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import KegiatanCarousel from '../components/KegiatanCarousel';
 import { Kegiatan } from '../types/Kegiatan';
 import profIcon from '../assets/nav/profile.png';
+import KegiatanPendingTaskCarousel from '../components/KegiatanPendingTaskCarousel';
 
 const programs: Program[] = [
     {
@@ -41,6 +42,7 @@ const kegiatans: Kegiatan[] = [
       program: 'Program 1',
       topic: 'Pemrograman Berorientasi Objek',
       imageUrl: 'https://via.placeholder.com/300',
+      taskPercentage: 10,
     },
     {
       id: 2,
@@ -51,6 +53,7 @@ const kegiatans: Kegiatan[] = [
       program: 'Program 1',
       topic: 'Pemrograman Berorientasi Objek',
       imageUrl: 'https://via.placeholder.com/300',
+      taskPercentage: 50,
     },
     {
       id: 3,
@@ -61,6 +64,7 @@ const kegiatans: Kegiatan[] = [
       program: 'Program 1',
       topic: 'Pemrograman Berorientasi Objek',
       imageUrl: 'https://via.placeholder.com/300',
+      taskPercentage: 80,
     },
     // Add more kegiatans as needed
   ];
@@ -108,6 +112,7 @@ const Home = () => {
           Lihat Semua &gt;
         </Link>
       </div>
+      <KegiatanPendingTaskCarousel kegiatans={kegiatans} />
       <ProgramCarousel programs={programs} />
       <Link to="/DashboardMuridList" className="w-full max-w-screen-lg rounded-lg shadow-md bg-neutral8 text-white p-4 flex flex-col items-center justify-center space-y-2 mt-8">
         <img src={profIcon} alt="Dashboard Murid" className="w-16 h-16" />
