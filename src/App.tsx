@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import ProgramDetail from "./pages/ProgramDetail";
 import ProgramList from "./pages/ProgramList";
 import Profile from "./pages/Profile";
+import Schedule from "./pages/Schedule";
 
 // Components
 import RootLayout from "./layout/RootLayout";
@@ -19,8 +20,8 @@ const router = createBrowserRouter([
             {path: '/program', element: <ProgramList/>},
             {path: '/program/:id', element: <ProgramDetail/>},
             {path: '/profile', element: <Profile/>},
-            {path: '/login', element: <Login/>}
-            
+            {path: '/login', element: <Login/>},
+            {path: '/schedule', element: <Schedule/>},
         ]
     },
 ])

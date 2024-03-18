@@ -6,6 +6,7 @@ import KegiatanCarousel from '../components/KegiatanCarousel';
 import { Kegiatan } from '../types/Kegiatan';
 import profIcon from '../assets/nav/profile.png';
 import KegiatanPendingTaskCarousel from '../components/KegiatanPendingTaskCarousel';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 const programs: Program[] = [
     {
@@ -101,18 +102,25 @@ const Home = () => {
           <h1 className='font-bold text-program-title text-text-100'>Kegiatan Hari ini</h1>
           <p className='text-text-100'>{thisDay}</p>
         </div>
-        <Link  className='flex items-top font-bold text-persian-blue-500 active:text-persian-blue4 text-body-1' to={'/ListProgram'}>
-          Lihat Jadwal &gt;
+        <Link  className='flex items-center font-bold text-persian-blue-500 active:text-persian-blue4 text-body-1' to={'/ListProgram'}>
+        <CalendarTodayIcon sx={{ width: 22 }} />
+        <span className="ml-1">Lihat Jadwal</span>
         </Link>
       </div>
       <KegiatanCarousel kegiatans={kegiatans} />
-      <div className='flex justify-between items-center w-full mb-4'>
+      <div className='flex justify-between items-center w-full my-4'>
+        <h1 className='font-bold text-program-title text-text-100'>Tugas Tertunda</h1>
+        <Link  className='flex items-center font-bold text-persian-blue-500 text-body-1' to={'/pending_task'}>
+          Lihat Semua &gt;
+        </Link>
+      </div>
+      <KegiatanPendingTaskCarousel kegiatans={kegiatans} />
+      <div className='flex justify-between items-center w-full my-4'>
         <h1 className='font-bold text-program-title text-text-100'>Program</h1>
         <Link  className='flex items-center font-bold text-persian-blue-500 text-body-1' to={'/program'}>
           Lihat Semua &gt;
         </Link>
       </div>
-      <KegiatanPendingTaskCarousel kegiatans={kegiatans} />
       <ProgramCarousel programs={programs} />
       <Link to="/DashboardMuridList" className="w-full max-w-screen-lg rounded-lg shadow-md bg-neutral8 text-white p-4 flex flex-col items-center justify-center space-y-2 mt-8">
         <img src={profIcon} alt="Dashboard Murid" className="w-16 h-16" />
