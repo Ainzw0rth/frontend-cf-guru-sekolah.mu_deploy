@@ -71,7 +71,6 @@ const ProgramDetail = () => {
 
     const breadcrumb = [
         {label: 'Home', link: '/'},
-        {label: 'Program', link: '/program'},
         {label: data.judul, link: `/program/${data.slug}`}
     ];
 
