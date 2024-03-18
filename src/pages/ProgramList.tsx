@@ -69,8 +69,8 @@ const kegiatan: Kegiatan[] = [
     },
     {
         id: 2,
-        title: 'Kegiatan 1',
-        class: 'Class B',
+        title: 'Kegiatan 2',
+        class: 'TK A',
         program: 'Program 1',
         topic: 'TK A',
         date: '2022-03-20',
@@ -80,9 +80,20 @@ const kegiatan: Kegiatan[] = [
     },
     {
         id: 3,
-        title: 'Kegiatan 1',
+        title: 'Kegiatan 3',
         class: 'SD Kelas 1',
         program: 'Program 3',
+        topic: 'Topic A',
+        date: '2022-03-20',
+        time: '10:00',
+        imageUrl: 'https://via.placeholder.com/300',
+        taskPercentage: 0,
+    },
+    {
+        id: 3,
+        title: 'Kegiatan 4',
+        class: 'SD Kelas 2',
+        program: 'Program 4',
         topic: 'Topic A',
         date: '2022-03-20',
         time: '10:00',
@@ -189,6 +200,11 @@ const ProgramList = () => {
             classOptions.push(kegiatan.class);
           }
         });
+
+        classOptions.sort((a, b) => {
+            return a.localeCompare(b);
+        });
+
         return classOptions;
     };
 
@@ -206,49 +222,53 @@ const ProgramList = () => {
                     className="flex-1 mr-2"
                     style={{ border: "1px solid #1890ff", borderRadius: "8px", paddingLeft: "10px", marginRight: "8px" }}
                 />
-                <button onClick={handleSearchClick}           className="bg-persian-blue-500 text-white py-3 rounded-md w-20 text-label-5 font-semibold">
+                <button onClick={handleSearchClick}           className="bg-persian-blue-500 text-white py-3 rounded-md w-20 text-label-4 font-semibold">
                     Cari
                 </button>
             </div>
             <div className="flex-auto flex mb-5">
-                <div>
-                    <select 
-                        value={filterValue} 
-                        onChange={handleFilterChange} 
-                        className="px-3 py-2 border rounded-md flex-auto mr-2 mb-2 sm:mb-0"
-                        style={{ fontSize: '0.5 rem' }}
-                    >
+            <div className="mr-2">
+                <select 
+                    value={filterValue} 
+                    onChange={handleFilterChange} 
+                    className="filter-dropdown px-2 py-1 border rounded-md flex-auto mb-2 sm:mb-0"
+                    style={{ fontSize: '0.8rem'}}
+                >
                     <option value="">Periode</option>
                     {getFilterOptions().map((option, index) => (
-                        <option key={index} value={option}>
-                            {option}
-                        </option>
+                    <option key={index} value={option}>
+                        {option}
+                    </option>
                     ))}
-                    </select>
+                </select>
                 </div>
                 <div>
-                    <select
-                        value={filterClass}
-                        onChange={handleClassFilterChange}
-                        className="px-3 py-2 border rounded-md flex-auto mb-2 sm:mb-0"
-                        style={{ fontSize: '0.5 rem' }}
-                    >
+                <select
+                    value={filterClass}
+                    onChange={handleClassFilterChange}
+                    className="filter-dropdown px-2 py-1 border rounded-md flex-auto mb-2 sm:mb-0"
+                    style={{ fontSize: '0.8rem'}}
+                >
                     <option value="">Kelas</option>
                     {getClassFilterOptions().map((option, index) => (
-                        <option key={index} value={option}>
-                            {option}
-                        </option>
+                    <option key={index} value={option}>
+                        {option}
+                    </option>
                     ))}
-                    </select>
+                </select>
                 </div>
             </div>
-            <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto'>
+            {filteredPrograms.length === 0 ? (
+                <p className="text-neutral9 italic">Program tidak ditemukan</p>
+            ) : (
+                <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto'>
                 {filteredPrograms.map((program) => (
                     <div key={program.id} className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4">
-                        <ProgramCard program={program} />
+                    <ProgramCard program={program} type={1}/>
                     </div>
                 ))}
-            </div>
+                </div>
+            )}
         </div>
     );
 }

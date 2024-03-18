@@ -29,7 +29,7 @@ export default {
             'label-2': ['14px', '24px'],
             'label-3': ['14px', '24px'],
             'label-4': ['14px', '16px'],
-            'label-5': ['14px', '16px'],
+            'label-5': ['8px', '10px'],
             'label-6': ['14px', '16px'],
         },
         colors: {
