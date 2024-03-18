@@ -102,7 +102,7 @@ const Home = () => {
           <h1 className='font-bold text-program-title text-text-100'>Kegiatan Hari ini</h1>
           <p className='text-text-100'>{thisDay}</p>
         </div>
-        <Link  className='flex items-center font-bold text-persian-blue-500 active:text-persian-blue4 text-body-1' to={'/ListProgram'}>
+        <Link  className='flex items-center font-bold text-persian-blue-500 active:text-persian-blue4 text-body-1' to={'/Schedule'}>
         <CalendarTodayIcon sx={{ width: 22 }} />
         <span className="ml-1">Lihat Jadwal</span>
         </Link>
