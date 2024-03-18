@@ -101,8 +101,7 @@ const kegiatans: Kegiatan[] = [
 
 const breadcrumb = [
     {label: 'Home', link: '/'},
-    {label: 'Program', link: '/program'},
-    {label: 'Jadwal', link: `/program/Jadwal`}
+    {label: 'Jadwal', link: `/Jadwal`}
 ];
 
 
