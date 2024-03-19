@@ -28,10 +28,10 @@ const PresenceStats = ({presenceClass} : {presenceClass : PresenceClass}) => {
     return (
         <div className="flex gap-5 overflow-auto whitespace-nowrap pb-4">
             <PresenceStatsCard title="Belum" value={notYetStudents}/>
+            <PresenceStatsCard title="Hadir" value={presentStudents}/>
             <PresenceStatsCard title="Absen" value={absentStudents}/>
             <PresenceStatsCard title="Sakit" value={sickStudents}/>
             <PresenceStatsCard title="Izin" value={permittedStudents}/>
-            <PresenceStatsCard title="Hadir" value={presentStudents}/>
         </div>
     );
 }
@@ -44,15 +44,20 @@ interface StudentPresenceCardProps {
 const StudentPresenceCard = ({student, onStatusChange} : StudentPresenceCardProps) => {
     const [status, setStatus] = useState(student.status);
 
-    const handleStatusChange = (newStatus : PresenceStatus) => {
-        onStatusChange(student.id, newStatus);
-        setStatus(newStatus);
+    const toggleStatus = (newStatus : PresenceStatus) => {
+        let appliedStatus = status;
+        if (status === newStatus) {
+            appliedStatus = PresenceStatus.NOT_YET;
+        } else {
+            appliedStatus = newStatus;
+        }
+
+        onStatusChange(student.id, appliedStatus);
+        setStatus(appliedStatus);
 
         // TODO : Send status change to backend
     }
 
-    console.log(student.name, status)
-    
     return (
         <div className="flex flex-col w-full p-5 shadow-hard rounded-lg gap-3">
             <div className="flex items-center w-full gap-4">
@@ -64,7 +69,7 @@ const StudentPresenceCard = ({student, onStatusChange} : StudentPresenceCardProp
                     className={`w-1/2 py-1.5 px-2  border-presence-red border-2 
                     font-semibold rounded-xl text-label-4
                     ${status === PresenceStatus.ABSENT ? 'bg-presence-red text-white' : 'text-presence-red'}`}
-                    onClick={() => handleStatusChange(PresenceStatus.ABSENT)}
+                    onClick={() => toggleStatus(PresenceStatus.ABSENT)}
                 >
                     Absen
                 </button> 
@@ -72,7 +77,7 @@ const StudentPresenceCard = ({student, onStatusChange} : StudentPresenceCardProp
                     className={`w-1/2 py-1.5 px-2 border-presence-yellow border-2 
                     font-semibold rounded-xl text-label-4
                     ${status === PresenceStatus.SICK ? 'bg-presence-yellow text-white' : 'text-presence-yellow'}`}
-                    onClick={() => handleStatusChange(PresenceStatus.SICK)}
+                    onClick={() => toggleStatus(PresenceStatus.SICK)}
                 >
                     Sakit
                 </button>
@@ -80,7 +85,7 @@ const StudentPresenceCard = ({student, onStatusChange} : StudentPresenceCardProp
                     className={`w-1/2 py-1.5 px-2 border-presence-blue border-2 
                     font-semibold rounded-xl text-label-4
                     ${status === PresenceStatus.PERMITTED ? 'bg-presence-blue text-white' : 'text-presence-blue'}`}
-                    onClick={() => handleStatusChange(PresenceStatus.PERMITTED)}
+                    onClick={() => toggleStatus(PresenceStatus.PERMITTED)}
                 >
                     Izin
                 </button>
@@ -88,7 +93,7 @@ const StudentPresenceCard = ({student, onStatusChange} : StudentPresenceCardProp
                     className={`w-1/2 py-1.5 px-2 border-presence-green border-2 
                     font-semibold rounded-xl text-label-4
                     ${status === PresenceStatus.PRESENT ? 'bg-presence-green text-white' : 'text-presence-green'}`}
-                    onClick={() => handleStatusChange(PresenceStatus.PRESENT)}
+                    onClick={() => toggleStatus(PresenceStatus.PRESENT)}
                 >
                     Hadir
                 </button>

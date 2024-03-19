@@ -69,7 +69,7 @@ const ActivityPage = () => {
 
     return (
     <main className="flex flex-col">
-        <ProgramBanner imgUrl="https://images.red.com/stories/2022.08-squid-game/02.jpg" judul="Belajar Baris Berbaris"/>
+        <ProgramBanner imgUrl="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2024/02/1000081242.jpg" judul="Belajar Baris Berbaris"/>
         <nav className="flex px-5 overflow-auto whitespace-nowrap pb-4 gap-4">
             <ActivityTab active={openTab == TAB.INSTRUKSI} title="Instruksi" onClick={() => setOpenTab(TAB.INSTRUKSI)}/>
             <ActivityTab active={openTab == TAB.MATERI} title="Materi" onClick={() => setOpenTab(TAB.MATERI)}/>

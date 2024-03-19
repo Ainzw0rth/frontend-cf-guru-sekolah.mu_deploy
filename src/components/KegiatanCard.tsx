@@ -14,7 +14,7 @@ const KegiatanCard: React.FC<KegiatanCardProps> = ({ kegiatan }) => {
         <div className="w-full flex-col bg-neutral8 rounded-lg shadow-md p-4">
           <div className="w-full flex justify-between items-center">
             <Tag label={`${kegiatan.time}`} color="neutral" />
-            <Link  className='flex items-center font-bold text-persian-blue-500 active:text-persian-blue4 text-body-1' to={`/kegiatan/${kegiatan.id}`}>
+            <Link  className='flex items-center font-bold text-persian-blue-500 active:text-persian-blue4 text-body-1' to={`/activity/${kegiatan.id}`}>
                 Detail Kegiatan &gt;
             </Link>
           </div>
