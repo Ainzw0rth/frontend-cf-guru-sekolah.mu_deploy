@@ -60,7 +60,7 @@ const BottomNav = () => {
                     onClick={() => handleNavClick(NAV.STUDENT)} active={active === NAV.STUDENT}/>
             </ul>
         </nav>
-        <div className="h-24 w-full max-w-screen-sm mx-auto"/> {/* whitespace to get rid of elements hidden by bottom nav */}
+        <div className="h-28 w-full max-w-screen-sm mx-auto"/> {/* whitespace to get rid of elements hidden by bottom nav */}
     </>
     );
 }
