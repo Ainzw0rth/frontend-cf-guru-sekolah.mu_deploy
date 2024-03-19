@@ -1,27 +1,29 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 // Pages
-import Home from "./pages/Home";
-import ProgramDetail from "./pages/ProgramDetail";
-import ProgramList from "./pages/ProgramList";
-import Profile from "./pages/Profile";
-import Schedule from "./pages/Schedule";
+import HomePage from "./pages/HomePage";
+import ProgramDetailPage from "./pages/ProgramDetailPage";
+import ProgramListPage from "./pages/ProgramListPage";
+import ProfilePage from "./pages/ProfilePage";
+import SchedulePage from "./pages/SchedulePage";
+import LoginPage from "./pages/LoginPage";
+import ActivityPage from "./pages/Activity";
 
 // Components
 import RootLayout from "./layout/RootLayout";
-import Login from "./pages/Login";
 
 const router = createBrowserRouter([
     {
         path: '/', 
         element: <RootLayout/>,
         children: [
-            {path: '/', element: <Home/>},
-            {path: '/program', element: <ProgramList/>},
-            {path: '/program/:id', element: <ProgramDetail/>},
-            {path: '/profile', element: <Profile/>},
-            {path: '/login', element: <Login/>},
-            {path: '/schedule', element: <Schedule/>},
+            {path: '/', element: <HomePage/>},
+            {path: '/program', element: <ProgramListPage/>},
+            {path: '/program/:id', element: <ProgramDetailPage/>},
+            {path: '/profile', element: <ProfilePage/>},
+            {path: '/login', element: <LoginPage/>},
+            {path: '/schedule', element: <SchedulePage/>},
+            {path: '/class/:classId/:activityId', element: <ActivityPage/>}
         ]
     },
 ])

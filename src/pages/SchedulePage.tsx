@@ -1,5 +1,5 @@
 import KegiatanCard from "../components/KegiatanCard";
-import { Kegiatan } from "../types/Kegiatan";
+import { Activity } from "../types/Activity";
 import Breadcrumb from "../components/Breadcrumb";
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -14,7 +14,7 @@ import 'dayjs/locale/id';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const kegiatans: Kegiatan[] = [
+const kegiatans: Activity[] = [
     {
       id: 1,
       title: 'Kegiatan 1',
@@ -51,7 +51,7 @@ const kegiatans: Kegiatan[] = [
     // Add more kegiatans as needed
   ];
 
-  const kegiatans1: Kegiatan[] = [
+  const kegiatans1: Activity[] = [
     {
       id: 1,
       title: 'Kegiatan 4',
@@ -105,9 +105,9 @@ const breadcrumb = [
 ];
 
 
-const Schedule = () => {
+const SchedulePage = () => {
     const [selectedDay, setSelectedDay] = React.useState<Dayjs | null>(dayjs().utc());
-    const [kegiatans, setKegiatans] = React.useState<Kegiatan[]>([]);
+    const [kegiatans, setKegiatans] = React.useState<Activity[]>([]);
 
     React.useEffect(() => {
       if (selectedDay) {
@@ -151,4 +151,4 @@ const Schedule = () => {
 }
 
 
-export default Schedule;
+export default SchedulePage;

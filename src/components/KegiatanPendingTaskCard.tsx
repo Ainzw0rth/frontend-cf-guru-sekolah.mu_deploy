@@ -1,11 +1,11 @@
 import React from 'react';
-import { Kegiatan } from '../types/Kegiatan';
+import { Activity } from '../types/Activity';
 import Tag from './Tag';
 import LinearProgress from '@mui/material/LinearProgress';
 import { Link } from 'react-router-dom';
 
 interface KegiatanCardProps {
-  kegiatan: Kegiatan;
+  kegiatan: Activity;
 }
 
 const KegiatanPendingTaskCard: React.FC<KegiatanCardProps> = ({ kegiatan }) => {

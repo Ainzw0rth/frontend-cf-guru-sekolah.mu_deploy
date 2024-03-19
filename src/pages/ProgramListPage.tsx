@@ -1,7 +1,7 @@
 import {ChangeEvent, KeyboardEvent, useState} from 'react';
 import ProgramCard from "../components/ProgramCard";
 import { Program } from "../types/Program";
-import { Kegiatan } from '../types/Kegiatan';
+import { Activity } from '../types/Activity';
 
 const programs: Program[] = [
     {
@@ -55,7 +55,7 @@ const programs: Program[] = [
     },
 ];
 
-const kegiatan: Kegiatan[] = [
+const kegiatan: Activity[] = [
     {
         id: 1,
         title: 'Kegiatan 1',
@@ -103,7 +103,7 @@ const kegiatan: Kegiatan[] = [
     // Add more activities as needed
 ];
 
-const ProgramList = () => {
+const ProgramListPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredPrograms, setFilteredPrograms] = useState(programs);
     const [filterValue, setFilterValue] = useState("");
@@ -273,4 +273,4 @@ const ProgramList = () => {
     );
 }
 
-export default ProgramList;
+export default ProgramListPage;

@@ -1,4 +1,4 @@
-export interface Kegiatan {
+export interface Activity {
     id: number;
     title: string;
     class: string;

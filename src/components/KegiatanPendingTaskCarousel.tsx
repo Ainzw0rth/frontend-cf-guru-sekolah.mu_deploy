@@ -1,9 +1,9 @@
 import React from "react";
-import { Kegiatan } from "../types/Kegiatan";
+import { Activity } from "../types/Activity";
 import KegiatanPendingTaskCard from "./KegiatanPendingTaskCard";
 
 interface KegiatanCarouselProps {
-    kegiatans: Kegiatan[];
+    kegiatans: Activity[];
 }
 
 const KegiatanPendingTaskCarousel: React.FC<KegiatanCarouselProps> = ({ kegiatans }) => {

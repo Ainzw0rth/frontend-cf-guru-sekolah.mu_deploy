@@ -3,7 +3,7 @@ import { Program } from '../types/Program';
 import ProgramCarousel from '../components/ProgramCarousel';
 import { Link } from 'react-router-dom';
 import KegiatanCarousel from '../components/KegiatanCarousel';
-import { Kegiatan } from '../types/Kegiatan';
+import { Activity } from '../types/Activity';
 import profIcon from '../assets/nav/profile.png';
 import KegiatanPendingTaskCarousel from '../components/KegiatanPendingTaskCarousel';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -33,7 +33,7 @@ const programs: Program[] = [
     // Add more programs as needed
   ];
 
-const kegiatans: Kegiatan[] = [
+const kegiatans: Activity[] = [
     {
       id: 1,
       title: 'Kegiatan 1',
@@ -83,7 +83,7 @@ const kegiatans: Kegiatan[] = [
     photoUrl: 'https://via.placeholder.com/300',
   };
 
-const Home = () => {
+const HomePage = () => {
     return (
       <div className='bg-neutral8 bg-fixed bg-bottom bg-no-repeat h-svh w-full flex-col justify-center items-center max-[390px]:p-5 p-10 overflow-y-auto' style={{backgroundImage: `url(${homeBackground})`}}>
         <div className="flex items-center justify-left space-x-4 mb-5">
@@ -131,4 +131,4 @@ const Home = () => {
     );
 }
 
-export default Home;
+export default HomePage;
