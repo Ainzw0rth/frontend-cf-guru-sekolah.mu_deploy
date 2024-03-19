@@ -19,7 +19,7 @@ export default {
             'heading-1': ['24px', '30px'],
             'heading-2': ['24px', '26px'],
             'heading-3': ['22px', '24px'],
-            'heading-4': ['22px', '24px'],
+            'heading-4': ['20px', '24px'],
             'body-1': ['16px', '18px'],
             'body-2': ['14px', '16px'],
             'paragraph-1': ['16px', '18px'],
@@ -101,7 +101,11 @@ export default {
             "radius-20": 20,
             "persian-blue7": "#bdbee8",
             "neutral9": "#d8d8d8",
-            "neutral10": "#ececec"
+            "neutral10": "#ececec",
+            "presence-red": "#F55B59",
+            "presence-yellow": "#F0C006",
+            "presence-blue": "#78A7D5",
+            "presence-green": "#61BE6B",
         }
     },
   },
