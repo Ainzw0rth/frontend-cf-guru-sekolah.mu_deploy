@@ -29,16 +29,16 @@ const BottomNavItem = (props: BottomNavItemProps) => {
     );
 }
 
-const NAV_KEY = {
-    home: 0,
-    program: 1,
-    schedule: 2,
-    pending: 3,
-    student: 4
+const NAV = {
+    HOME: 0,
+    PROGRAM: 1,
+    SCHEDULE: 2,
+    PENDING: 3,
+    STUDENT: 4
 }
 
 const BottomNav = () => {
-    const [active, setActive] = useState(NAV_KEY.home);
+    const [active, setActive] = useState(NAV.HOME);
 
     const handleNavClick = (key: number) => {
         setActive(key);
@@ -49,15 +49,15 @@ const BottomNav = () => {
         <nav className="w-full h-24 shadow-hard-top rounded-t-3xl fixed bottom-0 bg-white max-w-screen-sm mx-auto">
             <ul className="h-full flex items-center justify-around">
                 <BottomNavItem icon={homeImg} url="/" alt="Home Nav" 
-                    onClick={() => handleNavClick(NAV_KEY.home)} active={active === NAV_KEY.home}/>
+                    onClick={() => handleNavClick(NAV.HOME)} active={active === NAV.HOME}/>
                 <BottomNavItem icon={programImg} url="/program" alt="Program Nav" 
-                    onClick={() => handleNavClick(NAV_KEY.program)} active={active === NAV_KEY.program}/>
+                    onClick={() => handleNavClick(NAV.PROGRAM)} active={active === NAV.PROGRAM}/>
                 <BottomNavItem icon={scheduleImg} url="/schedule" alt="Schedule Nav" 
-                    onClick={() => handleNavClick(NAV_KEY.schedule)} active={active === NAV_KEY.schedule}/>
+                    onClick={() => handleNavClick(NAV.SCHEDULE)} active={active === NAV.SCHEDULE}/>
                 <BottomNavItem icon={pendingTaskImg} url="/pending-task" alt="Pending Task Nav" 
-                    onClick={() => handleNavClick(NAV_KEY.pending)} active={active === NAV_KEY.pending}/>
+                    onClick={() => handleNavClick(NAV.PENDING)} active={active === NAV.PENDING}/>
                 <BottomNavItem icon={studentImg} url="/students" alt="Students Nav" 
-                    onClick={() => handleNavClick(NAV_KEY.student)} active={active === NAV_KEY.student}/>
+                    onClick={() => handleNavClick(NAV.STUDENT)} active={active === NAV.STUDENT}/>
             </ul>
         </nav>
         <div className="h-24 w-full max-w-screen-sm mx-auto"/> {/* whitespace to get rid of elements hidden by bottom nav */}

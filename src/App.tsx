@@ -7,7 +7,7 @@ import ProgramListPage from "./pages/ProgramListPage";
 import ProfilePage from "./pages/ProfilePage";
 import SchedulePage from "./pages/SchedulePage";
 import LoginPage from "./pages/LoginPage";
-import ActivityPage from "./pages/Activity";
+import ActivityPage from "./pages/ActivityPage";
 
 // Components
 import RootLayout from "./layout/RootLayout";
