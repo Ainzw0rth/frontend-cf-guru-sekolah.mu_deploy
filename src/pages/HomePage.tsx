@@ -8,69 +8,68 @@ import profIcon from '../assets/nav/profile.png';
 import KegiatanPendingTaskCarousel from '../components/KegiatanPendingTaskCarousel';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { useEffect, useState } from 'react';
-import { randomInt } from 'crypto';
 
-const programs: Program[] = [
-    {
-      id: 1,
-      title: 'Program 1',
-      semester: 1,
-      academic_year: '2021/2022',
-      imageUrl: 'https://via.placeholder.com/300',
-    },
-    {
-      id: 2,
-      title: 'Program 2',
-      semester: 2,
-      academic_year: '2021/2022',
-      imageUrl: 'https://via.placeholder.com/300',
-    },
-    {
-      id: 3,
-      title: 'Program 3',
-      semester: 1,
-      academic_year: '2022/2023',
-      imageUrl: 'https://via.placeholder.com/300',
-    },
-    // Add more programs as needed
-  ];
+// const programs: Program[] = [
+//     {
+//       id: 1,
+//       title: 'Program 1',
+//       semester: 1,
+//       academic_year: '2021/2022',
+//       imageUrl: 'https://via.placeholder.com/300',
+//     },
+//     {
+//       id: 2,
+//       title: 'Program 2',
+//       semester: 2,
+//       academic_year: '2021/2022',
+//       imageUrl: 'https://via.placeholder.com/300',
+//     },
+//     {
+//       id: 3,
+//       title: 'Program 3',
+//       semester: 1,
+//       academic_year: '2022/2023',
+//       imageUrl: 'https://via.placeholder.com/300',
+//     },
+//     // Add more programs as needed
+//   ];
 
-const kegiatans: Activity[] = [
-    {
-      id: 1,
-      title: 'Kegiatan 1',
-      date: '2021-12-31',
-      time: '08:00',
-      class: 'XII RPL 1',
-      program: 'Program 1',
-      topic: 'Pemrograman Berorientasi Objek',
-      imageUrl: 'https://via.placeholder.com/300',
-      taskPercentage: 10,
-    },
-    {
-      id: 2,
-      title: 'Kegiatan 2',
-      date: '2021-12-31',
-      time: '08:00',
-      class: 'XII RPL 1',
-      program: 'Program 1',
-      topic: 'Pemrograman Berorientasi Objek',
-      imageUrl: 'https://via.placeholder.com/300',
-      taskPercentage: 50,
-    },
-    {
-      id: 3,
-      title: 'Kegiatan 3',
-      date: '2021-12-31',
-      time: '08:00',
-      class: 'XII RPL 1',
-      program: 'Program 1',
-      topic: 'Pemrograman Berorientasi Objek',
-      imageUrl: 'https://via.placeholder.com/300',
-      taskPercentage: 80,
-    },
-    // Add more kegiatans as needed
-  ];
+// const kegiatans: Activity[] = [
+//     {
+//       id: 1,
+//       title: 'Kegiatan 1',
+//       date: '2021-12-31',
+//       time: '08:00',
+//       class: 'XII RPL 1',
+//       program: 'Program 1',
+//       topic: 'Pemrograman Berorientasi Objek',
+//       imageUrl: 'https://via.placeholder.com/300',
+//       taskPercentage: 10,
+//     },
+//     {
+//       id: 2,
+//       title: 'Kegiatan 2',
+//       date: '2021-12-31',
+//       time: '08:00',
+//       class: 'XII RPL 1',
+//       program: 'Program 1',
+//       topic: 'Pemrograman Berorientasi Objek',
+//       imageUrl: 'https://via.placeholder.com/300',
+//       taskPercentage: 50,
+//     },
+//     {
+//       id: 3,
+//       title: 'Kegiatan 3',
+//       date: '2021-12-31',
+//       time: '08:00',
+//       class: 'XII RPL 1',
+//       program: 'Program 1',
+//       topic: 'Pemrograman Berorientasi Objek',
+//       imageUrl: 'https://via.placeholder.com/300',
+//       taskPercentage: 80,
+//     },
+//     // Add more kegiatans as needed
+//   ];
 
   const thisDay = new Date().toLocaleDateString('id-ID', {
     weekday: 'long',
