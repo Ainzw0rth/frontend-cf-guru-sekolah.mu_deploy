@@ -1,6 +1,7 @@
 import AppBar from "../components/AppBar";
 import Breadcrumb from "../components/Breadcrumb";
 import FoldableTopic from "../components/FoldableTopic";
+import ProgramBanner from "../components/ProgramBanner";
 import Tag from "../components/Tag";
 
 const PROGRAM_DUMMY = {
@@ -47,22 +48,8 @@ const PROGRAM_DUMMY = {
     ]
 }
 
-const ProgramBanner = (props : {imgUrl : string, judul : string}) => {
-    return (
-        <div>
-            <img 
-                src={props.imgUrl} 
-                alt={`Banner ${props.judul}`}
-                className="w-full h-60 object-cover"
-            />
-            <div className="w-fit bg-cobalt6 px-5 py-2 shadow-medium -translate-y-1/2 z-20">
-                <h1 className="font-bold text-program-title text-text-100">{props.judul}</h1>
-            </div>
-        </div>
-    );
-}
 
-const ProgramDetail = () => { 
+const ProgramDetailPage = () => { 
     const fetchProgramData = () => { 
         // TODO : Fetch data from Backend
         return PROGRAM_DUMMY;
@@ -116,4 +103,4 @@ const ProgramDetail = () => {
     );
 }
 
-export default ProgramDetail;
+export default ProgramDetailPage;

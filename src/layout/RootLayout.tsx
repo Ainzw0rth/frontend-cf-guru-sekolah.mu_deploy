@@ -4,13 +4,17 @@ import BottomNav from "../components/BottomNav"
 
 const RootLayout = () => { 
     return (
-        <>
-            <AppHead/>
-            <div className="max-w-5xl mx-auto">
-                <Outlet/>
-            </div>
-            <BottomNav/>
-        </>
+    <>
+        <div className="flex justify-center">
+            <AppHead />
+        </div>
+        <div className="max-w-screen-sm mx-auto">
+            <Outlet />
+        </div>
+        <div className="flex justify-center">
+            <BottomNav />
+        </div>
+    </>
     )
 }
 

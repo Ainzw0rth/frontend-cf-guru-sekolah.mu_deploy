@@ -3,7 +3,7 @@ import homeBackground from '../assets/home_background.png';
 import TextField from '../components/TextField';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -44,4 +44,4 @@ const Login = () => {
     );
 }
 
-export default Login;
+export default LoginPage;
