@@ -3,6 +3,7 @@ import ProgramCard from "../components/ProgramCard";
 import { Program } from "../types/Program";
 import { Activity } from '../types/Activity';
 
+/*
 const programs: Program[] = [
     {
       id: 1,
@@ -102,10 +103,13 @@ const kegiatan: Activity[] = [
     },
     // Add more activities as needed
 ];
+*/
+var programs: Program[] = [];
+var kegiatan: Activity[] = [];
 
 const ProgramListPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [filteredPrograms, setFilteredPrograms] = useState<Program[]>([]);
+    const [filteredPrograms, setFilteredPrograms] = useState(programs);
     const [filterValue, setFilterValue] = useState("");
     const [filterClass, setFilterClass] = useState("");
     const [isLoading, setIsLoading] = useState(true);
@@ -113,6 +117,7 @@ const ProgramListPage = () => {
 
     useEffect(() => {
         fetchPrograms();
+        fetchActivities();
     }, []);
 
     const fetchPrograms = async () => {
@@ -122,20 +127,45 @@ const ProgramListPage = () => {
                 throw new Error('Failed to fetch programs');
             }
             const data = await response.json();
-    
-            const formattedPrograms = data.data.map((programData: any) => ({
+
+            programs = data.data.map((programData: any) => ({
                 id: programData.id_program,
                 title: programData.nama_program,
                 semester: parseInt(programData.periode_belajar.split(" ")[1]),
                 academic_year: programData.tahun_akademik,
                 imageUrl: 'https://via.placeholder.com/300',
             }));
-    
-            setFilteredPrograms(formattedPrograms);
+
+            setFilteredPrograms(programs);
             setIsLoading(false);
         } catch (error) {
             console.error('Error fetching programs:', error);
             setIsLoading(false);
+        }
+    };
+
+    const fetchActivities = async () => {
+        try {
+            const response = await fetch(`https://backend-sekolah-mu-development-ainzw0rth.vercel.app/kegiatan/guru?id=${idGuru}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch activities');
+            }
+            const data = await response.json();
+    
+            kegiatan = data.data.rows.map((activityData: any) => ({
+                id: activityData.id_kegiatan,
+                title: activityData.nama_kegiatan,
+                class: activityData.nama_kelas,
+                program: activityData.nama_program,
+                topic: activityData.nama_topik,
+                date: activityData.tanggal.split('T')[0],
+                time: activityData.waktu,
+                imageUrl: 'https://via.placeholder.com/300',
+                taskPercentage: 0
+            }));
+    
+        } catch (error) {
+            console.error('Error fetching activities:', error);
         }
     };
 
@@ -243,66 +273,66 @@ const ProgramListPage = () => {
         <div className='bg-neutral8 h-svh w-full justify-center items-center p-10'>
             <h1 className='font-bold text-program-title text-text-100 mb-5'>Daftar Program</h1>
             {isLoading ? (
-                <p>Loading...</p>
+                <p className="text-neutral9 italic">Loading...</p>
             ) : (
                 <>
-                    <div className="flex flex-wrap mb-5">
-                        <input
-                            type="text"
-                            placeholder="Cari Judul Program"
-                            value={searchTerm}
-                            onChange={handleSearchChange}
-                            onKeyDown={handleKeyDown}
-                            className="flex-1 mr-2"
-                            style={{ border: "1px solid #1890ff", borderRadius: "8px", paddingLeft: "10px", marginRight: "8px" }}
-                        />
-                        <button onClick={handleSearchClick} className="bg-persian-blue-500 text-white py-3 rounded-md w-20 text-label-4 font-semibold">
-                            Cari
-                        </button>
+                <div className="flex flex-wrap mb-5">
+                    <input
+                        type="text"
+                        placeholder="Cari Judul Program"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        onKeyDown={handleKeyDown}
+                        className="flex-1 mr-2"
+                        style={{ border: "1px solid #1890ff", borderRadius: "8px", paddingLeft: "10px", marginRight: "8px" }}
+                    />
+                    <button onClick={handleSearchClick}           className="bg-persian-blue-500 text-white py-3 rounded-md w-20 text-label-4 font-semibold">
+                        Cari
+                    </button>
+                </div>
+                <div className="flex-auto flex mb-5">
+                <div className="mr-2">
+                    <select 
+                        value={filterValue} 
+                        onChange={handleFilterChange} 
+                        className="filter-dropdown px-2 py-1 border rounded-md flex-auto mb-2 sm:mb-0"
+                        style={{ fontSize: '0.8rem'}}
+                    >
+                        <option value="">Periode</option>
+                        {getFilterOptions().map((option, index) => (
+                        <option key={index} value={option}>
+                            {option}
+                        </option>
+                        ))}
+                    </select>
                     </div>
-                    <div className="flex-auto flex mb-5">
-                        <div className="mr-2">
-                            <select
-                                value={filterValue}
-                                onChange={handleFilterChange}
-                                className="filter-dropdown px-2 py-1 border rounded-md flex-auto mb-2 sm:mb-0"
-                                style={{ fontSize: '0.8rem' }}
-                            >
-                                <option value="">Periode</option>
-                                {getFilterOptions().map((option, index) => (
-                                    <option key={index} value={option}>
-                                        {option}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div>
-                            <select
-                                value={filterClass}
-                                onChange={handleClassFilterChange}
-                                className="filter-dropdown px-2 py-1 border rounded-md flex-auto mb-2 sm:mb-0"
-                                style={{ fontSize: '0.8rem' }}
-                            >
-                                <option value="">Kelas</option>
-                                {getClassFilterOptions().map((option, index) => (
-                                    <option key={index} value={option}>
-                                        {option}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                    <div>
+                    <select
+                        value={filterClass}
+                        onChange={handleClassFilterChange}
+                        className="filter-dropdown px-2 py-1 border rounded-md flex-auto mb-2 sm:mb-0"
+                        style={{ fontSize: '0.8rem'}}
+                    >
+                        <option value="">Kelas</option>
+                        {getClassFilterOptions().map((option, index) => (
+                        <option key={index} value={option}>
+                            {option}
+                        </option>
+                        ))}
+                    </select>
                     </div>
-                    {filteredPrograms.length === 0 ? (
-                        <p className="text-neutral9 italic">Program tidak ditemukan</p>
-                    ) : (
-                        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto'>
-                            {filteredPrograms.map((program) => (
-                                <div key={program.id} className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4">
-                                    <ProgramCard program={program} type={1} />
-                                </div>
-                            ))}
+                </div>
+                {filteredPrograms.length === 0 ? (
+                    <p className="text-neutral9 italic">Program tidak ditemukan</p>
+                ) : (
+                    <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto'>
+                    {filteredPrograms.map((program) => (
+                        <div key={program.id} className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4">
+                        <ProgramCard program={program} type={1}/>
                         </div>
-                    )}
+                    ))}
+                    </div>
+                )}
                 </>
             )}
         </div>
