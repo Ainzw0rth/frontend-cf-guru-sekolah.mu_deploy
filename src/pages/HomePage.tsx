@@ -139,7 +139,7 @@ const HomePage = () => {
         topic: kegiatanData.nama_topik || '', 
         date: kegiatanData.tanggal || '',
         time: kegiatanData.waktu.slice(0, 5) || '',
-        imageUrl: '',
+        imageUrl: 'https://via.placeholder.com/300',
         taskPercentage: Math.floor(Math.random() * (100 + 1)),
       }));
   
