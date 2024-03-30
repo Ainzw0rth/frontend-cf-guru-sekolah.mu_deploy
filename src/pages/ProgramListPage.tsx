@@ -137,6 +137,7 @@ const ProgramListPage = () => {
             }));
 
             setFilteredPrograms(programs);
+            filterPrograms('', '', '');
             setIsLoading(false);
         } catch (error) {
             console.error('Error fetching programs:', error);
@@ -201,7 +202,7 @@ const ProgramListPage = () => {
         let filtered = programs.filter(program =>
             program.title.toLowerCase().includes(searchValue.toLowerCase())
         );
-
+    
         if (filterValue) {
             let formattedFilterValue = filterValue;
             if (filterValue.startsWith("Semester ")) {
@@ -213,17 +214,27 @@ const ProgramListPage = () => {
                 program.academic_year === academicYear
             );
         }
-
+    
         if (filterClass) {
             filtered = filtered.filter(program =>
-              kegiatan.some(kegiatan =>
-                kegiatan.class === filterClass && kegiatan.program === program.title
-              )
+                kegiatan.some(kegiatan =>
+                    kegiatan.class === filterClass && kegiatan.program === program.title
+                )
             );
-          }
 
+        }
+
+        const uniquePrograms: { [key: number]: Program } = {};
+
+        filtered.forEach(program => {
+            uniquePrograms[program.id] = program;
+        });
+
+        filtered = Object.values(uniquePrograms);
+    
         setFilteredPrograms(filtered);
     };
+    
 
     const getFilterOptions = () => {
         const options: string[] = [];
