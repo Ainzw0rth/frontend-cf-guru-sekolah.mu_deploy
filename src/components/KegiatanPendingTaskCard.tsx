@@ -15,9 +15,9 @@ const KegiatanPendingTaskCard: React.FC<KegiatanCardProps> = ({ kegiatan }) => {
         <div className="w-full flex-col bg-neutral8 rounded-lg shadow-md p-4">
           <div className="w-full">
             <div className="w-full flex justify-between pt-1 mb-2">
-              <h2 className="text-lg font-semibold text-gray-800 truncate">{kegiatan.title}</h2>
-              <Link  className='flex items-center font-bold text-persian-blue-500 active:text-persian-blue4 text-body-1' to={`/kegiatan/${kegiatan.id}`}>
-                  Lanjutkan Tugas &gt;
+              <h2 className="text-lg font-semibold text-gray-800 truncate mr-1 max-w-44">{kegiatan.title}</h2>
+              <Link  className='font-bold text-persian-blue-500 active:text-persian-blue4 text-body-1' to={`/activity/${kegiatan.id}`}>
+                  Lanjutkan &gt;
               </Link>
             </div>
             <div className='flex flex-wrap'>
