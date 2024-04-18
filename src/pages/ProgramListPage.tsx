@@ -1,5 +1,6 @@
 import {ChangeEvent, KeyboardEvent, useState, useEffect} from 'react';
 import ProgramCard from "../components/ProgramCard";
+import Pagination from "../components/Pagination";
 import { Program } from "../types/Program";
 import { Activity } from '../types/Activity';
 
@@ -109,10 +110,12 @@ var kegiatan: Activity[] = [];
 
 const ProgramListPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [filteredPrograms, setFilteredPrograms] = useState(programs);
+    const [filteredPrograms, setFilteredPrograms] = useState<Program[]>([]);
     const [filterValue, setFilterValue] = useState("");
     const [filterClass, setFilterClass] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const programsPerPage = 2;
     const idGuru = 1;
 
     useEffect(() => {
@@ -135,6 +138,16 @@ const ProgramListPage = () => {
                 academic_year: programData.tahun_akademik,
                 imageUrl: 'https://via.placeholder.com/300',
             }));
+
+            for (let i = 1; i <= 5; i++) {
+                programs.push({
+                    id: programs.length + 1,
+                    title: `PDummy ${i}`,
+                    semester: 2,
+                    academic_year: '2022/2023',
+                    imageUrl: 'https://via.placeholder.com/300',
+                });
+            }
 
             setFilteredPrograms(programs);
             filterPrograms('', '', '');
@@ -164,11 +177,30 @@ const ProgramListPage = () => {
                 imageUrl: 'https://via.placeholder.com/300',
                 taskPercentage: 0
             }));
+
+            for (let i = 1; i <= 5; i++) {
+                kegiatan.push({
+                    id: kegiatan.length + 1,
+                    title: `Kegiatan Dummy ${i}`,
+                    class: 'Dummy Class',
+                    program: `PDummy ${i}`,
+                    topic: 'Dummy Topic',
+                    date: '2022-01-01',
+                    time: '08:00:00',
+                    imageUrl: 'https://via.placeholder.com/300',
+                    taskPercentage: 0
+                });
+            }
     
         } catch (error) {
             console.error('Error fetching activities:', error);
         }
     };
+
+    const onPageChange = (page: number) => setCurrentPage(page);
+    const indexOfLastProgram = currentPage * programsPerPage;
+    const indexOfFirstProgram = indexOfLastProgram - programsPerPage;
+    const currentPrograms = filteredPrograms.slice(indexOfFirstProgram, indexOfLastProgram);
 
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
@@ -297,7 +329,8 @@ const ProgramListPage = () => {
                         className="flex-1 mr-2"
                         style={{ border: "1px solid #1890ff", borderRadius: "8px", paddingLeft: "10px", marginRight: "8px" }}
                     />
-                    <button onClick={handleSearchClick}           className="bg-persian-blue-500 text-white py-3 rounded-md w-20 text-label-4 font-semibold">
+                    <button onClick={handleSearchClick}
+                        className="bg-persian-blue-500 text-white py-3 rounded-md w-20 text-label-4 font-semibold">
                         Cari
                     </button>
                 </div>
@@ -333,16 +366,25 @@ const ProgramListPage = () => {
                     </select>
                     </div>
                 </div>
-                {filteredPrograms.length === 0 ? (
+                {currentPrograms.length === 0 ? (
                     <p className="text-neutral9 italic">Program tidak ditemukan</p>
                 ) : (
-                    <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto'>
-                    {filteredPrograms.map((program) => (
-                        <div key={program.id} className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4">
-                        <ProgramCard program={program} type={1}/>
+                    <>
+                        <div className='grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto'>
+                            {currentPrograms.map((program) => (
+                                <div key={program.id} className="w-1/2">
+                                    <ProgramCard program={program} type={1} />
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                    </div>
+                        <div style={{ marginTop: '30px', display: 'grid', placeItems: 'center' }}>
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={Math.ceil(filteredPrograms.length / programsPerPage)}
+                                onPageChange={onPageChange}
+                            />
+                        </div>
+                    </>
                 )}
                 </>
             )}
