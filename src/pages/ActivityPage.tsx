@@ -1,7 +1,9 @@
 import { useState } from "react";
 import ProgramBanner from "../components/ProgramBanner";
 import PresenceTab from "../components/tabs/PresenceTab";
+import EvaluationTab from '../components/tabs/EvaluationTab';
 import { PresenceData } from "../types/Presence";
+import { EvaluationData } from "../types/Evaluation";
 import { useParams } from "react-router-dom";
 
 interface ActivityTabProps {
@@ -29,7 +31,9 @@ const TAB = { INSTRUKSI: 0, MATERI: 1, PRESENSI: 2, EVALUASI: 3, HASIL_KARYA: 4 
 const generateTabElements = (
     activityId: number,
     presenceData: PresenceData | undefined,
-    onPresenceDataChange: (data: PresenceData) => void
+    onPresenceDataChange: (data: PresenceData) => void,
+    evaluationData: EvaluationData | undefined,
+    onEvaluationDataChange: (dataEval: EvaluationData) => void
 ) => {
     return [
         {
@@ -44,7 +48,7 @@ const generateTabElements = (
         },
         {
             id: TAB.EVALUASI, element: 
-                <div className="w-full flex justify-center mt-20 text-3xl">Evaluasi</div>
+                <EvaluationTab activityId={activityId} onEvaluationDataChange={(data) => onEvaluationDataChange(data)} evaluationData={evaluationData}/>
         },
         {
             id: TAB.HASIL_KARYA, element: 
@@ -61,12 +65,22 @@ const ActivityPage = () => {
         setPresenceData(data);
     }
 
+    const [evaluationData, setEvaluationData] = useState<EvaluationData>();
+    const storeEvaluationData = (dataEval : EvaluationData) => {
+        setEvaluationData(dataEval);
+    }
+
     const { id } = useParams();
     if (!id) { return <div>Invalid Activity ID</div>; }
     const activityId = parseInt(id);
 
-    const tabElements = generateTabElements(activityId, presenceData, storePresenceData);
-
+    const tabElements = generateTabElements(
+        activityId,
+        presenceData,
+        storePresenceData,
+        evaluationData,
+        storeEvaluationData
+    );
     return (
     <main className="flex flex-col">
         <ProgramBanner imgUrl="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2024/02/1000081242.jpg" judul="Belajar Baris Berbaris"/>

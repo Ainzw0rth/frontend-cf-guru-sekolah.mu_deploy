@@ -339,7 +339,7 @@ const ProgramListPage = () => {
                     <select 
                         value={filterValue} 
                         onChange={handleFilterChange} 
-                        className="filter-dropdown px-2 py-1 border rounded-md flex-auto mb-2 sm:mb-0"
+                        className="filter-dropdown px-2 py-1 border bg-neutral5 rounded-md flex-auto mb-2 sm:mb-0"
                         style={{ fontSize: '0.8rem'}}
                     >
                         <option value="">Periode</option>
@@ -354,7 +354,7 @@ const ProgramListPage = () => {
                     <select
                         value={filterClass}
                         onChange={handleClassFilterChange}
-                        className="filter-dropdown px-2 py-1 border rounded-md flex-auto mb-2 sm:mb-0"
+                        className="filter-dropdown px-2 py-1 border bg-neutral5 rounded-md flex-auto mb-2 sm:mb-0"
                         style={{ fontSize: '0.8rem'}}
                     >
                         <option value="">Kelas</option>
