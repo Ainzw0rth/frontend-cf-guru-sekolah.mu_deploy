@@ -9,9 +9,15 @@ interface KegiatanCarouselProps {
 const KegiatanPendingTaskCarousel: React.FC<KegiatanCarouselProps> = ({ kegiatans }) => {
   return (
     <div className="flex overflow-x-auto">
-      {kegiatans.map((kegiatan) => (
-        <KegiatanPendingTaskCard key={kegiatan.id} kegiatan={kegiatan} />
-      ))}
+      {kegiatans.length === 0 ? (
+        <div className="flex items-center justify-center w-full h-40">
+          <p className="text-lg">Bagus! Tidak ada tugas tertunda </p>
+        </div>
+      ) : (
+        kegiatans.map((kegiatan) => (
+          <KegiatanPendingTaskCard key={kegiatan.id} kegiatan={kegiatan} />
+        ))
+      )}
     </div>
   );
 };

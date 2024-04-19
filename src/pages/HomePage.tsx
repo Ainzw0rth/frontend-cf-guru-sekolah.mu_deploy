@@ -125,7 +125,8 @@ const HomePage = () => {
 
   const fetchKegiatans = async () => {
     try {
-      const response = await fetch('https://backend-sekolah-mu-development-ainzw0rth.vercel.app/kegiatan/guru?id=1');
+      const tanggal = new Date().toISOString().split('T')[0];
+      const response = await fetch(`https://backend-sekolah-mu-development-ainzw0rth.vercel.app/kegiatan/tanggal?tanggal=${tanggal}`);
       if (!response.ok) {
         throw new Error('Failed to fetch kegiatans');
       }
