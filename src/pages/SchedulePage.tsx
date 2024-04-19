@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Activity } from "../types/Activity";
 import KegiatanCard from "../components/KegiatanCard";
 import Breadcrumb from "../components/Breadcrumb";
