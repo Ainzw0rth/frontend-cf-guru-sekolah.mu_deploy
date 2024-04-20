@@ -1,5 +1,5 @@
 import { STUDENT_EVALUATION } from "../../data/studentEvaluation";
-import { EvaluationClass, EvaluationData, EvaluationStatus, StudentEvaluation, } from "../../types/Evaluation";
+import { EvaluationData, EvaluationStatus, StudentEvaluation, } from "../../types/Evaluation";
 import { useState, useEffect } from "react";
 
 const fetchEvaluationData = (activityId: number) => {
