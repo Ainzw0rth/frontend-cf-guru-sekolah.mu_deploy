@@ -1,13 +1,13 @@
 import { FormControl, MenuItem, Select, SelectChangeEvent } from "@mui/material";
-import { STUDENT_PRESENCE } from "../../data/studentPresence";
-import { PresenceClass, PresenceData, PresenceStatus, StudentPresence, } from "../../types/Presence";
+import { PresenceClass, PresenceData, PresenceStatus, StudentPresence } from "../../types/Presence";
 import { useState } from "react";
+import { fetchPresenceData, savePresenceData } from "../../utils/presenceUtils";
+import { toast } from "react-toastify";
 
-const fetchPresenceData = (activityId : number) => {
-    console.log(`Fetching presence data for activity ${activityId}`);
-    return STUDENT_PRESENCE;
-}
-
+// const updatePresenceData = (activityId : number, newPresenceData : PresenceData) => {
+//     console.log(`Updating presence data for activity ${activityId}`);
+//     console.log(newPresenceData);
+// }
 
 const PresenceStatsCard = ({title, value} : {title: string, value: number}) => {
     return (
@@ -114,16 +114,28 @@ const PresenceTab = (props : PresenceTabProps) => {
         setSelectedClass(e.target.value);
     }
 
+    const [isChangesSaved, setIsChangesSaved] = useState(true);
+    const [changedIds, setChangedIds] = useState<number[]>([]);
+
     const handleStudentStatusChange = (studentId: number, newStatus: PresenceStatus) => {
         const newPresenceData = [...props.presenceData!];
         const classIndex = parseInt(selectedClass);
         const studentIndex = newPresenceData[classIndex].students.findIndex(student => student.id === studentId);
         newPresenceData[classIndex].students[studentIndex].status = newStatus;
+        setIsChangesSaved(false);
+        if (!changedIds.includes(studentId))
+            setChangedIds([...changedIds, studentId]);
         props.onPresenceDataChange(newPresenceData);
     }
 
     if (!props.presenceData) {
-        props.onPresenceDataChange(fetchPresenceData(props.activityId));
+        fetchPresenceData(props.activityId)
+            .then(data => props.onPresenceDataChange(data))
+            .catch(err => {
+                console.error(err);   
+                props.onPresenceDataChange([]);
+            });
+        
         return <div>Loading...</div>;
     }
 
@@ -145,6 +157,17 @@ const PresenceTab = (props : PresenceTabProps) => {
                 </Select>
             </FormControl>
             <PresenceStats presenceClass={data[parseInt(selectedClass)]}/>
+            <button className="bg-persian-blue-500 text-neutral8 rounded-xl py-2 font-semibold disabled:opacity-50" disabled={isChangesSaved}
+                onClick={() => { 
+                    savePresenceData(props.activityId, data, changedIds).then(() => {
+                        setIsChangesSaved(true);
+                        setChangedIds([]);
+                        toast.success('Perubahan berhasil disimpan');
+                    })
+                }}
+            >
+                Simpan
+            </button>
             {
                 data[parseInt(selectedClass)].students.map((student) => (
                     <StudentPresenceCard 
