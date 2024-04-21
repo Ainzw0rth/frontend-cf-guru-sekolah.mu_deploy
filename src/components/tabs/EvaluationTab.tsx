@@ -1,4 +1,4 @@
-import { STUDENT_EVALUATION, fetchEvaluationData } from "../../data/studentEvaluation";
+import { fetchEvaluationData } from "../../data/studentEvaluation";
 import { EvaluationData, EvaluationStatus, StudentEvaluation, } from "../../types/Evaluation";
 import { useState, useEffect } from "react";
 
