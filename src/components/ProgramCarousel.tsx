@@ -11,7 +11,7 @@ const ProgramCarousel: React.FC<ProgramCarouselProps> = ({ programs }) => {
     <div className="flex overflow-x-auto">
       {programs.length === 0 ? (
         <div className="flex items-center justify-center w-full h-40">
-          <p className="text-lg">Tidak ada progra terdaftar</p>
+            <p className="text-lg">Tidak ada program terdaftar </p>
         </div>
       ) : (
         programs.map((program) => (

@@ -13,6 +13,13 @@ export interface StudentPresence {
     status: PresenceStatus;
 }
 
+export interface StudentPresenceResponse {
+    id_murid: number;
+    nama_murid: string;
+    path_foto_profil: string;
+    catatan_kehadiran: string;
+}
+
 export interface PresenceClass {
     classId: number;
     classTitle: string;   

@@ -27,18 +27,24 @@ const SchedulePage = () => {
         const fetchKegiatans = async () => {
             try {
                 const formattedDate = selectedDay?.format('YYYY-MM-DD');
-                const response = await fetch(`https://backend-sekolah-mu-development-ainzw0rth.vercel.app/kegiatan/tanggal?tanggal=${formattedDate}`);
+                console.log(formattedDate)
+                const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/kegiatan/tanggal?tanggal='${formattedDate}'`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch kegiatans');
                 }
                 const data = await response.json();
 
-                if (!data.data) {
+                console.log(data)
+
+                console.log(data.data)
+
+                if (!data.data) { 
                     setKegiatans([]);
                     return;
                 }
 
-                const formattedKegiatans = data.data.rows.map((kegiatanData: any) => ({
+
+                const formattedKegiatans = data.data.map((kegiatanData: any) => ({
                     id: kegiatanData.id_kegiatan,
                     title: kegiatanData.nama_kegiatan,
                     class: kegiatanData.nama_kelas || '', 
