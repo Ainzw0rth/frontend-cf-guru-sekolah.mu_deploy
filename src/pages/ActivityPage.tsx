@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ProgramBanner from "../components/ProgramBanner";
 import PresenceTab from "../components/tabs/PresenceTab";
+import StudentsWorkTab from "../components/tabs/StudentsWorkTab";
 import { PresenceData } from "../types/Presence";
 import { useParams } from "react-router-dom";
 
@@ -48,7 +49,7 @@ const generateTabElements = (
         },
         {
             id: TAB.HASIL_KARYA, element: 
-            <div className="w-full flex justify-center mt-20 text-3xl">Hasil Karya</div>
+            <StudentsWorkTab activityId={activityId}/>
         }
     ]
 }
