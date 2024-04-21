@@ -108,6 +108,12 @@ const HomePage = () => {
       }
       const data = await response.json();
 
+      if (!data.data) {
+        setPrograms([]);
+        setIsLoading(false);
+        return;
+      }
+
       const formattedPrograms = data.data.map((programData: any) => ({
         id: programData.id_program,
         title: programData.nama_program,
@@ -125,11 +131,18 @@ const HomePage = () => {
 
   const fetchKegiatans = async () => {
     try {
-      const response = await fetch('https://backend-sekolah-mu-development.vercel.app/kegiatan/guru?id=1');
+      const tanggal = new Date().toISOString().split('T')[0];
+      const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/kegiatan/tanggal?tanggal='${tanggal}'`);
       if (!response.ok) {
         throw new Error('Failed to fetch kegiatans');
       }
       const data = await response.json();
+
+      if (!data.data) {
+        setKegiatans([]);
+        setIsLoading(false);         
+        return;
+      }
 
       const formattedKegiatans = data.data.rows.map((kegiatanData: any) => ({
         id: kegiatanData.id_kegiatan,

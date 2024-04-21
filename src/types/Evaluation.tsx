@@ -16,6 +16,7 @@ export interface StudentEvaluation {
 
 export interface EvaluationClass { 
     activityId: number;
+    teacherId: number;
     students: StudentEvaluation[];
 }
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ProgramBanner from "../components/ProgramBanner";
 import PresenceTab from "../components/tabs/PresenceTab";
+// import StudentsWorkTab from "../components/tabs/StudentsWorkTab";
 import EvaluationTab from '../components/tabs/EvaluationTab';
 import InstructionTab from '../components/tabs/InstructionTab';
 import { PresenceData } from "../types/Presence";
@@ -63,7 +64,8 @@ const generateTabElements = (
         },
         {
             id: TAB.HASIL_KARYA, element: 
-            <div className="w-full flex justify-center mt-20 text-3xl">Hasil Karya</div>
+            <div></div>
+            // <StudentsWorkTab activityId={activityId}/>
         }
     ]
 }
