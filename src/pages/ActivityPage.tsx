@@ -8,6 +8,8 @@ import { EvaluationData } from "../types/Evaluation";
 import { InstructionData } from "../types/Instruction";
 import { useParams } from "react-router-dom";
 import LinearProgress from '@mui/material/LinearProgress';
+import MaterialTab from "../components/tabs/MaterialTab";
+import { MaterialData } from "../types/Material";
 
 interface ActivityTabProps {
     active: boolean;
@@ -38,7 +40,9 @@ const generateTabElements = (
     evaluationData: EvaluationData | undefined,
     onEvaluationDataChange: (dataEval: EvaluationData) => void,
     instructionData: InstructionData | undefined,
-    onInstructionDataChange: (dataEval: InstructionData) => void
+    onInstructionDataChange: (dataEval: InstructionData) => void,
+    materialData: MaterialData | undefined,
+    onMaterialDataChange: (data: MaterialData) => void
 ) => {
     return [
         {
@@ -47,7 +51,8 @@ const generateTabElements = (
         },
         {
             id: TAB.MATERI, element: 
-                <div className="w-full flex justify-center mt-20 text-3xl">Materi</div>},
+                <MaterialTab activityId={activityId} onPresenceDataChange={(data) => onMaterialDataChange(data)} materialData={materialData}/>
+        },
         {
             id: TAB.PRESENSI, element: 
                 <PresenceTab activityId={activityId} onPresenceDataChange={(data) => onPresenceDataChange(data)} presenceData={presenceData}/>
@@ -81,6 +86,11 @@ const ActivityPage = () => {
         setInstructionData(data);
     }
 
+    const [materialData, setMaterialData] = useState<MaterialData>();
+    const storeMaterialData = (data : MaterialData) => {
+        setMaterialData(data);
+    }
+
     const [totalData, setTotalData] = useState<number | null>(null);
     const [unfinishedData, setUnfinishedData] = useState<number | null>(null);
 
@@ -88,6 +98,7 @@ const ActivityPage = () => {
     if (!id) { return <div>Invalid Activity ID</div>; }
     const activityId = parseInt(id);
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
         fetch('https://backend-sekolah-mu-development.vercel.app/kegiatan/percentage?id=' + activityId)
           .then(response => response.json())
@@ -109,7 +120,9 @@ const ActivityPage = () => {
         evaluationData,
         storeEvaluationData,
         instructionData,
-        storeInstructionData
+        storeInstructionData,
+        materialData,
+        storeMaterialData
     );
 
     return (
