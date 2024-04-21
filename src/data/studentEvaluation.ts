@@ -26,32 +26,68 @@ export const STUDENT_EVALUATION : EvaluationData =
         ]
     };
 
-export const fetchEvaluationData = async (activityId: number) => {
-    try {
-        const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/evaluasi?kegiatan=${activityId}`);
-        const evaluationData = await response.json();
-        
-        if (!evaluationData || !evaluationData.data || !Array.isArray(evaluationData.data)) {
-            throw new Error("No evaluation data found");
-            // return STUDENT_EVALUATION;
+    export const fetchEvaluationData = async (activityId: number) => {
+        try {
+            // Fetch student list in the activity
+            const studentResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/kegiatan/murid/${activityId}`);
+            const studentData = await studentResponse.json();
+            
+            // Fetch evaluation data for the activity
+            const evaluationResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/evaluasi?kegiatan=${activityId}`);
+            let evaluationData = await evaluationResponse.json();
+            
+            // Check all student ids
+            const studentIds = studentData.data.map((student: any) => student.id_murid);
+            const evaluationIds = evaluationData.data.map((item: any) => item.id_murid);
+            
+            const missingIds = studentIds.filter((id: any) => !evaluationIds.includes(id));
+            
+            // Create new evaluation data for missing students
+            if (missingIds.length > 0) {
+                const id_kegiatan = activityId;
+                const id_guru = studentData.data[0].id_guru;
+                
+                for (const id_murid of missingIds) {
+                    await fetch(`https://backend-sekolah-mu-development.vercel.app/evaluasi`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id_kegiatan,
+                            id_murid,
+                            presensi: null,
+                            nilai: null,
+                            catatan: null,
+                            feedback: null,
+                            id_guru
+                        })
+                    });
+                }
+                
+                // Refetch evaluation data
+                evaluationData = await fetch(`https://backend-sekolah-mu-development.vercel.app/evaluasi?kegiatan=${activityId}`).then(response => response.json());
+            }
+            
+            const formattedData = evaluationData.data.map((item: { id_murid: number; penilaian: number; catatan: string; feedback: string; }) => {
+                const student = studentData.data.find((student: any) => student.id_murid === item.id_murid);
+                return {
+                    id: item.id_murid,
+                    name: student ? student.nama_murid : `Murid ${item.id_murid}`,
+                    imgUrl: `https://i.pinimg.com/736x/3f/4c/e9/3f4ce92510bf6161969dcdc9bda93ffb.jpg`,
+                    penilaian: item.penilaian,
+                    catatan: item.catatan,
+                    feedback: item.feedback,
+                    status: determineStatus(item.penilaian, item.catatan, item.feedback)
+                };
+            });
+    
+            return formattedData;
+        } catch (error) {
+            console.error("Error fetching evaluation data:", error);
+            throw new Error("Failed to fetch evaluation data");
         }
-        
-        const formattedData = evaluationData.data.map((item: { id_murid: number; penilaian: number; catatan: string; feedback: string; }) => ({
-            id: item.id_murid,
-            name: `Murid ${item.id_murid}`,
-            imgUrl: `https://i.pinimg.com/736x/3f/4c/e9/3f4ce92510bf6161969dcdc9bda93ffb.jpg`,
-            penilaian: item.penilaian,
-            catatan: item.catatan,
-            feedback: item.feedback,
-            status: determineStatus(item.penilaian, item.catatan, item.feedback)
-        }));
-
-        return formattedData;
-    } catch (error) {
-        console.error("Error fetching evaluation data:", error);
-        throw new Error("Failed to fetch evaluation data");
-    }
-}
+    }    
 
 const determineStatus = (penilaian: number, catatan: string, feedback: string) => {
     if (!penilaian && !catatan && !feedback) {

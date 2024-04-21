@@ -91,11 +91,12 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
 
 
         const filteredStudents = evaluationData.students.filter(student => {
+            console.log("Student:", student);
             return (
                 student.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
                 (filterStatus === "" || student.status === filterStatus)
             );
-        });
+        });        
         
         console.log("Filtered Students:", filteredStudents);
         setFilteredStudents(filteredStudents);
