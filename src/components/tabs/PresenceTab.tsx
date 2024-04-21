@@ -2,7 +2,6 @@ import { FormControl, MenuItem, Select, SelectChangeEvent } from "@mui/material"
 import { PresenceClass, PresenceData, PresenceStatus, StudentPresence } from "../../types/Presence";
 import { useState } from "react";
 import { fetchPresenceData, savePresenceData } from "../../utils/presenceUtils";
-import { toast } from "react-toastify";
 
 // const updatePresenceData = (activityId : number, newPresenceData : PresenceData) => {
 //     console.log(`Updating presence data for activity ${activityId}`);
@@ -162,7 +161,6 @@ const PresenceTab = (props : PresenceTabProps) => {
                     savePresenceData(props.activityId, data, changedIds).then(() => {
                         setIsChangesSaved(true);
                         setChangedIds([]);
-                        toast.success('Perubahan berhasil disimpan');
                     })
                 }}
             >

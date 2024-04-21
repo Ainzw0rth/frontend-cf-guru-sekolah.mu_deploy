@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import chevron from "../assets/chevron.png";
 import { ContentType } from "../types/Material";
 import EmbeddedLink from "./EmbeddedLink";
+import PdfViewer from "./PdfViewer";
 
 interface FoldableContentProps {
     title: string;
@@ -42,7 +43,7 @@ const FoldableContent = (props : FoldableContentProps) => {
                     >
                         {
                             props.type === ContentType.PDF ? 
-                            <iframe src={props.contentUrl} className="w-full h-96"></iframe> :
+                            <PdfViewer contentUrl={props.contentUrl}/> :
                             <EmbeddedLink src={props.contentUrl}/>
                         }
                     </motion.div>
