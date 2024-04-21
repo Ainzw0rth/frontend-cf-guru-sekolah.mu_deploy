@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProgramBanner from "../components/ProgramBanner";
 import PresenceTab from "../components/tabs/PresenceTab";
 import EvaluationTab from '../components/tabs/EvaluationTab';
@@ -81,9 +81,26 @@ const ActivityPage = () => {
         setInstructionData(data);
     }
 
+    const [totalData, setTotalData] = useState<number | null>(null);
+    const [unfinishedData, setUnfinishedData] = useState<number | null>(null);
+
     const { id } = useParams();
     if (!id) { return <div>Invalid Activity ID</div>; }
     const activityId = parseInt(id);
+
+    useEffect(() => {
+        fetch('https://backend-sekolah-mu-development.vercel.app/kegiatan/percentage?id=' + activityId)
+          .then(response => response.json())
+          .then(data => {
+            // Store the response data in the state variable
+            console.log(data.data[0]);
+            setTotalData(data.data[0].total_rows * 5);
+            setUnfinishedData(data.data[0].null_catatan_kehadiran*1 + data.data[0].null_penilaian*1 + data.data[0].null_catatan*1 + data.data[0].null_feedback*1 + data.data[0].null_id_karya*1);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }, [activityId]);
 
     const tabElements = generateTabElements(
         activityId,
@@ -94,6 +111,7 @@ const ActivityPage = () => {
         instructionData,
         storeInstructionData
     );
+
     return (
     <div>
         <main className="flex flex-col">
@@ -113,17 +131,17 @@ const ActivityPage = () => {
         <div className="w-full shadow-hard-top rounded-t-3xl fixed bottom-20 bg-white max-w-screen-sm mx-auto z-10">
             <div className="pt-4 flex items-center mx-10 gap-10">
                 <LinearProgress
-                variant="determinate"
-                value={Math.floor(70)}
-                className='rounded-lg shadow-md flex-grow'
-                sx={{
-                    height: '10px',
-                    '& .MuiLinearProgress-bar': {
-                    backgroundColor: '#2325ba',
-                    },
-                }}
+                    variant="determinate"
+                    value={((unfinishedData ?? 0) / (totalData ?? 1)) * 100}
+                    className='rounded-lg shadow-md flex-grow'
+                    sx={{
+                        height: '10px',
+                        '& .MuiLinearProgress-bar': {
+                            backgroundColor: '#2325ba',
+                        },
+                    }}
                 />
-                <p className='text-text-100 text-right ml-2'>{Math.floor(70)}%</p>
+                <p className='text-text-100 text-right ml-2'>{((unfinishedData ?? 0) / (totalData ?? 1)) * 100}%</p>
             </div>
         </div>
     </div>
