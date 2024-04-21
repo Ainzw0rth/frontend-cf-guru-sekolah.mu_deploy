@@ -16,6 +16,7 @@ const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activity
     const handleSubmit = async () => {
         try {
             setIsSaving(true);
+            setEvaluation(tempEvaluation);
 
             if (!activityId || !teacherId) {
                 throw new Error("Activity ID or Teacher ID is missing");

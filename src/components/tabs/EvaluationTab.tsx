@@ -51,7 +51,6 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
     const [filteredStudents, setFilteredStudents] = useState<StudentEvaluation[]>([]);
     const [evaluationData, setEvaluationData] = useState<EvaluationData>();
     const [selectedStudent, setSelectedStudent] = useState<StudentEvaluation | null>(null);
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -108,12 +107,10 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
 
     const handleStudentClick = (student: StudentEvaluation) => {
         setSelectedStudent(student);
-        setIsPopupOpen(true);
     };    
 
     const handleClosePopup = () => {
         setSelectedStudent(null);
-        setIsPopupOpen(false);
     };
 
     return (
