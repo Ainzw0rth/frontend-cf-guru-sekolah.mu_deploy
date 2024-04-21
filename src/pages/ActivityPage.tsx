@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ProgramBanner from "../components/ProgramBanner";
 import PresenceTab from "../components/tabs/PresenceTab";
-import StudentsWorkTab from "../components/tabs/StudentsWorkTab";
+// import StudentsWorkTab from "../components/tabs/StudentsWorkTab";
 import EvaluationTab from '../components/tabs/EvaluationTab';
 import InstructionTab from '../components/tabs/InstructionTab';
 import { PresenceData } from "../types/Presence";
@@ -64,7 +64,8 @@ const generateTabElements = (
         },
         {
             id: TAB.HASIL_KARYA, element: 
-            <StudentsWorkTab activityId={activityId}/>
+            <div></div>
+            // <StudentsWorkTab activityId={activityId}/>
         }
     ]
 }
