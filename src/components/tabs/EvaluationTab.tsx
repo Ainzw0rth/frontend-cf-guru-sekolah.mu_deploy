@@ -1,5 +1,6 @@
 import { fetchEvaluationData } from "../../data/studentEvaluation";
 import { EvaluationData, EvaluationStatus, StudentEvaluation, } from "../../types/Evaluation";
+import EvaluationPopup from "./EvaluationPopUp";
 import { useState, useEffect } from "react";
 
 // const fetchEvaluationData = (activityId: number) => {
@@ -9,9 +10,10 @@ import { useState, useEffect } from "react";
 
 interface StudentEvaluationCardProps {
     student: StudentEvaluation;
+    onClick: () => void;
 }
 
-const StudentEvaluationCard = ({ student }: StudentEvaluationCardProps) => {
+const StudentEvaluationCard = ({ student, onClick }: StudentEvaluationCardProps) => {
     const getStatusClass = () => {
         switch (student.status) {
             case EvaluationStatus.COMPLETE:
@@ -24,7 +26,10 @@ const StudentEvaluationCard = ({ student }: StudentEvaluationCardProps) => {
     };
 
     return (
-        <div className={`flex flex-col w-full p-5 shadow-hard rounded-lg gap-3 ${getStatusClass()}`}>
+        <div 
+            className={`flex flex-col w-full p-5 shadow-hard rounded-lg gap-3 ${getStatusClass()}`}
+            onClick={onClick}
+        >
             <div className="flex items-center w-full gap-3">
                 <img src={student.imgUrl} alt={student.name} className="w-8 h-8 rounded-full"/>
                 <h3 className="text-text-100 text-paragraph-1 font-semibold">{student.name}</h3>
@@ -45,14 +50,13 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
     const [isLoading, setIsLoading] = useState(true);
     const [filteredStudents, setFilteredStudents] = useState<StudentEvaluation[]>([]);
     const [evaluationData, setEvaluationData] = useState<EvaluationData>();
+    const [selectedStudent, setSelectedStudent] = useState<StudentEvaluation | null>(null);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const dataEval: EvaluationData = {
-                    activityId: activityId,
-                    students: await fetchEvaluationData(activityId)
-                };
+                const dataEval : EvaluationData = await fetchEvaluationData(activityId);
                 console.log("Get data:", dataEval);
                 setEvaluationData(dataEval);
                 onEvaluationDataChange(dataEval);
@@ -102,6 +106,16 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
         setFilteredStudents(filteredStudents);
     };
 
+    const handleStudentClick = (student: StudentEvaluation) => {
+        setSelectedStudent(student);
+        setIsPopupOpen(true);
+    };    
+
+    const handleClosePopup = () => {
+        setSelectedStudent(null);
+        setIsPopupOpen(false);
+    };
+
     return (
         <div className="flex flex-col mt-5 gap-5 w-5/6 mx-auto">
             <div className="flex items-center gap-3">
@@ -142,9 +156,22 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
                     <p className="text-neutral9 italic">Siswa tidak ditemukan</p>
                 ) : (
                     filteredStudents.map(student => (
-                        <StudentEvaluationCard key={student.id} student={student} />
+                        <StudentEvaluationCard
+                            key={student.id}
+                            student={student}
+                            onClick={() => handleStudentClick(student)}
+                        />
                     ))
                 )
+            )}
+            
+            {selectedStudent && (
+                <EvaluationPopup 
+                    studentData={selectedStudent} 
+                    activityId={evaluationData?.activityId} 
+                    teacherId={evaluationData?.teacherId} 
+                    onClose={handleClosePopup} 
+                />
             )}
         </div>
     );
