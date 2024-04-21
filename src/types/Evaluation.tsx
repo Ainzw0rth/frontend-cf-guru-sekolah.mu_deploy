@@ -8,13 +8,15 @@ export interface StudentEvaluation {
     id: number;
     name: string;
     imgUrl: string;
+    penilaian: number;
+    catatan: string;
+    feedback: string;
     status: EvaluationStatus;
 }
 
-export interface EvaluationClass {
-    classId: number;
-    classTitle: string;   
+export interface EvaluationClass { 
+    activityId: number;
     students: StudentEvaluation[];
 }
 
-export type EvaluationData = EvaluationClass[];
+export type EvaluationData = EvaluationClass;

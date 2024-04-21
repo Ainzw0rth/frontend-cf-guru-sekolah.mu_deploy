@@ -1,11 +1,11 @@
-import { STUDENT_EVALUATION } from "../../data/studentEvaluation";
+import { STUDENT_EVALUATION, fetchEvaluationData } from "../../data/studentEvaluation";
 import { EvaluationData, EvaluationStatus, StudentEvaluation, } from "../../types/Evaluation";
 import { useState, useEffect } from "react";
 
-const fetchEvaluationData = (activityId: number) => {
-    console.log(`Fetching evaluation data for activity ${activityId}`);
-    return STUDENT_EVALUATION;
-}
+// const fetchEvaluationData = (activityId: number) => {
+//     console.log(`Fetching evaluation data for activity ${activityId}`);
+//     return STUDENT_EVALUATION;
+// }
 
 interface StudentEvaluationCardProps {
     student: StudentEvaluation;
@@ -44,12 +44,25 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
     const [filterStatus, setFilterStatus] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [filteredStudents, setFilteredStudents] = useState<StudentEvaluation[]>([]);
+    const [evaluationData, setEvaluationData] = useState<EvaluationData>();
 
     useEffect(() => {
-        const evaluationData = fetchEvaluationData(activityId);
-        onEvaluationDataChange(evaluationData);
-        setIsLoading(false);
-    }, [activityId, onEvaluationDataChange]);
+        const fetchData = async () => {
+            try {
+                const dataEval: EvaluationData = {
+                    activityId: activityId,
+                    students: await fetchEvaluationData(activityId)
+                };
+                console.log("Get data:", dataEval);
+                setEvaluationData(dataEval);
+                onEvaluationDataChange(dataEval);
+                setIsLoading(false);
+            } catch (error) {
+                console.error("Error fetching evaluation data:", error);
+            }
+        };
+        fetchData();
+    }, [activityId, onEvaluationDataChange]);    
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
@@ -64,16 +77,27 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
     };
 
     useEffect(() => {
-        filterStudents(searchTerm, filterStatus);
-    }, [searchTerm, filterStatus]);
+        if (evaluationData) {
+            filterStudents(searchTerm, filterStatus);
+        }
+    }, [evaluationData, searchTerm, filterStatus]);
+
 
     const filterStudents = (searchTerm: string, filterStatus: string) => {
-        const status: EvaluationStatus = filterStatus as EvaluationStatus;
-        const filteredStudents = STUDENT_EVALUATION.flatMap(cls => cls.students)
-            .filter(student =>
+        if (!evaluationData) return;
+
+        console.log("Eval:", evaluationData);
+        console.log("Eval Student:", evaluationData.students);
+
+
+        const filteredStudents = evaluationData.students.filter(student => {
+            return (
                 student.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-                (filterStatus === "" || student.status === status)
+                (filterStatus === "" || student.status === filterStatus)
             );
+        });
+        
+        console.log("Filtered Students:", filteredStudents);
         setFilteredStudents(filteredStudents);
     };
 
