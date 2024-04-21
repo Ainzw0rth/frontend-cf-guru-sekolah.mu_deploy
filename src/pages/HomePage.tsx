@@ -102,7 +102,7 @@ const HomePage = () => {
 
   const fetchPrograms = async () => {
     try {
-      const response = await fetch(`https://backend-sekolah-mu-development-ainzw0rth.vercel.app/program/guru/1`);
+      const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/program/guru/1`);
       if (!response.ok) {
         throw new Error('Failed to fetch programs');
       }
@@ -125,7 +125,7 @@ const HomePage = () => {
 
   const fetchKegiatans = async () => {
     try {
-      const response = await fetch('https://backend-sekolah-mu-development-ainzw0rth.vercel.app/kegiatan/guru?id=1');
+      const response = await fetch('https://backend-sekolah-mu-development.vercel.app/kegiatan/guru?id=1');
       if (!response.ok) {
         throw new Error('Failed to fetch kegiatans');
       }
