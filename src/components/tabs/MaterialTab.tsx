@@ -4,7 +4,7 @@ import FoldableContent from "../FoldableContent";
 const MATERIAL_DUMMY = [
     {
         title: '[PDF] Modul Pembelajaran Baris Berbaris',
-        contentUrl: 'https://www.google.com',
+        contentUrl: 'https://cdn.filestackcontent.com/wcrjf9qPTCKXV3hMXDwK',
         type: ContentType.PDF
     },
     {

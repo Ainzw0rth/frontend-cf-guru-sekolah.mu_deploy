@@ -1,13 +1,12 @@
 import { FormControl, MenuItem, Select, SelectChangeEvent } from "@mui/material";
-import { STUDENT_PRESENCE } from "../../data/studentPresence";
-import { PresenceClass, PresenceData, PresenceStatus, StudentPresence, } from "../../types/Presence";
+import { PresenceClass, PresenceData, PresenceStatus, StudentPresence } from "../../types/Presence";
 import { useState } from "react";
+import { fetchPresenceData, savePresenceData } from "../../utils/presenceUtils";
 
-const fetchPresenceData = (activityId : number) => {
-    console.log(`Fetching presence data for activity ${activityId}`);
-    return STUDENT_PRESENCE;
-}
-
+// const updatePresenceData = (activityId : number, newPresenceData : PresenceData) => {
+//     console.log(`Updating presence data for activity ${activityId}`);
+//     console.log(newPresenceData);
+// }
 
 const PresenceStatsCard = ({title, value} : {title: string, value: number}) => {
     return (
@@ -61,7 +60,7 @@ const StudentPresenceCard = ({student, onStatusChange} : StudentPresenceCardProp
     return (
         <div className="flex flex-col w-full p-5 shadow-hard rounded-lg gap-3">
             <div className="flex items-center w-full gap-4">
-                <img src={student.imgUrl} alt={student.name} className="w-12 h-12 rounded-full"/>
+                <img src="https://i.pinimg.com/736x/c9/33/6f/c9336f3f0a0160c3e2d0e18c7d096b73.jpg" alt={student.name} className="w-12 h-12 rounded-full"/>
                 <h3 className="text-text-100 text-heading-4 font-semibold">{student.name}</h3>
             </div>
             <div className="flex gap-2 w-full justify-between items-center">
@@ -114,16 +113,28 @@ const PresenceTab = (props : PresenceTabProps) => {
         setSelectedClass(e.target.value);
     }
 
+    const [isChangesSaved, setIsChangesSaved] = useState(true);
+    const [changedIds, setChangedIds] = useState<number[]>([]);
+
     const handleStudentStatusChange = (studentId: number, newStatus: PresenceStatus) => {
         const newPresenceData = [...props.presenceData!];
         const classIndex = parseInt(selectedClass);
         const studentIndex = newPresenceData[classIndex].students.findIndex(student => student.id === studentId);
         newPresenceData[classIndex].students[studentIndex].status = newStatus;
+        setIsChangesSaved(false);
+        if (!changedIds.includes(studentId))
+            setChangedIds([...changedIds, studentId]);
         props.onPresenceDataChange(newPresenceData);
     }
 
     if (!props.presenceData) {
-        props.onPresenceDataChange(fetchPresenceData(props.activityId));
+        fetchPresenceData(props.activityId)
+            .then(data => props.onPresenceDataChange(data))
+            .catch(err => {
+                console.error(err);   
+                props.onPresenceDataChange([]);
+            });
+        
         return <div>Loading...</div>;
     }
 
@@ -145,6 +156,16 @@ const PresenceTab = (props : PresenceTabProps) => {
                 </Select>
             </FormControl>
             <PresenceStats presenceClass={data[parseInt(selectedClass)]}/>
+            <button className="bg-persian-blue-500 text-neutral8 rounded-xl py-2 font-semibold disabled:opacity-50" disabled={isChangesSaved}
+                onClick={() => { 
+                    savePresenceData(props.activityId, data, changedIds).then(() => {
+                        setIsChangesSaved(true);
+                        setChangedIds([]);
+                    })
+                }}
+            >
+                Simpan
+            </button>
             {
                 data[parseInt(selectedClass)].students.map((student) => (
                     <StudentPresenceCard 
