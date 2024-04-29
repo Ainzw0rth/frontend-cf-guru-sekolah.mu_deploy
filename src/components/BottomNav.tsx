@@ -34,7 +34,7 @@ const NAV = {
     PROGRAM: 1,
     SCHEDULE: 2,
     PENDING: 3,
-    STUDENT: 4
+    PROFILE: 4
 }
 
 const BottomNav = () => {
@@ -56,8 +56,8 @@ const BottomNav = () => {
                     onClick={() => handleNavClick(NAV.SCHEDULE)} active={active === NAV.SCHEDULE}/>
                 <BottomNavItem icon={pendingTaskImg} url="/pending-task" alt="Pending Task Nav" 
                     onClick={() => handleNavClick(NAV.PENDING)} active={active === NAV.PENDING}/>
-                <BottomNavItem icon={studentImg} url="/students" alt="Students Nav" 
-                    onClick={() => handleNavClick(NAV.STUDENT)} active={active === NAV.STUDENT}/>
+                <BottomNavItem icon={studentImg} url="/profile" alt="Profile Nav" 
+                    onClick={() => handleNavClick(NAV.PROFILE)} active={active === NAV.PROFILE}/>
             </ul>
         </nav>
         <div className="h-28 w-full max-w-screen-sm mx-auto"/> {/* whitespace to get rid of elements hidden by bottom nav */}
