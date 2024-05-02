@@ -10,7 +10,7 @@ import StudentPresenceChart from '../components/StudentPresenceChart';
 import StudentWorkCarousel from '../components/StudentWorkCarousel';
 import StudentNote from '../components/StudentNote';
 
-/*
+/* TEMPORARY DATA
 const DASHBOARD_DATA: StudentDashboard = {
     identity: 
         {
