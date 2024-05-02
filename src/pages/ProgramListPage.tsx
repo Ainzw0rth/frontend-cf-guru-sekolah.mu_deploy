@@ -4,107 +4,6 @@ import Pagination from "../components/Pagination";
 import { Program } from "../types/Program";
 import { Activity } from '../types/Activity';
 
-/*
-const programs: Program[] = [
-    {
-      id: 1,
-      title: 'Program 1',
-      semester: 1,
-      academic_year: '2021/2022',
-      imageUrl: 'https://via.placeholder.com/300',
-    },
-    {
-      id: 2,
-      title: 'Program 2',
-      semester: 2,
-      academic_year: '2021/2022',
-      imageUrl: 'https://via.placeholder.com/300',
-    },
-    {
-      id: 3,
-      title: 'Program 3',
-      semester: 1,
-      academic_year: '2022/2023',
-      imageUrl: 'https://via.placeholder.com/300',
-    },
-    {
-        id: 4,
-        title: 'Program 4',
-        semester: 1,
-        academic_year: '2022/2023',
-        imageUrl: 'https://via.placeholder.com/300',
-    },
-    {
-        id: 5,
-        title: 'Program 5',
-        semester: 1,
-        academic_year: '2022/2023',
-        imageUrl: 'https://via.placeholder.com/300',
-    },
-    {
-        id: 6,
-        title: 'Program 6',
-        semester: 1,
-        academic_year: '2022/2023',
-        imageUrl: 'https://via.placeholder.com/300',
-    },  
-    {
-        id: 7,
-        title: 'Program 7',
-        semester: 1,
-        academic_year: '2022/2023',
-        imageUrl: 'https://via.placeholder.com/300',
-    },
-];
-
-const kegiatan: Activity[] = [
-    {
-        id: 1,
-        title: 'Kegiatan 1',
-        class: 'SD Kelas 1',
-        program: 'Program 1',
-        topic: 'Topic A',
-        date: '2022-03-20',
-        time: '10:00',
-        imageUrl: 'https://via.placeholder.com/300',
-        taskPercentage: 0,
-    },
-    {
-        id: 2,
-        title: 'Kegiatan 2',
-        class: 'TK A',
-        program: 'Program 1',
-        topic: 'TK A',
-        date: '2022-03-20',
-        time: '10:00',
-        imageUrl: 'https://via.placeholder.com/300',
-        taskPercentage: 0,
-    },
-    {
-        id: 3,
-        title: 'Kegiatan 3',
-        class: 'SD Kelas 1',
-        program: 'Program 3',
-        topic: 'Topic A',
-        date: '2022-03-20',
-        time: '10:00',
-        imageUrl: 'https://via.placeholder.com/300',
-        taskPercentage: 0,
-    },
-    {
-        id: 3,
-        title: 'Kegiatan 4',
-        class: 'SD Kelas 2',
-        program: 'Program 4',
-        topic: 'Topic A',
-        date: '2022-03-20',
-        time: '10:00',
-        imageUrl: 'https://via.placeholder.com/300',
-        taskPercentage: 0,
-    },
-    // Add more activities as needed
-];
-*/
 var programs: Program[] = [];
 var kegiatan: Activity[] = [];
 
@@ -115,7 +14,7 @@ const ProgramListPage = () => {
     const [filterClass, setFilterClass] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const programsPerPage = 2;
+    const programsPerPage = 10;
     const idGuru = 1;
 
     useEffect(() => {
@@ -138,16 +37,6 @@ const ProgramListPage = () => {
                 academic_year: programData.tahun_akademik,
                 imageUrl: 'https://via.placeholder.com/300',
             }));
-
-            for (let i = 1; i <= 5; i++) {
-                programs.push({
-                    id: programs.length + 1,
-                    title: `PDummy ${i}`,
-                    semester: 2,
-                    academic_year: '2022/2023',
-                    imageUrl: 'https://via.placeholder.com/300',
-                });
-            }
 
             setFilteredPrograms(programs);
             filterPrograms('', '', '');
