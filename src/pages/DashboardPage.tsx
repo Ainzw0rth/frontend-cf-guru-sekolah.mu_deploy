@@ -10,6 +10,7 @@ import StudentPresenceChart from '../components/StudentPresenceChart';
 import StudentWorkCarousel from '../components/StudentWorkCarousel';
 import StudentNote from '../components/StudentNote';
 
+/*
 const DASHBOARD_DATA: StudentDashboard = {
     identity: 
         {
@@ -145,7 +146,7 @@ const DASHBOARD_DATA: StudentDashboard = {
         }
     ],
 };
-
+*/
 
 const DashboardPage = () => {
     const [dashboardData, setDashboardData] = useState<StudentDashboard>();
