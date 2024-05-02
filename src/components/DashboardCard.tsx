@@ -10,12 +10,12 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ studentData }) => {
   console.log("studentData", studentData);
   return (
     <Link to={`/dashboard/${studentData.id}`} className="flex-1">
-      <div className="flex-none w-40 bg-neutral8 rounded-lg shadow-md active:bg-neutral6">
+      <div className="flex-none w-36 bg-neutral8 rounded-lg shadow-md active:bg-neutral6">
         <div className="bg-gamboge6 p-2 rounded-lg w-full h-36 object-cover flex justify-center items-center">
           <img 
             src={"https://i.pinimg.com/736x/c9/33/6f/c9336f3f0a0160c3e2d0e18c7d096b73.jpg"} 
             alt={studentData.name} 
-            className="rounded-full w-28 h-28 object-cover" 
+            className="rounded-full w-24 h-24 object-cover" 
           />
         </div>
         <div className="p-4">

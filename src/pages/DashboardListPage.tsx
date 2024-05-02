@@ -1,4 +1,4 @@
-import { FormControl, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { FormControl, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 import { ChangeEvent, useState, useEffect } from 'react';
 import { Murid } from "../types/Murid";
 import { Kelas } from "../types/Kelas";
@@ -33,7 +33,7 @@ const DashboardListPage = () => {
 
     const fetchClass = async () => {
         try {
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/kelas?guru=${idGuru}`);
+            const response = await fetch(`http://localhost:3000/kelas?guru=${idGuru}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch class');
             }
@@ -55,7 +55,7 @@ const DashboardListPage = () => {
     const fetchClassStudent = async () => {
         try {
             console.log('fetching students of class:', idKelas);
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid?kelas=${idKelas}`);
+            const response = await fetch(`http://localhost:3000/murid?kelas=${idKelas}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch student');
             }
@@ -126,16 +126,17 @@ const DashboardListPage = () => {
                         Cari
                     </button>
                 </div>
-                <div className="flex-auto flex mb-5">
+                <div className="flex-col flex mb-5 gap-5 w-full mx-auto">
                     <FormControl>
                         <Select
                             value={filterClass}
                             onChange={handleClassFilterChange} 
                             className="bg-cobalt6 rounded-full"
+                            style={{ lineHeight: '14px' }}
                         >
                             {getClassOptions().map((option, index) => (
                                 <MenuItem key={index} value={option}>
-                                    Kelas {option}
+                                    <Typography variant="body1" style={{ fontSize: '14px' }}>Kelas {option}</Typography>
                                 </MenuItem>
                             ))}
                         </Select>
