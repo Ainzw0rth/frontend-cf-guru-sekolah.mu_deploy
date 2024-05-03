@@ -1,21 +1,38 @@
-export const isLoggedIn = () => {
-    // For the login, we'll just use a simple logic, with stored teacher_id in localStorage
-    // If the account_id is not stored, then the user is not logged in
+// For the login, we'll just use a simple logic, with stored teacher_id in localStorage
+// If the account_id is not stored, then the user is not logged in
 
-    // We are aware this is not the safe approach, but the purpose of this auth is just for demonstration
-    // to show how different data will be shown to the teacher's id
+// We are aware this is not the safe approach, but the purpose of this auth is just for demonstration
+// to show how different data will be shown to the teacher's id
+export const isLoggedIn = () => {
     return localStorage.getItem('teacher_id') !== null
 }
 
 export const logout = () => {
-    // Redirect to login page
     localStorage.removeItem('teacher_id')
 }
 
-export const login = (teacher_id: string) => {
-    // Set the teacher_id in localStorage
-    // Redirect to home page
-    localStorage.setItem('teacher_id', teacher_id)
+export const login = async (email: string, password: string) : Promise<number> => {
+    // Returns
+    // 1. teacher_id if success
+    // 2. -1 if failed
+
+    await fetch('https://backend-sekolah-mu-development.vercel.app/auth/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({email, password})
+    })
+    .then(response => response.json())
+    .then(data => {
+        localStorage.setItem('teacher_id', data.teacher_id)
+        return data.teacher_id
+    }).catch(err => {
+        console.error(err)
+        return -1;
+    });
+
+    return -1;
 }
 
 export const getTeacherId = () => {

@@ -3,11 +3,6 @@ import { PresenceClass, PresenceData, PresenceStatus, StudentPresence } from "..
 import { useState } from "react";
 import { fetchPresenceData, savePresenceData } from "../../utils/presenceUtils";
 
-// const updatePresenceData = (activityId : number, newPresenceData : PresenceData) => {
-//     console.log(`Updating presence data for activity ${activityId}`);
-//     console.log(newPresenceData);
-// }
-
 const PresenceStatsCard = ({title, value} : {title: string, value: number}) => {
     return (
         <div className="shadow-hard rounded-lg flex flex-col w-20 h-20 justify-center items-center shrink-0">
@@ -53,8 +48,6 @@ const StudentPresenceCard = ({student, onStatusChange} : StudentPresenceCardProp
 
         onStatusChange(student.id, appliedStatus);
         setStatus(appliedStatus);
-
-        // TODO : Send status change to backend
     }
 
     return (

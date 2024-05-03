@@ -5,11 +5,12 @@ export interface TextFieldProps {
     label: string;
     value: string;
     type: string;
+    active?: boolean;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const TextField = (props : TextFieldProps) => { 
-    const [isActive, setIsActive] = useState(false);
+    const [isActive, setIsActive] = useState(props.active || props.value !== '');
 
     const handleFocus = () => {
         setIsActive(true);
