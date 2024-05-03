@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import chevron from "../assets/chevron.png";
-import { ContentType } from "../types/Material";
 import EmbeddedLink from "./EmbeddedLink";
 import PdfViewer from "./PdfViewer";
 
 interface FoldableContentProps {
     title: string;
     contentUrl: string;
-    type: ContentType;
+    type: string;
 }
 
 const FoldableContent = (props : FoldableContentProps) => { 
@@ -42,7 +41,7 @@ const FoldableContent = (props : FoldableContentProps) => {
                         transition={{duration: 0.3}}
                     >
                         {
-                            props.type === ContentType.PDF ? 
+                            props.type === "pdf" ?
                             <PdfViewer contentUrl={props.contentUrl}/> :
                             <EmbeddedLink src={props.contentUrl}/>
                         }

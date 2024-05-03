@@ -52,7 +52,7 @@ const generateTabElements = (
         },
         {
             id: TAB.MATERI, element: 
-                <MaterialTab activityId={activityId} onPresenceDataChange={(data) => onMaterialDataChange(data)} materialData={materialData}/>
+                <MaterialTab activityId={activityId} onMaterialDataChange={(data) => onMaterialDataChange(data)} materialData={materialData}/>
         },
         {
             id: TAB.PRESENSI, element: 

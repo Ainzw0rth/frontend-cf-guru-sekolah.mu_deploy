@@ -120,7 +120,7 @@ const PresenceTab = (props : PresenceTabProps) => {
         props.onPresenceDataChange(newPresenceData);
     }
 
-    if (!props.presenceData) {
+    if (!props.presenceData || props.presenceData.length === 0) {
         fetchPresenceData(props.activityId)
             .then(data => props.onPresenceDataChange(data))
             .catch(err => {
