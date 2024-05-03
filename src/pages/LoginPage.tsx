@@ -25,7 +25,7 @@ const LoginPage = () => {
         }
 
         const teacherId = await login(email, password);
-        if (teacherId !== -1) {
+        if (teacherId !== -1 && teacherId !== undefined) {
             window.location.href = '/';
         } else {
             alert('Login gagal, silahkan coba lagi');
@@ -55,8 +55,10 @@ const LoginPage = () => {
                     active={password !== ''}
                 />
                 <button className=
-                    "bg-persian-blue-500 text-white py-3 rounded-full w-full text-heading-3 font-semibold" 
-                type='submit' ref={submitBtnRef}>
+                    "bg-persian-blue-500 text-white py-3 rounded-full w-full text-heading-3 font-semibold \
+                    shadow-hard transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    type='submit' ref={submitBtnRef}
+                >
                     Masuk
                 </button>
             </form>
