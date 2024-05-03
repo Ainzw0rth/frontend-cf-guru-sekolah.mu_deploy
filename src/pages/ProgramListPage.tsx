@@ -14,6 +14,10 @@ const ProgramListPage = () => {
     const [filterClass, setFilterClass] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
+    const [filterOptions, setFilterOptions] = useState<string[]>([]);
+    const [classFilterOptions, setClassFilterOptions] = useState<string[]>([]);
+    const [isInitialFetch, setIsInitialFetch] = useState(true);
+    
     const programsPerPage = 10;
     const idGuru = 1;
 
@@ -21,6 +25,14 @@ const ProgramListPage = () => {
         fetchPrograms();
         fetchActivities();
     }, []);
+
+    useEffect(() => {
+        if (isInitialFetch) {
+            setFilterOptions(getFilterOptions());
+            setClassFilterOptions(getClassFilterOptions(filteredPrograms));
+            setIsInitialFetch(false);
+        }
+    }, [filteredPrograms]);
 
     const fetchPrograms = async () => {
         try {
@@ -41,6 +53,7 @@ const ProgramListPage = () => {
             setFilteredPrograms(programs);
             filterPrograms('', '', '');
             setIsLoading(false);
+            setIsInitialFetch(true);
         } catch (error) {
             console.error('Error fetching programs:', error);
             setIsLoading(false);
@@ -55,7 +68,7 @@ const ProgramListPage = () => {
             }
             const data = await response.json();
     
-            kegiatan = data.data.rows.map((activityData: any) => ({
+            kegiatan = data.data.map((activityData: any) => ({
                 id: activityData.id_kegiatan,
                 title: activityData.nama_kegiatan,
                 class: activityData.nama_kelas,
@@ -67,20 +80,6 @@ const ProgramListPage = () => {
                 taskPercentage: 0
             }));
 
-            for (let i = 1; i <= 5; i++) {
-                kegiatan.push({
-                    id: kegiatan.length + 1,
-                    title: `Kegiatan Dummy ${i}`,
-                    class: 'Dummy Class',
-                    program: `PDummy ${i}`,
-                    topic: 'Dummy Topic',
-                    date: '2022-01-01',
-                    time: '08:00:00',
-                    imageUrl: 'https://via.placeholder.com/300',
-                    taskPercentage: 0
-                });
-            }
-    
         } catch (error) {
             console.error('Error fetching activities:', error);
         }
@@ -93,31 +92,35 @@ const ProgramListPage = () => {
 
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
-    }
+    };
 
     const handleSearchClick = () => {
+        setIsLoading(true);
         filterPrograms(searchTerm, filterValue, filterClass);
-    }
+    };
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key == 'Enter') {
+        if (e.key === 'Enter') {
+            setIsLoading(true);
             filterPrograms(searchTerm, filterValue, filterClass);
         }
     };
 
     const handleFilterChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        setIsLoading(true);
         setFilterValue(e.target.value);
-        if (e.target.value === ''){
+        if (e.target.value === '') {
             filterPrograms(searchTerm, '', filterClass);
         } else {
             filterPrograms(searchTerm, e.target.value, filterClass);
         }
-    }
+    };
 
     const handleClassFilterChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        setIsLoading(true);
         setFilterClass(e.target.value);
         filterPrograms(searchTerm, filterValue, e.target.value);
-    }
+    };
 
     const filterPrograms = (searchValue: string, filterValue?: string, filterClass?: string) => {
         let filtered = programs.filter(program =>
@@ -144,7 +147,7 @@ const ProgramListPage = () => {
             );
 
         }
-
+        
         const uniquePrograms: { [key: number]: Program } = {};
 
         filtered.forEach(program => {
@@ -153,6 +156,7 @@ const ProgramListPage = () => {
 
         filtered = Object.values(uniquePrograms);
     
+        setIsLoading(false);
         setFilteredPrograms(filtered);
     };
     
@@ -185,14 +189,17 @@ const ProgramListPage = () => {
         return options;
     };
 
-    const getClassFilterOptions = () => {
+    const getClassFilterOptions = (filteredPrograms: Program[]) => {
         const classOptions: string[] = [];
-        kegiatan.forEach(kegiatan => {
-          if (!classOptions.includes(kegiatan.class)) {
-            classOptions.push(kegiatan.class);
-          }
+    
+        filteredPrograms.forEach(program => {
+            kegiatan.forEach(kegiatan => {
+                if (kegiatan.program === program.title && !classOptions.includes(kegiatan.class)) {
+                    classOptions.push(kegiatan.class);
+                }
+            });
         });
-
+    
         classOptions.sort((a, b) => {
             return a.localeCompare(b);
         });
@@ -200,9 +207,10 @@ const ProgramListPage = () => {
         return classOptions;
     };
 
-
+    console.log("filteredPrograms", filteredPrograms);
+    console.log("currentPrograms", currentPrograms);
     return (
-        <div className='bg-neutral8 h-svh w-full justify-center items-center p-10'>
+        <div className='bg-neutral8 w-full justify-center items-center p-10'>
             <h1 className='font-bold text-program-title text-text-100 mb-5'>Daftar Program</h1>
             {isLoading ? (
                 <p className="text-neutral9 italic">Loading...</p>
@@ -232,7 +240,7 @@ const ProgramListPage = () => {
                         style={{ fontSize: '0.8rem'}}
                     >
                         <option value="">Periode</option>
-                        {getFilterOptions().map((option, index) => (
+                        {filterOptions.map((option, index) => (
                         <option key={index} value={option}>
                             {option}
                         </option>
@@ -247,7 +255,7 @@ const ProgramListPage = () => {
                         style={{ fontSize: '0.8rem'}}
                     >
                         <option value="">Kelas</option>
-                        {getClassFilterOptions().map((option, index) => (
+                        {classFilterOptions.map((option, index) => (
                         <option key={index} value={option}>
                             {option}
                         </option>

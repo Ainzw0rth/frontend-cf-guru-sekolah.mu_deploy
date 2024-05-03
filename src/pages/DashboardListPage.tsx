@@ -1,5 +1,5 @@
 import { FormControl, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
-import { ChangeEvent, useState, useEffect } from 'react';
+import { ChangeEvent, KeyboardEvent, useState, useEffect } from 'react';
 import { Murid } from "../types/Murid";
 import { Kelas } from "../types/Kelas";
 import DashboardCard from '../components/DashboardCard';
@@ -33,7 +33,7 @@ const DashboardListPage = () => {
 
     const fetchClass = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/kelas?guru=${idGuru}`);
+            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/kelas?guru=${idGuru}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch class');
             }
@@ -49,13 +49,14 @@ const DashboardListPage = () => {
             setKelas(kelasData);
         } catch (error) {
             console.error('Error fetching class:', error);
+            setIsLoading(false);
         }
     };
 
     const fetchClassStudent = async () => {
         try {
             console.log('fetching students of class:', idKelas);
-            const response = await fetch(`http://localhost:3000/murid?kelas=${idKelas}`);
+            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid?kelas=${idKelas}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch student');
             }
@@ -72,13 +73,16 @@ const DashboardListPage = () => {
                 path_profile: studentData.path_foto_profil
             }));
 
+            setIsLoading(false);
             setFilteredMurid(muridData);
         } catch (error) {
             console.error('Error fetching students of class:', error);
+            setIsLoading(false);
         }
     };
 
     const handleClassFilterChange = (e: SelectChangeEvent<string>) => {
+        setIsLoading(true);
         const selectedClass = e.target.value;
         setFilterClass(selectedClass);
         const selectedKelas = kelas.find(k => k.name === selectedClass);
@@ -91,11 +95,36 @@ const DashboardListPage = () => {
         setSearchTerm(e.target.value);
     };
 
+    const handleSearchClick = () => {
+        if (searchTerm.trim() !== "") {
+            setIsLoading(true);
+            filterMurid(searchTerm);
+        } else {
+            setIsLoading(true);
+            setFilteredMurid([]);
+            fetchClassStudent();
+        }
+    };
+    
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            if (searchTerm.trim() !== "") {
+                setIsLoading(true);
+                filterMurid(searchTerm);
+            } else {
+                setIsLoading(true);
+                setFilteredMurid([]);
+                fetchClassStudent();
+            }
+        }
+    };    
+
     const filterMurid = (searchValue: string) => {
         let filtered = filteredMurid.filter(item =>
             item.name.toLowerCase().includes(searchValue.toLowerCase())
         );
-
+        
+        setIsLoading(false);
         setFilteredMurid(filtered);
     };
 
@@ -106,27 +135,28 @@ const DashboardListPage = () => {
     console.log("Show murid:", filteredMurid);
 
     return (
-        <div className='bg-neutral8 h-svh w-full justify-center items-center p-10'>
+        <div className='bg-neutral8 w-full justify-center items-center p-10'>
             <h1 className='font-bold text-program-title text-text-100 mb-5'>Dashboard Murid</h1>
+            <div className="flex flex-wrap mb-5">
+                <input
+                    type="text"
+                    placeholder="Cari Murid"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    onKeyDown={handleKeyDown}
+                    className="flex-1 mr-2"
+                    style={{ border: "1px solid #1890ff", borderRadius: "8px", paddingLeft: "10px", marginRight: "8px" }}
+                />
+                <button onClick={handleSearchClick}
+                    className="bg-persian-blue-500 text-white py-3 rounded-md w-20 text-label-4 font-semibold">
+                    Cari
+                </button>
+            </div>
             {isLoading ? (
                 <p className="text-neutral9 italic">Loading...</p>
             ) : (
-                <>
-                <div className="flex flex-wrap mb-5">
-                    <input
-                        type="text"
-                        placeholder="Cari Murid"
-                        value={searchTerm}
-                        onChange={handleSearchChange}
-                        className="flex-1 mr-2"
-                        style={{ border: "1px solid #1890ff", borderRadius: "8px", paddingLeft: "10px", marginRight: "8px" }}
-                    />
-                    <button onClick={() => filterMurid(searchTerm)}
-                        className="bg-persian-blue-500 text-white py-3 rounded-md w-20 text-label-4 font-semibold">
-                        Cari
-                    </button>
-                </div>
-                <div className="flex-col flex mb-5 gap-5 w-full mx-auto">
+            <>
+                <div className="flex flex-col mb-5 w-full mx-auto">
                     <FormControl>
                         <Select
                             value={filterClass}
@@ -155,7 +185,7 @@ const DashboardListPage = () => {
                         </div>
                     </>
                 )}
-                </>
+            </>
             )}
         </div>
     );
