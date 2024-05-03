@@ -16,6 +16,7 @@ export const login = async (email: string, password: string) : Promise<number> =
     // 1. teacher_id if success
     // 2. -1 if failed
 
+    let teacher_id = -1;
     await fetch('https://backend-sekolah-mu-development.vercel.app/auth/login', {
         method: 'POST',
         headers: {
@@ -24,15 +25,14 @@ export const login = async (email: string, password: string) : Promise<number> =
         body: JSON.stringify({email, password})
     })
     .then(response => response.json())
-    .then(data => {
-        localStorage.setItem('teacher_id', data.teacher_id)
-        return data.teacher_id
+    .then(res => {
+        localStorage.setItem('teacher_id', res.data)
+        teacher_id = res.data
     }).catch(err => {
         console.error(err)
-        return -1;
     });
 
-    return -1;
+    return teacher_id;
 }
 
 export const getTeacherId = () => {
