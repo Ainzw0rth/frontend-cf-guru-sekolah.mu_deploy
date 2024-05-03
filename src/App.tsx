@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { isLoggedIn } from "./utils/authUtils";
 
 // Pages
 import HomePage from "./pages/HomePage";
@@ -13,6 +14,7 @@ import DashboardPage from "./pages/DashboardPage";
 
 // Components
 import RootLayout from "./layout/RootLayout";
+import LoginLayout from "./layout/LoginLayout";
 
 const router = createBrowserRouter([
     {
@@ -35,7 +37,15 @@ const router = createBrowserRouter([
 const App = () => {
     return (
         <>
+        {
+            isLoggedIn() 
+                ? 
             <RouterProvider router={router} />
+                : 
+            <LoginLayout>
+                <LoginPage />
+            </LoginLayout>
+        }
         </>
     )}
 

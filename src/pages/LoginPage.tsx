@@ -1,13 +1,10 @@
 import { useState } from 'react';
 import homeBackground from '../assets/home_background.png';
 import TextField from '../components/TextField';
-import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const navigate = useNavigate();
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
@@ -19,8 +16,6 @@ const LoginPage = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // TODO: Implement login logic
-        navigate('/');
     }
 
     return (
@@ -28,7 +23,11 @@ const LoginPage = () => {
             <div className="flex flex-col gap-4">
                 <h1 className="text-text-100 text-heading-2 font-semibold">Log In</h1>
                 <p className="text-neutral-900 text-paragraph-3">
-                        Masuk terlebih dahulu untuk mengakses dashboard guru Sekolah.mu
+                        Masuk terlebih dahulu untuk mengakses dashboard guru Sekolah.mu <br/><br/>
+
+                        For the demo purposes, use: <br/>
+                        email : tony@marvel.com <br/>
+                        sekolahmu
                 </p>
             </div>
             <form className='flex flex-col gap-8 my-8' onSubmit={handleSubmit}>
