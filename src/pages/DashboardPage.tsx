@@ -32,11 +32,11 @@ const DASHBOARD_DATA: StudentDashboard = {
         },
         {
             status: 'Izin',
-            total: 1,
+            total: 3,
         },
         {
             status: 'Alpa',
-            total: 3,
+            total: 1,
         },
     ],
     scoreSummary: 80,
@@ -154,7 +154,6 @@ const DashboardPage = () => {
     const { id } = useParams<{ id: string }>();    
     
     const idMurid = parseInt(id || '');
-    const profileImage = "https://i.pinimg.com/736x/c9/33/6f/c9336f3f0a0160c3e2d0e18c7d096b73.jpg";
 
     console.log('id:', id);
     console.log('idMurid:', idMurid);
@@ -167,12 +166,12 @@ const DashboardPage = () => {
         // setDashboardData(DASHBOARD_DATA);
         // setIsLoading(false);
         try {
-            const studentResponse = await fetch(`http://localhost:3000/murid/${id}`);
-            const presensiResponse = await fetch(`http://localhost:3000/murid/presensi/${id}`);
-            const avgNilaiResponse = await fetch(`http://localhost:3000/murid/avg-nilai/${id}`);
-            const catatanResponse = await fetch(`http://localhost:3000/murid/catatan/${id}`);
-            const feedbackResponse = await fetch(`http://localhost:3000/murid/feedback/${id}`);
-            const karyaResponse = await fetch(`http://localhost:3000/murid/karya/${id}`);
+            const studentResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/${id}`);
+            const presensiResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/presensi/${id}`);
+            const avgNilaiResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/avg-nilai/${id}`);
+            const catatanResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/catatan/${id}`);
+            const feedbackResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/feedback/${id}`);
+            const karyaResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/karya/${id}`);
 
             if (!studentResponse.ok || !presensiResponse.ok || !avgNilaiResponse.ok || !catatanResponse.ok || !feedbackResponse.ok || !karyaResponse.ok) {
                 throw new Error('Failed to fetch student dashboard data');
@@ -246,13 +245,13 @@ const DashboardPage = () => {
                 style={{ backgroundImage: `url(${banner})` }}
             >
                 <div className='flex flex-col items-center'>
-                    <img src={profileImage} alt="Profile" className="w-32 h-32 rounded-full mb-3" />
+                    <img src={dashboardData?.identity?.path_profile} alt="Profile" className="w-32 h-32 rounded-full mb-3" />
                     <p className="text-2xl font-semibold">{dashboardData?.identity?.name ?? 'No Name'}</p>
                 </div>
             </div>
             <div className='flex flex-col items-center'>
                 {isLoading ? (
-                    <p className="text-neutral9 italic">Loading...</p>
+                    <p className="text-neutral9 italic mt-10">Loading...</p>
                 ) : (
                     <div className='items-center' style={{ width: '95%'}}>
                         {/* Identitas Murid */}
