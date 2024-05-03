@@ -53,7 +53,7 @@ const StudentPresenceCard = ({student, onStatusChange} : StudentPresenceCardProp
     return (
         <div className="flex flex-col w-full p-5 shadow-hard rounded-lg gap-3">
             <div className="flex items-center w-full gap-4">
-                <img src="https://i.pinimg.com/736x/c9/33/6f/c9336f3f0a0160c3e2d0e18c7d096b73.jpg" alt={student.name} className="w-12 h-12 rounded-full"/>
+                <img src={student.imgUrl} alt={student.name} className="w-12 h-12 rounded-full"/>
                 <h3 className="text-text-100 text-heading-4 font-semibold">{student.name}</h3>
             </div>
             <div className="flex gap-2 w-full justify-between items-center">
