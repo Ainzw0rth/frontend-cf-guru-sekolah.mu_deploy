@@ -111,6 +111,7 @@ const fetchActivityData = async (activityId : number) : Promise<ActivityPageData
 // #endregion
 
 const ActivityPage = () => {
+    let activityId = -1;
     const [openTab, setOpenTab] = useState(TAB.INSTRUKSI);    
 
     const [presenceData, setPresenceData] = useState<PresenceData>();
@@ -169,11 +170,11 @@ const ActivityPage = () => {
                 console.error(err);
                 setActivityData({ title: '', imgUrl: '', instruksi_murid: [], instruksi_guru: [], tujuan_pembelajaran: [] });
             });
-    });
+    }, [activityId]);
 
     const { id } = useParams();
     if (!id) { return <div>Invalid Activity ID</div>; }
-    const activityId = parseInt(id);
+    activityId = parseInt(id);
 
     const tabElements = generateTabElements(
         activityId,
