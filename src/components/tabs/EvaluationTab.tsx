@@ -3,11 +3,6 @@ import { EvaluationData, EvaluationStatus, StudentEvaluation, } from "../../type
 import EvaluationPopup from "./EvaluationPopUp";
 import { useState, useEffect } from "react";
 
-// const fetchEvaluationData = (activityId: number) => {
-//     console.log(`Fetching evaluation data for activity ${activityId}`);
-//     return STUDENT_EVALUATION;
-// }
-
 interface StudentEvaluationCardProps {
     student: StudentEvaluation;
     onClick: () => void;
@@ -56,7 +51,6 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
         const fetchData = async () => {
             try {
                 const dataEval : EvaluationData = await fetchEvaluationData(activityId);
-                console.log("Get data:", dataEval);
                 setEvaluationData(dataEval);
                 onEvaluationDataChange(dataEval);
                 setIsLoading(false);
@@ -88,20 +82,14 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
 
     const filterStudents = (searchTerm: string, filterStatus: string) => {
         if (!evaluationData) return;
-
-        console.log("Eval:", evaluationData);
-        console.log("Eval Student:", evaluationData.students);
-
-
+        
         const filteredStudents = evaluationData.students.filter(student => {
-            console.log("Student:", student);
             return (
                 student.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
                 (filterStatus === "" || student.status === filterStatus)
             );
         });        
         
-        console.log("Filtered Students:", filteredStudents);
         setFilteredStudents(filteredStudents);
     };
 

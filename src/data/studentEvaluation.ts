@@ -73,10 +73,6 @@ export const fetchEvaluationData = async (activityId: number) => {
         const formattedData = () => {
             try {
                 const formattedStudents = evaluationData.data.map((item: any) => {
-
-                    console.log("studentData :", studentData);
-                    console.log("studentData.data :", studentData.data);
-
                     const student = studentData.data.find((student: any) => student.id_murid === item.id_murid);
                     return {
                         id: item.id_murid,

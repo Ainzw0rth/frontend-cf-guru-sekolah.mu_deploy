@@ -6,10 +6,6 @@ interface StudentIdentityProps {
 }
 
 const StudentIdentity = (props: StudentIdentityProps) => {
-    console.log('props:', props);
-    console.log('props.student:', props.student);   
-    console.log('props.averageScore:', props.averageScore);
-
     const formattedBirthDate = props.student ? props.student.birth_date.toLocaleDateString('id-ID', {
         day: '2-digit',
         month: 'long',

@@ -9,7 +9,6 @@ interface StudentWorkPopUpProps {
 
 const StudentWorkPopUp: React.FC<StudentWorkPopUpProps> = ({ student, onClose }) => {
     const handleClose = () => {
-        console.log('Close Pop Up');
         onClose();
     };
 
