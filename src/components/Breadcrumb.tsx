@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
 export interface BreadcrumbProps {
@@ -16,25 +17,24 @@ const Breadcrumb = (props : BreadcrumbProps) => {
         {
             props.items.map((item, index) => {
                 return (
-                <>
+                <React.Fragment key={index}>
                 {
                     index < props.items.length - 1 
                     ?
                         <>
                             <Link 
-                                to={item.link} key={index}
+                                to={item.link}
                                 className="text-label-1 font-semibold text-persian-blue-500"
                             > {item.label} </Link>
                             <span>&nbsp;&nbsp;&#62;&nbsp;&nbsp;</span>
                         </>
                     :
                         <span 
-                            key={index}
                             className="text-label-1 font-semibold text-text-100"
                         > {item.label} </span>
                     
                 }
-                </>
+                </React.Fragment>
             )})
         }
             </div>

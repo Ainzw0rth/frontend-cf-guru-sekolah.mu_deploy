@@ -1,77 +1,135 @@
+import { useEffect, useState } from "react";
 import AppBar from "../components/AppBar";
 import Breadcrumb from "../components/Breadcrumb";
-import FoldableTopic from "../components/FoldableTopic";
+import FoldableTopic, { FoldableTopicProps } from "../components/FoldableTopic";
 import ProgramBanner from "../components/ProgramBanner";
 import Tag from "../components/Tag";
+import { BASE_URL } from "../const";
+import { useParams } from "react-router-dom";
 
-const PROGRAM_DUMMY = {
-    id: 1,
-    slug: 'matematika-sd-kelas-1',
-    judul: 'Matematika SD Kelas 1',
-    imgUrl: 'https://images.unsplash.com/photo-1613563696485-f64240817218?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    tujuan: [
-        'Mengembangkan keterampilan berhitung interaktif',
-        'Mendorong kreativitas dalam mengenali bentuk geometris',
-        'Menumbuhkan pemahaman tentang konsep pengukuran',
-    ],
-    kompetensi: [
-        'Bekerja sama', 'Mandiri', 'Komunikatif', 'Kreatif', 'Berpikir Kritis'
-    ],
-    periode: {
-        tahun_ajaran: '2023/2024',
-        semester: '1',
-    },
-    topik: [
-        {
-            title: 'Penjumlahan dan Pengurangan',
-            activities: [
-                {title: 'Penjumlahan dan Pengurangan 1 Angka', url: '#'},
-                {title: 'Penjumlahan dan Pengurangan 2 Angka', url: '#'},
-                {title: 'Penjumlahan dan Pengurangan 3 Angka', url: '#'},
-            ]
-        },
-        {
-            title: 'Bangun Datar',
-            activities: [
-                {title: 'Pengenalan Bentuk-Bentuk Dasar', url: '#'},
-                {title: 'Pengenalan Sifat Bangun Datar', url: '#'},
-                {title: 'Identifikasi Bangun Datar di Lingkungan', url: '#'},
-            ]
-        },
-        {
-            title: 'Pengukuran',
-            activities: [
-                {title: 'Pengukuran Panjang', url: '#'},
-                {title: 'Pengukuran Berat', url: '#'},
-            ]
-        }
-    ]
+interface ProgramBasicData {
+    id: number;
+    nama: string;
+    tujuanPembelajaran: string[];
+    imgUrl: string;
+    periodePembelajaran: string;
 }
 
 
+type ProgramActivities = FoldableTopicProps[];
+type ProgramCompetencies = string[];
+
+const ORIGIN_URL = window.location.origin;
+
 const ProgramDetailPage = () => { 
-    const fetchProgramData = () => { 
-        // TODO : Fetch data from Backend
-        return PROGRAM_DUMMY;
+    let programId = -1;
+
+    const [programData, setProgramData] = useState<ProgramBasicData>({id: -1, nama: '', tujuanPembelajaran: [], imgUrl: '', periodePembelajaran: ''});
+    const [programCompetencies, setProgramCompetencies] = useState<ProgramCompetencies>([]);
+    const [programActivities, setProgramActivities] = useState<ProgramActivities>([]);
+
+    const fetchProgramData = async (programId : number) : Promise<ProgramBasicData> => { 
+        try {
+            const response = await fetch(`${BASE_URL}/program/${programId}`);
+            if (!response.ok) {
+                return {id: -1, nama: '', tujuanPembelajaran: [], imgUrl: '', periodePembelajaran: ''};
+            }
+
+            const json = await response.json();
+            const programData : ProgramBasicData = {
+                id: json.data[0].id_program,
+                nama: json.data[0].nama_program,
+                tujuanPembelajaran: json.data[0].tujuan_pembelajaran.split('\n'),
+                imgUrl: json.data[0].path_banner,
+                periodePembelajaran: `${json.data[0].periode_belajar} Tahun Ajaran ${json.data[0].tahun_akademik}`
+            };
+
+            return programData;
+        } catch (error) {
+            console.error('Failed to fetch program data ' + error);
+            return {id: -1, nama: '', tujuanPembelajaran: [], imgUrl: '', periodePembelajaran: ''};
+        }
     }
-    const data = fetchProgramData();
+
+    const fetchProgramCompetencies = async (programId : number) : Promise<ProgramCompetencies> => {
+        try {
+            const response = await fetch(`${BASE_URL}/program/kompetensi/${programId}`);
+            if (!response.ok) {
+                return [];
+            }
+
+            const json = await response.json();
+            const competencies : ProgramCompetencies = json.data;
+            return competencies;
+        } catch (error) {
+            console.error('Failed to fetch program competencies ' + error);
+            return [];
+        }
+    }
+
+    const fetchProgramActivities = async (programId : number) => {
+        try {
+            const response = await fetch(`${BASE_URL}/program/kegiatan/${programId}`);
+            if (!response.ok) {
+                return [];
+            }
+
+            const json = await response.json();
+            const activities : ProgramActivities = json.data.map((topic: {
+                nama_topik: string;
+                kegiatan: {id_kegiatan: number, nama_kegiatan: string}[]
+            }) => ({
+                title: topic.nama_topik,
+                activities: topic.kegiatan.map((activity: {id_kegiatan: number, nama_kegiatan: string}) => ({
+                    title: activity.nama_kegiatan,
+                    url: `${ORIGIN_URL}/activity/${activity.id_kegiatan}`
+                }))
+            }));
+            return activities;
+        } catch (error) {
+            console.error('Failed to fetch program activities ' + error);
+            return [];
+        }
+    }
+
+    useEffect(() => {
+        fetchProgramData(programId)
+            .then(data => setProgramData(data))
+            .catch(err => console.error(err));
+
+        fetchProgramCompetencies(programId)
+            .then(data => setProgramCompetencies(data))
+            .catch(err => console.error(err));
+
+        fetchProgramActivities(programId)
+            .then(data => setProgramActivities(data))
+            .catch(err => console.error(err));
+    }, [programId]);
 
     const breadcrumb = [
         {label: 'Home', link: '/'},
         {label: 'Program', link: '/program'},
-        {label: data.judul, link: `/program/${data.slug}`}
+        {label: programData.nama, link: `/program/${programData.id}`}
     ];
+
+    const { id } = useParams<{id: string}>();
+    if (!id) { return <div>Invalid Program ID</div>; }
+    programId = parseInt(id);
+
+    if (programData.id === -1) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <main className="flex flex-col">
-            <AppBar title={data.judul}/>
+            <AppBar title={programData.nama}/>
             <Breadcrumb items={breadcrumb}/>
-            <ProgramBanner imgUrl={data.imgUrl} judul={data.judul}/>
+            <ProgramBanner imgUrl={programData.imgUrl} judul={programData.nama}/>
             <div className="px-5">
                 <h2 className="font-semibold text-heading-4 text-text-100 mb-5">Tujuan Pembelajaran</h2>
                 <ul className="flex flex-col list-disc ml-4">
                 { 
-                    data.tujuan.map((tujuan, index)  => {
+                    programData.tujuanPembelajaran.map((tujuan, index)  => {
                         return <li className="text-lg text-neutral-900" key={index}>
                             {tujuan}
                         </li>
@@ -81,20 +139,24 @@ const ProgramDetailPage = () => {
                 <h2 className="font-semibold text-heading-4 text-text-100 my-5">Kompetensi</h2>
                 <div className="flex flex-wrap gap-2">
                     {
-                        data.kompetensi.map((kompetensi, index) => {
+                        programCompetencies.map((kompetensi, index) => {
                             return <Tag label={kompetensi} key={index}/>
                         })
                     }
                 </div>
                 <h2 className="font-semibold text-heading-4 text-text-100 my-5">Periode Pengajaran</h2>
                 <p className="text-neutral-900 text-paragraph-3">
-                    {`Semester ${data.periode.semester} Tahun Ajaran ${data.periode.tahun_ajaran}`}
+                    {programData.periodePembelajaran}
                 </p>
                 <h2 className="font-semibold text-heading-4 text-text-100 my-5">Topik Pembelajaran</h2>
                 <div className="flex flex-col gap-4 mb-6">
                 {
-                    data.topik.map((topik, index) => {
-                        return <FoldableTopic title={topik.title} activities={topik.activities} key={index}/>
+                    programActivities.map((topik, index) => {
+                        return <FoldableTopic 
+                            title={topik.title}
+                            activities={topik.activities}
+                            key={index}
+                        />
                     })
                 }
                 </div>
