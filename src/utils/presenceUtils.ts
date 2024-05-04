@@ -1,5 +1,6 @@
 import { PresenceData, PresenceStatus, StudentPresenceResponse } from "../types/Presence";
 import { BASE_URL } from "../const";
+import { getTeacherId } from "./authUtils";
 
 export function presenceStatusToString (status: PresenceStatus) {
     switch (status) {
@@ -65,8 +66,9 @@ export const savePresenceData = async (activityId: number, presenceData: Presenc
         id_murid: student.id,
         catatan_kehadiran: presenceStatusToString(student.status)
     }));
+    const idGuru = getTeacherId();
     try {
-        const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/presensi/${activityId}`, {
+        const response = await fetch(`${BASE_URL}/presensi/${activityId}?guru=${idGuru}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
