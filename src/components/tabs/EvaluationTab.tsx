@@ -59,7 +59,7 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
             }
         };
         fetchData();
-    }, [activityId, onEvaluationDataChange]);    
+    }, [activityId]);    
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
