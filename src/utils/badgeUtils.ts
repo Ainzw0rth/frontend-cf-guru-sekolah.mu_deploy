@@ -1,4 +1,3 @@
-import { json } from "stream/consumers";
 import { getTeacherId } from "./authUtils";
 
 export const updateBadges = async () => {
