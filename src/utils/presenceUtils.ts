@@ -1,5 +1,6 @@
 import { PresenceData, PresenceStatus, StudentPresenceResponse } from "../types/Presence";
 import { BASE_URL } from "../const";
+import { updateBadges } from "./badgeUtils";
 
 export function presenceStatusToString (status: PresenceStatus) {
     switch (status) {
@@ -76,6 +77,7 @@ export const savePresenceData = async (activityId: number, presenceData: Presenc
         if (!response.ok) {
             throw new Error('Failed to save presence data' + response.statusText);
         }
+        updateBadges();
     } catch (error) {
         throw new Error('Failed to save presence data: ' + error);
     }

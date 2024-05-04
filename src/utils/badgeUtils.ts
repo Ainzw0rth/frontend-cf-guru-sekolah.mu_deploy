@@ -1,4 +1,13 @@
-export const updateBadges = async (idGuru: any) => {
+import { json } from "stream/consumers";
+import { getTeacherId } from "./authUtils";
+
+export const updateBadges = async () => {
+    let idGuru = getTeacherId();
+
+    if (!idGuru) {
+        return;
+    }
+
     console.log('Updating badges for teacher with id', idGuru);
     try {
         const badgeTypes = {
@@ -21,9 +30,11 @@ export const updateBadges = async (idGuru: any) => {
                 throw new Error('Failed to update badges');
             }
         
-            const jsonData = await response.json();
-        
-            if (jsonData.data == true) {
+            const isQualifiedforBadge = await response.json();
+            
+            console.log("badgeType:", badgeType + ", qualified for badge: " + isQualifiedforBadge.data);
+
+            if (isQualifiedforBadge.data == true) {
                 const responseUpdate = await fetch(`https://backend-sekolah-mu-development.vercel.app/badge/${badgeType}/${idGuru}`, { 
                     method: 'POST',
                     headers: {

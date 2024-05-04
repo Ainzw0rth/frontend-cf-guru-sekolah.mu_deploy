@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StudentEvaluation } from "../../types/Evaluation";
+import { updateBadges } from "../../utils/badgeUtils";
 
 interface EvaluationPopupProps {
     studentData: StudentEvaluation;
@@ -52,6 +53,8 @@ const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activity
             if (!response.ok) {
                 throw new Error('Failed to patch evaluation');
             }
+
+            updateBadges();
         } catch (error) {
             console.error("Error patching evaluation:", error);
         }
