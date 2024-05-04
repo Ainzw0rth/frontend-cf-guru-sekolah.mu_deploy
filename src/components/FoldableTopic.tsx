@@ -5,12 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import chevron from "../assets/chevron.png";
 
-interface ActivityLink {
+export interface ActivityLink {
     title: string;
     url: string;
 }
 
-interface FoldableTopicProps {
+export interface FoldableTopicProps {
     title: string;
     activities: ActivityLink[];
 }
