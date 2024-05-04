@@ -59,7 +59,7 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
             }
         };
         fetchData();
-    }, [activityId]);    
+    }, [activityId, onEvaluationDataChange]);    
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
@@ -101,7 +101,7 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
         setSelectedStudent(null);
     };
 
-    console.log("evaluationData", evaluationData);
+    // console.log("evaluationData", evaluationData);
 
     return (
         <div className="flex flex-col mt-5 gap-5 w-5/6 mx-auto">

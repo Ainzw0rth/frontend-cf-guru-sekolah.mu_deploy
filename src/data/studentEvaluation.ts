@@ -32,7 +32,7 @@ export const fetchEvaluationData = async (activityId: number) => {
         // Fetch student list in the activity
         const studentResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/kegiatan/murid/${activityId}`);
         const studentData = await studentResponse.json();
-        console.log("studentData", studentData);
+        // console.log("studentData", studentData);
         
         // Fetch evaluation data for the activity
         const evaluationResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/evaluasi?jadwal=${activityId}`);
@@ -79,7 +79,7 @@ export const fetchEvaluationData = async (activityId: number) => {
             try {
                 const formattedStudents = evaluationData.data.map((item: any) => {
                     const student = studentData.data.find((student: any) => student.id_murid === item.id_murid);
-                    console.log("student", student);
+                    // console.log("student", student);
                     return {
                         id: item.id_murid,
                         name: student ? student.nama_murid : `Murid ${item.id_murid}`,
