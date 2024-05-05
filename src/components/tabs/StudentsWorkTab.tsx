@@ -1,7 +1,15 @@
 // import { fetchStudentWorkData } from "../../data/studentWork";
+import { STUDENT_WORK } from "../../data/studentWork"
 import { StudentWorkData, StudentWorkStatus, StudentWork, } from "../../types/StudentWork";
 import StudentWorkPopUp from "./StudentWorkPopUp";
 import { useState, useEffect } from "react";
+import { fetchStudentWorkData } from "../../data/studentWork";
+
+
+// const fetchStudentWorkData = (activityId: number) => {
+//     console.log(`Fetching evaluation data for activity ${activityId}`);
+//     return STUDENT_WORK;
+// }
 
 interface StudentWorkCardProps {
     student: StudentWork;
@@ -42,19 +50,19 @@ interface StudentWorkTabProps {
 const StudentWorkTab = ({ activityId, onStudentWorkDataChange }: StudentWorkTabProps) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
-    const [isLoading, /*setIsLoading*/] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [filteredStudents, setFilteredStudents] = useState<StudentWork[]>([]);
-    const [studentWorkData, /*setStudentWorkData*/] = useState<StudentWorkData>();
+    const [studentWorkData, setStudentWorkData] = useState<StudentWorkData>();
     const [selectedStudent, setSelectedStudent] = useState<StudentWork | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // const dataWork : StudentWorkData = await fetchStudentWorkData(activityId);
-                // console.log("Get data:", dataWork);
-                // setStudentWorkData(dataWork);
-                // onStudentWorkDataChange(dataWork);
-                // setIsLoading(false);
+                const dataWork : StudentWorkData = await fetchStudentWorkData(activityId);
+                console.log("Get data:", dataWork);
+                setStudentWorkData(dataWork);
+                onStudentWorkDataChange(dataWork);
+                setIsLoading(false);
             } catch (error) {
                 console.error("Error fetching student's work data:", error);
             }
@@ -137,7 +145,6 @@ const StudentWorkTab = ({ activityId, onStudentWorkDataChange }: StudentWorkTabP
                 >
                     <option value="">Status</option>
                     <option value={StudentWorkStatus.NOT_YET}>Belum Dikerjakan</option>
-                    <option value={StudentWorkStatus.INCOMPLETE}>Belum Selesai</option>
                     <option value={StudentWorkStatus.COMPLETE}>Selesai</option>
                 </select>
             </div>

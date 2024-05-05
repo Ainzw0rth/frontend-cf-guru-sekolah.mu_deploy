@@ -5,6 +5,7 @@ import PresenceTab from "../components/tabs/PresenceTab";
 import EvaluationTab from '../components/tabs/EvaluationTab';
 import InstructionTab from '../components/tabs/InstructionTab';
 import MaterialTab from "../components/tabs/MaterialTab";
+import StudentWorkTab from "../components/tabs/StudentsWorkTab";
 
 import { PresenceData } from "../types/Presence";
 import { EvaluationData } from "../types/Evaluation";
@@ -14,6 +15,7 @@ import { MaterialData } from "../types/Material";
 import LinearProgress from '@mui/material/LinearProgress';
 import ProgramBanner from "../components/ProgramBanner";
 import { BASE_URL } from "../const";
+import { StudentWorkData } from "../types/StudentWork";
 
 // #region tab components
 interface ActivityTabItemProps {
@@ -47,7 +49,9 @@ const generateTabElements = (
     instructionData: InstructionData | undefined,
     onInstructionDataChange: (dataEval: InstructionData) => void,
     materialData: MaterialData | undefined,
-    onMaterialDataChange: (data: MaterialData) => void
+    onMaterialDataChange: (data: MaterialData) => void,
+    studentWorkData: StudentWorkData | undefined,
+    onStudentWorkDataChange: (data: StudentWorkData) => void
 ) => {
     return [
         {
@@ -68,8 +72,7 @@ const generateTabElements = (
         },
         {
             id: TAB.HASIL_KARYA, element: 
-            <div></div>
-            // <StudentsWorkTab activityId={activityId}/>
+                <StudentWorkTab activityId={activityId} onStudentWorkDataChange={(data) => onStudentWorkDataChange(data)} studentWorkData={studentWorkData}/>
         }
     ]
 }
@@ -134,6 +137,11 @@ const ActivityPage = () => {
         setMaterialData(data);
     }
 
+    const [studentWorkData, setStudentWorkData] = useState<StudentWorkData>();
+    const storeStudentWorkData = (data : StudentWorkData) => {
+        setStudentWorkData(data);
+    }
+
     const [activityData, setActivityData] = useState<ActivityPageData>({ 
         title: '', imgUrl: '', instruksi_murid: [], instruksi_guru: [], tujuan_pembelajaran: []
     });
@@ -185,7 +193,9 @@ const ActivityPage = () => {
         instructionData,
         storeInstructionData,
         materialData,
-        storeMaterialData
+        storeMaterialData,
+        studentWorkData,
+        storeStudentWorkData
     );
 
     return (
