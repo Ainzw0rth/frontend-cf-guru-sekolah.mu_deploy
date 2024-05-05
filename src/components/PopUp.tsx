@@ -3,10 +3,11 @@ import React from 'react';
 interface PopupProps {
   message: string;
   image: string;
+  action_label: string;
   action: () => void;
 }
 
-const Popup: React.FC<PopupProps> = ({ message, image, action }) => {
+const Popup: React.FC<PopupProps> = ({ message, image, action_label, action }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="fixed inset-0 bg-black opacity-50"></div>
@@ -37,7 +38,7 @@ const Popup: React.FC<PopupProps> = ({ message, image, action }) => {
             onClick={() => action()}
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
           >
-            Action
+            {action_label}
           </button>
         </div>
       </div>
