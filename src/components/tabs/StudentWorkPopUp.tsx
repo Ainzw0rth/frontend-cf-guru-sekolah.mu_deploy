@@ -9,7 +9,7 @@ interface StudentWorkPopupProps {
 }
 
 const StudentWorkPopUp: React.FC<StudentWorkPopupProps> = ({ studentData, activityId, teacherId, onClose }) => {
-    const [studentWork, setStudentWork] = useState<StudentWork>(studentData);
+    const [studentWork] = useState<StudentWork>(studentData);
     const [file, setFile] = useState<File | undefined>(undefined);
     const [isSaving, setIsSaving] = useState(false);
 
