@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StudentEvaluation } from "../../types/Evaluation";
+import { updateBadges } from "../../utils/badgeUtils";
 
 interface EvaluationPopupProps {
     studentData: StudentEvaluation;
@@ -37,7 +38,7 @@ const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activity
 
     const patchEvaluation = async (activityId: number, teacherId: number, data: any) => {
         try {
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/evaluasi?kegiatan=${activityId}&murid=${evaluation.id}`, {
+            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/evaluasi?jadwal=${activityId}&murid=${evaluation.id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
@@ -52,6 +53,8 @@ const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activity
             if (!response.ok) {
                 throw new Error('Failed to patch evaluation');
             }
+
+            updateBadges();
         } catch (error) {
             console.error("Error patching evaluation:", error);
         }

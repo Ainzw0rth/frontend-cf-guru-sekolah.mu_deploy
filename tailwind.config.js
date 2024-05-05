@@ -22,6 +22,7 @@ export default {
             'heading-4': ['20px', '24px'],
             'body-1': ['16px', '18px'],
             'body-2': ['14px', '16px'],
+            'body-3': ['18px', '20px'],
             'paragraph-1': ['16px', '18px'],
             'paragraph-2': ['16px', '18px'],
             'paragraph-3': ['14px', '16px'],

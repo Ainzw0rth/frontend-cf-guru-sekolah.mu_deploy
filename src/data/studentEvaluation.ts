@@ -32,13 +32,16 @@ export const fetchEvaluationData = async (activityId: number) => {
         // Fetch student list in the activity
         const studentResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/kegiatan/murid/${activityId}`);
         const studentData = await studentResponse.json();
+        // console.log("studentData", studentData);
         
         // Fetch evaluation data for the activity
-        const evaluationResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/evaluasi?kegiatan=${activityId}`);
+        const evaluationResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/evaluasi?jadwal=${activityId}`);
         let evaluationData = await evaluationResponse.json();
         
         // Check all student ids
+        // console.log("studentData", studentData);
         const studentIds = studentData.data.map((student: any) => student.id_murid);
+        // console.log("studentIds", studentIds);
         const evaluationIds = evaluationData.data.map((item: any) => item.id_murid);
         
         const missingIds = studentIds.filter((id: any) => !evaluationIds.includes(id));
@@ -67,21 +70,20 @@ export const fetchEvaluationData = async (activityId: number) => {
             }
             
             // Refetch evaluation data
-            evaluationData = await fetch(`https://backend-sekolah-mu-development.vercel.app/evaluasi?kegiatan=${activityId}`).then(response => response.json());
+            evaluationData = await fetch(`https://backend-sekolah-mu-development.vercel.app/evaluasi?jadwal=${activityId}`).then(response => response.json());
         }
-        
+                
+        evaluationData.data.sort((a: any, b: any) => a.id_murid - b.id_murid);
+
         const formattedData = () => {
             try {
                 const formattedStudents = evaluationData.data.map((item: any) => {
-
-                    console.log("studentData :", studentData);
-                    console.log("studentData.data :", studentData.data);
-
                     const student = studentData.data.find((student: any) => student.id_murid === item.id_murid);
+                    // console.log("student", student);
                     return {
                         id: item.id_murid,
                         name: student ? student.nama_murid : `Murid ${item.id_murid}`,
-                        imgUrl: `https://i.pinimg.com/736x/3f/4c/e9/3f4ce92510bf6161969dcdc9bda93ffb.jpg`,
+                        imgUrl: student.path_foto_profil,
                         penilaian: item.penilaian,
                         catatan: item.catatan,
                         feedback: item.feedback,

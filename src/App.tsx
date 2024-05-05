@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { isLoggedIn } from "./utils/authUtils";
 
 // Pages
 import HomePage from "./pages/HomePage";
@@ -8,9 +9,12 @@ import ProfilePage from "./pages/ProfilePage";
 import SchedulePage from "./pages/SchedulePage";
 import LoginPage from "./pages/LoginPage";
 import ActivityPage from "./pages/ActivityPage";
+import DashboardListPage from "./pages/DashboardListPage";
+import DashboardPage from "./pages/DashboardPage";
 
 // Components
 import RootLayout from "./layout/RootLayout";
+import LoginLayout from "./layout/LoginLayout";
 
 const router = createBrowserRouter([
     {
@@ -23,7 +27,9 @@ const router = createBrowserRouter([
             {path: '/profile', element: <ProfilePage/>},
             {path: '/login', element: <LoginPage/>},
             {path: '/schedule', element: <SchedulePage/>},
-            {path: '/activity/:id', element: <ActivityPage/>}
+            {path: '/activity/:id', element: <ActivityPage/>},
+            {path: '/dashboard', element: <DashboardListPage/>},
+            {path: '/dashboard/:id', element: <DashboardPage/>}
         ]
     },
 ])
@@ -31,7 +37,15 @@ const router = createBrowserRouter([
 const App = () => {
     return (
         <>
+        {
+            isLoggedIn() 
+                ? 
             <RouterProvider router={router} />
+                : 
+            <LoginLayout>
+                <LoginPage />
+            </LoginLayout>
+        }
         </>
     )}
 

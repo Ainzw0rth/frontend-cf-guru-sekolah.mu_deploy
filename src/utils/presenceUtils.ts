@@ -1,5 +1,7 @@
-import { toast } from "react-toastify";
 import { PresenceData, PresenceStatus, StudentPresenceResponse } from "../types/Presence";
+import { BASE_URL } from "../const";
+import { updateBadges } from "./badgeUtils";
+import { getTeacherId } from "./authUtils";
 
 export function presenceStatusToString (status: PresenceStatus) {
     switch (status) {
@@ -33,9 +35,10 @@ export function stringToPresenceStatus (status: string) {
 
 export const fetchPresenceData = async (activityId : number) => {
     try {
-        const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/presensi/${activityId}`);
+        const response = await fetch(`${BASE_URL}/presensi/${activityId}`);
         if (!response.ok) {
-            throw new Error('Failed to fetch presence data');
+            console.error('Failed to fetch presence data ' + response.statusText);
+            return [];
         }
 
         const json = await response.json();
@@ -53,7 +56,8 @@ export const fetchPresenceData = async (activityId : number) => {
         ]    
         return presenceData;
     } catch (error) {
-        throw new Error('Failed to fetch presence data');
+        console.error('Failed to fetch presence data ' + error);
+        return [];
     }
 }
 
@@ -63,8 +67,9 @@ export const savePresenceData = async (activityId: number, presenceData: Presenc
         id_murid: student.id,
         catatan_kehadiran: presenceStatusToString(student.status)
     }));
+    const idGuru = getTeacherId();
     try {
-        const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/presensi/${activityId}`, {
+        const response = await fetch(`${BASE_URL}/presensi/${activityId}?guru=${idGuru}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -72,11 +77,10 @@ export const savePresenceData = async (activityId: number, presenceData: Presenc
             body: JSON.stringify(sentData)
         });
         if (!response.ok) {
-            toast.error('Gagal menyimpan data presensi');
             throw new Error('Failed to save presence data' + response.statusText);
         }
+        updateBadges();
     } catch (error) {
-        toast.error('Gagal menyimpan data presensi');
         throw new Error('Failed to save presence data: ' + error);
     }
 

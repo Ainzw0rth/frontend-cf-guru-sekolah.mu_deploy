@@ -1,24 +1,30 @@
 import { useEffect, useState } from "react";
-import ProgramBanner from "../components/ProgramBanner";
+import { useParams } from "react-router-dom";
+
 import PresenceTab from "../components/tabs/PresenceTab";
-// import StudentsWorkTab from "../components/tabs/StudentsWorkTab";
 import EvaluationTab from '../components/tabs/EvaluationTab';
 import InstructionTab from '../components/tabs/InstructionTab';
+import MaterialTab from "../components/tabs/MaterialTab";
+import StudentWorkTab from "../components/tabs/StudentsWorkTab";
+
 import { PresenceData } from "../types/Presence";
 import { EvaluationData } from "../types/Evaluation";
 import { InstructionData } from "../types/Instruction";
-import { useParams } from "react-router-dom";
-import LinearProgress from '@mui/material/LinearProgress';
-import MaterialTab from "../components/tabs/MaterialTab";
 import { MaterialData } from "../types/Material";
 
-interface ActivityTabProps {
+import LinearProgress from '@mui/material/LinearProgress';
+import ProgramBanner from "../components/ProgramBanner";
+import { BASE_URL } from "../const";
+import { StudentWorkData } from "../types/StudentWork";
+
+// #region tab components
+interface ActivityTabItemProps {
     active: boolean;
     title: string;
     onClick: () => void;
 }
 
-const ActivityTab = (props : ActivityTabProps) => {
+const ActivityTabItem = (props : ActivityTabItemProps) => {
     return (
         <button 
             className={`w-1/2 py-1 px-6 text-center rounded-3xl shadow-hard border-2 text-label-1 font-semibold
@@ -43,7 +49,9 @@ const generateTabElements = (
     instructionData: InstructionData | undefined,
     onInstructionDataChange: (dataEval: InstructionData) => void,
     materialData: MaterialData | undefined,
-    onMaterialDataChange: (data: MaterialData) => void
+    onMaterialDataChange: (data: MaterialData) => void,
+    studentWorkData: StudentWorkData | undefined,
+    onStudentWorkDataChange: (data: StudentWorkData) => void
 ) => {
     return [
         {
@@ -52,7 +60,7 @@ const generateTabElements = (
         },
         {
             id: TAB.MATERI, element: 
-                <MaterialTab activityId={activityId} onPresenceDataChange={(data) => onMaterialDataChange(data)} materialData={materialData}/>
+                <MaterialTab activityId={activityId} onMaterialDataChange={(data) => onMaterialDataChange(data)} materialData={materialData}/>
         },
         {
             id: TAB.PRESENSI, element: 
@@ -64,13 +72,49 @@ const generateTabElements = (
         },
         {
             id: TAB.HASIL_KARYA, element: 
-            <div></div>
-            // <StudentsWorkTab activityId={activityId}/>
+                <StudentWorkTab activityId={activityId} onStudentWorkDataChange={(data) => onStudentWorkDataChange(data)} studentWorkData={studentWorkData}/>
         }
     ]
 }
+// #endregion
+
+// #region data fetching
+interface ActivityPageData {
+    title: string;
+    imgUrl: string;
+    instruksi_murid: string[];
+    instruksi_guru: string[];
+    tujuan_pembelajaran: string[];
+}
+
+const fetchActivityData = async (activityId : number) : Promise<ActivityPageData> => {
+    try {
+        const response = await fetch(`${BASE_URL}/kegiatan/${activityId}`);
+        if (!response.ok) {
+            console.error('Failed to fetch activity data ' + response.statusText);
+            return { title: '', imgUrl: '', instruksi_murid: [], instruksi_guru: [], tujuan_pembelajaran: [] };
+        }
+
+        const json = await response.json();
+        const activityData : ActivityPageData = {
+            title: json.data.nama_kegiatan,
+            imgUrl: json.data.path_banner,
+            instruksi_murid: json.data.instruksi_murid.split('\n'),
+            instruksi_guru: json.data.instruksi_guru.split('\n'),
+            tujuan_pembelajaran: json.data.tujuan_pembelajaran.split('\n')
+        }
+        return activityData;
+    } catch (error) {
+        console.error('Failed to fetch activity data ' + error);
+        return { title: '', imgUrl: '', instruksi_murid: [], instruksi_guru: [], tujuan_pembelajaran: [] };
+    }
+
+}
+
+// #endregion
 
 const ActivityPage = () => {
+    let activityId = -1;
     const [openTab, setOpenTab] = useState(TAB.INSTRUKSI);    
 
     const [presenceData, setPresenceData] = useState<PresenceData>();
@@ -93,27 +137,52 @@ const ActivityPage = () => {
         setMaterialData(data);
     }
 
+    const [studentWorkData, setStudentWorkData] = useState<StudentWorkData>();
+    const storeStudentWorkData = (data : StudentWorkData) => {
+        setStudentWorkData(data);
+    }
+
+    const [activityData, setActivityData] = useState<ActivityPageData>({ 
+        title: '', imgUrl: '', instruksi_murid: [], instruksi_guru: [], tujuan_pembelajaran: []
+    });
+
     const [totalData, setTotalData] = useState<number | null>(null);
     const [unfinishedData, setUnfinishedData] = useState<number | null>(null);
 
+    useEffect(() => {
+        if (!activityId) { return; }
+
+        fetch('https://backend-sekolah-mu-development.vercel.app/kegiatan/percentage?id=' + activityId)
+            .then(response => response.json())
+            .then(data => {
+                // Store the response data in the state variable
+                console.log(data.data[0]);
+                setTotalData(data.data[0].total_rows * 5);
+                setUnfinishedData(data.data[0].null_catatan_kehadiran*1 + data.data[0].null_penilaian*1 + data.data[0].null_catatan*1 + data.data[0].null_feedback*1 + data.data[0].null_id_karya*1);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        fetchActivityData(activityId)
+            .then(data =>  {
+                setActivityData(data)
+                setInstructionData({ 
+                    instruksiMurid: data.instruksi_murid, 
+                    instruksiGuru: data.instruksi_guru, 
+                    tujuanPembelajaran: data.tujuan_pembelajaran 
+                });
+            }
+            )
+            .catch(err => {
+                console.error(err);
+                setActivityData({ title: '', imgUrl: '', instruksi_murid: [], instruksi_guru: [], tujuan_pembelajaran: [] });
+            });
+    }, [activityId]);
+
     const { id } = useParams();
     if (!id) { return <div>Invalid Activity ID</div>; }
-    const activityId = parseInt(id);
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-        fetch('https://backend-sekolah-mu-development.vercel.app/kegiatan/percentage?id=' + activityId)
-          .then(response => response.json())
-          .then(data => {
-            // Store the response data in the state variable
-            console.log(data.data[0]);
-            setTotalData(data.data[0].total_rows * 5);
-            setUnfinishedData(data.data[0].null_catatan_kehadiran*1 + data.data[0].null_penilaian*1 + data.data[0].null_catatan*1 + data.data[0].null_feedback*1 + data.data[0].null_id_karya*1);
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
-      }, [activityId]);
+    activityId = parseInt(id);
 
     const tabElements = generateTabElements(
         activityId,
@@ -124,19 +193,21 @@ const ActivityPage = () => {
         instructionData,
         storeInstructionData,
         materialData,
-        storeMaterialData
+        storeMaterialData,
+        studentWorkData,
+        storeStudentWorkData
     );
 
     return (
     <div>
         <main className="flex flex-col">
-            <ProgramBanner imgUrl="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2024/02/1000081242.jpg" judul="Belajar Baris Berbaris"/>
+            <ProgramBanner imgUrl={activityData.imgUrl} judul={activityData.title}/>
             <nav className="flex px-5 overflow-auto whitespace-nowrap pb-4 gap-4">
-                <ActivityTab active={openTab == TAB.INSTRUKSI} title="Instruksi" onClick={() => setOpenTab(TAB.INSTRUKSI)}/>
-                <ActivityTab active={openTab == TAB.MATERI} title="Materi" onClick={() => setOpenTab(TAB.MATERI)}/>
-                <ActivityTab active={openTab == TAB.PRESENSI} title="Presensi" onClick={() => setOpenTab(TAB.PRESENSI)}/>
-                <ActivityTab active={openTab == TAB.EVALUASI} title="Evaluasi" onClick={() => setOpenTab(TAB.EVALUASI)}/>
-                <ActivityTab active={openTab == TAB.HASIL_KARYA} title="Hasil Karya" onClick={() => setOpenTab(TAB.HASIL_KARYA)}/>            
+                <ActivityTabItem active={openTab == TAB.INSTRUKSI} title="Instruksi" onClick={() => setOpenTab(TAB.INSTRUKSI)}/>
+                <ActivityTabItem active={openTab == TAB.MATERI} title="Materi" onClick={() => setOpenTab(TAB.MATERI)}/>
+                <ActivityTabItem active={openTab == TAB.PRESENSI} title="Presensi" onClick={() => setOpenTab(TAB.PRESENSI)}/>
+                <ActivityTabItem active={openTab == TAB.EVALUASI} title="Evaluasi" onClick={() => setOpenTab(TAB.EVALUASI)}/>
+                <ActivityTabItem active={openTab == TAB.HASIL_KARYA} title="Hasil Karya" onClick={() => setOpenTab(TAB.HASIL_KARYA)}/>            
             </nav>
             {
                 tabElements.find((tab) => tab.id === openTab)?.element
@@ -147,7 +218,7 @@ const ActivityPage = () => {
             <div className="pt-4 flex items-center mx-10 gap-10">
                 <LinearProgress
                     variant="determinate"
-                    value={((unfinishedData ?? 0) / (totalData ?? 1)) * 100}
+                    value={Math.floor((((totalData ?? 1) -(unfinishedData ?? 0)) / (totalData ?? 1)) * 100)}
                     className='rounded-lg shadow-md flex-grow'
                     sx={{
                         height: '10px',
@@ -156,7 +227,7 @@ const ActivityPage = () => {
                         },
                     }}
                 />
-                <p className='text-text-100 text-right ml-2'>{((unfinishedData ?? 0) / (totalData ?? 1)) * 100}%</p>
+                <p className='text-text-100 text-right ml-2'>{Math.floor((((totalData ?? 1) -(unfinishedData ?? 0)) / (totalData ?? 1)) * 100)}%</p>
             </div>
         </div>
     </div>
