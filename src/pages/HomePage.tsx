@@ -96,8 +96,7 @@ const HomePage = () => {
         setIsLoading(false);         
         return;
       }
-
-      const formattedKegiatans = data.data.rows.map((kegiatanData: any) => ({
+      const formattedKegiatans = data.data.map((kegiatanData: any) => ({
         id: kegiatanData.id_kegiatan,
         title: kegiatanData.nama_kegiatan,
         class: kegiatanData.nama_kelas || '', 
@@ -108,7 +107,6 @@ const HomePage = () => {
         imageUrl: 'https://via.placeholder.com/300',
         taskPercentage: Math.floor(Math.random() * (100 + 1)),
       }));
-  
       setKegiatans(formattedKegiatans);
       setIsLoading(false);
     } catch (error) {

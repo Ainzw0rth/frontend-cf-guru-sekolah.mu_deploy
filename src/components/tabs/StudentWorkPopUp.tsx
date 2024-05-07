@@ -9,20 +9,30 @@ interface StudentWorkPopupProps {
 }
 
 const StudentWorkPopUp: React.FC<StudentWorkPopupProps> = ({ studentData, activityId, teacherId, onClose }) => {
-    const [studentWork, setStudentWork] = useState<StudentWork>(studentData);
-    const [tempStudentWork, setTempStudentWork] = useState<StudentWork>(studentData);
+    const [studentWork] = useState<StudentWork>(studentData);
+    const [file, setFile] = useState<File | undefined>(undefined);
     const [isSaving, setIsSaving] = useState(false);
 
     const handleSubmit = async () => {
         try {
             setIsSaving(true);
-            setStudentWork(tempStudentWork);
 
-            if (!activityId || !teacherId) {
-                throw new Error("Activity ID or Teacher ID is missing");
+            if (!activityId || !teacherId || !file) {
+                throw new Error("Activity ID, Teacher ID, or file is missing");
             }
 
-            // await patchStudentWork(activityId, teacherId, tempStudentWork);
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/hasil_karya?kegiatan=${activityId}&murid=${studentWork.id}&guru=${teacherId}`, {
+                method: 'PATCH',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to patch student\'s work');
+            }
+
             onClose();
         } catch (error) {
             console.error("Error submitting student's work:", error);
@@ -34,26 +44,11 @@ const StudentWorkPopUp: React.FC<StudentWorkPopupProps> = ({ studentData, activi
     const handleClose = () => {
         onClose();
     };
-    // // TO DO: patch api
-    // const patchStudentWork = async (activityId: number, teacherId: number, data: any) => {
-    //     try {
-    //         const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/hasil_karya?kegiatan=${activityId}&murid=${studentWork.id}`, {
-    //             method: 'PATCH',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify({
-    //                 file: data.file,
-    //                 id_guru: teacherId
-    //             })
-    //         });
-    //         if (!response.ok) {
-    //             throw new Error('Failed to patch student\'s work');
-    //         }
-    //     } catch (error) {
-    //         console.error("Error patching student's work:", error);
-    //     }
-    // };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        setFile(file);
+    };
 
     return (
         <div style={{ position: "fixed", top: "0", left: "0", width: "100%", height: "100%", backgroundColor: "rgba(0, 0, 0, 0.5)", zIndex: "1000" }}>
@@ -70,10 +65,7 @@ const StudentWorkPopUp: React.FC<StudentWorkPopupProps> = ({ studentData, activi
                         <label className="text-label-1 text-text-100 mr-5">Hasil Karya:</label>
                         <input
                             type="file"
-                            value={tempStudentWork.file}
-                            onChange={(_e) => {
-                                setTempStudentWork({ ...tempStudentWork,/* file:  TO DO */})
-                            }}
+                            onChange={handleFileChange}
                             className="border rounded-md p-2 text-label-1 bg-neutral-4 w-full"
                         />
                     </div>
