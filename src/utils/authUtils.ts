@@ -4,6 +4,7 @@
 // We are aware this is not the safe approach, but the purpose of this auth is just for demonstration
 // to show how different data will be shown to the teacher's id
 export const isLoggedIn = () => {
+    localStorage.setItem('teacher_id', '1')
     return localStorage.getItem('teacher_id') !== null
 }
 

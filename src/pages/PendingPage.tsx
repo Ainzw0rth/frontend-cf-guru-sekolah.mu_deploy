@@ -18,35 +18,34 @@ const PendingPage = () => {
     useEffect(() => {
         const fetchPending = async () => {
             try{
-                const response = await fetch('https://backend-sekolah-mu-development.vercel.app/tugastertunda/all',
-                    {
-                        method: 'GET',
-                        body: JSON.stringify({
-                            id_guru: getTeacherId()
-                        })
-                    }
-                );
+                console.log(getTeacherId());
+
+                const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/tugastertunda/all?id_guru=${getTeacherId()}`);
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch pending tasks');
                 }
 
+                console.log(response.status);
+
                 const resJson = await response.json();
 
-                console.log(resJson);
+                console.log(resJson.data);
 
 
             } catch (error) {
-
+                console.error(error);
             }
         };
+
+        fetchPending();
     }, []);
 
     return (
     <div className='flex flex-col'>
         <Breadcrumb items={breadcrumb}/>
 
-        <div className='flex flex-col justify-center items-center' style={{
+        <div className='flex flex-col justify-center items-center relative' style={{
         backgroundImage: `url(${cloudland})`,
         backgroundRepeat: 'no-repeat',
         backgroundPosition: '0% 90%',
@@ -56,7 +55,7 @@ const PendingPage = () => {
         }}>
 
         {pending.length === 0 ? (
-            <div className='flex justify-center items-center my-4'>
+            <div className='absolute top-0 flex justify-center items-center'>
                 <p className='my-24'>Tidak ada tugas yang tertunda! Selamat!</p>
             </div>
         ) : (
