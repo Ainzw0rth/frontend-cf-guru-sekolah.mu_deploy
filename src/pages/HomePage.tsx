@@ -120,7 +120,7 @@ const HomePage = () => {
 
   const fetchAClass = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/kelas?guru=1`);
+      const response = await fetch(`${BASE_URL}/kelas?guru=${idGuru}`);
       if (!response.ok) {
         throw new Error('Failed to fetch class');
       }

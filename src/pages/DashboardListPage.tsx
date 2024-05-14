@@ -4,6 +4,7 @@ import { Murid } from "../types/Murid";
 import { Kelas } from "../types/Kelas";
 import DashboardCard from '../components/DashboardCard';
 import { BASE_URL } from "../const";
+import { getTeacherId } from "../utils/authUtils";
 
 const DashboardListPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -13,7 +14,7 @@ const DashboardListPage = () => {
     const [idKelas, setIdKelas] = useState<number | null>(null);
     const [kelas, setKelas] = useState<Kelas[]>([]);
 
-    const idGuru = 1;
+    const idGuru = getTeacherId();
 
     useEffect(() => {
         fetchClass();

@@ -4,6 +4,7 @@ import Pagination from "../components/Pagination";
 import { Program } from "../types/Program";
 import { Activity } from '../types/Activity';
 import { BASE_URL } from '../const';
+import { getTeacherId } from '../utils/authUtils';
 
 var programs: Program[] = [];
 var kegiatan: Activity[] = [];
@@ -20,7 +21,7 @@ const ProgramListPage = () => {
     const [isInitialFetch, setIsInitialFetch] = useState(true);
     
     const programsPerPage = 10;
-    const idGuru = 1;
+    const idGuru = getTeacherId();
 
     useEffect(() => {
         fetchPrograms();

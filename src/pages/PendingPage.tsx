@@ -31,7 +31,7 @@ const PendingPage = () => {
 
                 console.log(resJson.data);
 
-
+                setPending(resJson.data);
             } catch (error) {
                 console.error(error);
             }
