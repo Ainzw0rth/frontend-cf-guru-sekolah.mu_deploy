@@ -3,6 +3,7 @@ import { ChangeEvent, KeyboardEvent, useState, useEffect } from 'react';
 import { Murid } from "../types/Murid";
 import { Kelas } from "../types/Kelas";
 import DashboardCard from '../components/DashboardCard';
+import { BASE_URL } from "../const";
 
 const DashboardListPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -33,7 +34,7 @@ const DashboardListPage = () => {
 
     const fetchClass = async () => {
         try {
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/kelas?guru=${idGuru}`);
+            const response = await fetch(`${BASE_URL}/kelas?guru=${idGuru}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch class');
             }
@@ -56,7 +57,7 @@ const DashboardListPage = () => {
     const fetchClassStudent = async () => {
         try {
             console.log('fetching students of class:', idKelas);
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid?kelas=${idKelas}`);
+            const response = await fetch(`${BASE_URL}/murid?kelas=${idKelas}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch student');
             }

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StudentEvaluation } from "../../types/Evaluation";
 import { updateBadges } from "../../utils/badgeUtils";
+import {BASE_URL} from "../../const";
 
 interface EvaluationPopupProps {
     studentData: StudentEvaluation;
@@ -38,7 +39,7 @@ const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activity
 
     const patchEvaluation = async (activityId: number, teacherId: number, data: any) => {
         try {
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/evaluasi?jadwal=${activityId}&murid=${evaluation.id}`, {
+            const response = await fetch(`${BASE_URL}/evaluasi?jadwal=${activityId}&murid=${evaluation.id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'

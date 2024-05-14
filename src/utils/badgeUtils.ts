@@ -1,4 +1,5 @@
 import { getTeacherId } from "./authUtils";
+import { BASE_URL } from "../const";
 
 export const updateBadges = async () => {
     let idGuru = getTeacherId();
@@ -18,7 +19,7 @@ export const updateBadges = async () => {
         };
         
         for (const [badgeType, badgeValue] of Object.entries(badgeTypes)) {
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/badge/${badgeType}/${idGuru}`, {
+            const response = await fetch(`${BASE_URL}/badge/${badgeType}/${idGuru}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -34,7 +35,7 @@ export const updateBadges = async () => {
             console.log("badgeType:", badgeType + ", qualified for badge: " + isQualifiedforBadge.data);
 
             if (isQualifiedforBadge.data == true) {
-                const responseUpdate = await fetch(`https://backend-sekolah-mu-development.vercel.app/badge/${badgeType}/${idGuru}`, { 
+                const responseUpdate = await fetch(`${BASE_URL}/badge/${badgeType}/${idGuru}`, { 
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

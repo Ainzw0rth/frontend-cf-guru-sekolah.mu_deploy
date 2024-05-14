@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import banner from '../assets/profile_banner.jpg';
 import { getTeacherId } from '../utils/authUtils';
+import { BASE_URL } from '../const';
 
 const TeacherProfile = () => {
     const [profile, setProfile] = useState(null);
 
     useEffect(() => {
         const fetchProfile = async () => {
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/profil/${getTeacherId()}`, {
+            const response = await fetch(`${BASE_URL}/profil/${getTeacherId()}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -42,7 +43,7 @@ const BadgesList = () => {
 
     useEffect(() => {
         const fetchBadges = async () => {
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/profil/badges/${getTeacherId()}`, {
+            const response = await fetch(`${BASE_URL}/profil/badges/${getTeacherId()}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -85,7 +86,7 @@ const ProfilePage = () => {
     useEffect(() => {
         const fetchBadgeCount = async () => {
             // Replace with your actual fetch logic
-            const response = await fetch('https://backend-sekolah-mu-development.vercel.app/profil/badges/' + getTeacherId());
+            const response = await fetch(`${BASE_URL}/profil/badges/` + getTeacherId());
             const badgeCount = await response.json();
             setNumberOfRows(badgeCount.data.length);
         };

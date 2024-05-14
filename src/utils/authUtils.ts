@@ -3,6 +3,8 @@
 
 // We are aware this is not the safe approach, but the purpose of this auth is just for demonstration
 // to show how different data will be shown to the teacher's id
+import { BASE_URL } from "../const"
+
 export const isLoggedIn = () => {
     localStorage.setItem('teacher_id', '1')
     return localStorage.getItem('teacher_id') !== null
@@ -18,7 +20,7 @@ export const login = async (email: string, password: string) : Promise<number> =
     // 2. -1 if failed
 
     let teacher_id = -1;
-    await fetch('https://backend-sekolah-mu-development.vercel.app/auth/login', {
+    await fetch(`${BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

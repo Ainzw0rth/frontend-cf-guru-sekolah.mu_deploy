@@ -9,144 +9,7 @@ import StudentIdentity from '../components/StudentIdentity';
 import StudentPresenceChart from '../components/StudentPresenceChart';
 import StudentWorkCarousel from '../components/StudentWorkCarousel';
 import StudentNote from '../components/StudentNote';
-
-/* TEMPORARY DATA
-const DASHBOARD_DATA: StudentDashboard = {
-    identity: 
-        {
-            id: 1,
-            name: 'John Doe',
-            gender: 'L',
-            birth_date: new Date('2000-01-01'),
-            nisn: '1234567890',
-            path_profile: 'https://i.pinimg.com/736x/c9/33/6f/c9336f3f0a0160c3e2d0e18c7d096b73.jpg',
-        },
-    presenceSummary: [
-        {
-            status: 'Hadir',
-            total: 10,
-        },
-        {
-            status: 'Sakit',
-            total: 2,
-        },
-        {
-            status: 'Izin',
-            total: 3,
-        },
-        {
-            status: 'Alpa',
-            total: 1,
-        },
-    ],
-    scoreSummary: 80,
-    activityCatatan: [
-        {
-            activity_id: 1,
-            activity_name: 'Pengenalan Hewan',
-            catatan: 'Lupa membawa buku',
-        },
-        {
-            activity_id: 2,
-            activity_name: 'Pengenalan Bentuk',
-            catatan: 'Tidak mengerjakan tugas',
-        },
-        {
-            activity_id: 3,
-            activity_name: 'Menggambar Pemandangan Desa',
-            catatan: 'Mengerjakan tugas dengan baik',
-        }
-    ],
-    activityFeedback: [
-        {
-            activity_id: 1,
-            activity_name: 'Pengenalan Hewan',
-            feedback: 'Jangan lupa membawa buku lagi ya',
-        },
-        {
-            activity_id: 2,
-            activity_name: 'Pengenalan Bentuk',
-            feedback: 'Lain kali lebih fokus mengerjakan tugas ya',
-        },
-        {
-            activity_id: 3,
-            activity_name: 'Menggambar Pemandangan Desa',
-            feedback: 'Good job! Keep it up!',
-        },
-        {
-            activity_id: 1,
-            activity_name: 'Pengenalan Hewan',
-            feedback: 'Jangan lupa membawa buku lagi ya',
-        },
-        {
-            activity_id: 2,
-            activity_name: 'Pengenalan Bentuk',
-            feedback: 'Lain kali lebih fokus mengerjakan tugas ya',
-        },
-        {
-            activity_id: 3,
-            activity_name: 'Menggambar Pemandangan Desa',
-            feedback: 'Good job! Keep it up!',
-        },
-        {
-            activity_id: 1,
-            activity_name: 'Pengenalan Hewan',
-            feedback: 'Jangan lupa membawa buku lagi ya',
-        },
-        {
-            activity_id: 2,
-            activity_name: 'Pengenalan Bentuk',
-            feedback: 'Lain kali lebih fokus mengerjakan tugas ya',
-        },
-        {
-            activity_id: 3,
-            activity_name: 'Menggambar Pemandangan Desa',
-            feedback: 'Good job! Keep it up!',
-        },
-        {
-            activity_id: 1,
-            activity_name: 'Pengenalan Hewan',
-            feedback: 'Jangan lupa membawa buku lagi ya',
-        },
-        {
-            activity_id: 2,
-            activity_name: 'Pengenalan Bentuk',
-            feedback: 'Lain kali lebih fokus mengerjakan tugas ya',
-        },
-        {
-            activity_id: 3,
-            activity_name: 'Menggambar Pemandangan Desa',
-            feedback: 'Good job! Keep it up!',
-        }
-    ],
-    activityKarya: [
-        {
-            activity_id: 1,
-            activity_name: 'Pengenalan Hewan',
-            work_id: 1,
-            work_name: 'Gambar Hewan',
-            work_type: 'Image',
-            work_path: '../src/assets/karya/Gambar Hewan Ani.jpg',
-        },
-        {
-            activity_id: 2,
-            activity_name: 'Pengenalan Bentuk',
-            work_id: 2,
-            work_name: 'Menceritakan Bentuk yang Pernah Dilihat',
-            work_type: 'PDF',
-            work_path: '../src/assets/karya/Bentuk di Lingkungan Ani.pdf',
-        },
-        {
-            activity_id: 3,
-            activity_name: 'Menggambar Pemandangan Desa',
-            work_id: 3,
-            work_name: 'Menggambar Pemandangan',
-            work_type: 'Video',
-            work_path: '../src/assets/karya/gambar pemandangan Ani.mp4',
-        }
-    ],
-};
-*/
+import { BASE_URL } from '../const';
 
 const DashboardPage = () => {
     const [dashboardData, setDashboardData] = useState<StudentDashboard>();
@@ -166,12 +29,12 @@ const DashboardPage = () => {
         // setDashboardData(DASHBOARD_DATA);
         // setIsLoading(false);
         try {
-            const studentResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/${id}`);
-            const presensiResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/presensi/${id}`);
-            const avgNilaiResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/avg-nilai/${id}`);
-            const catatanResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/catatan/${id}`);
-            const feedbackResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/feedback/${id}`);
-            const karyaResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/karya/${id}`);
+            const studentResponse = await fetch(`${BASE_URL}/murid/${id}`);
+            const presensiResponse = await fetch(`${BASE_URL}/murid/presensi/${id}`);
+            const avgNilaiResponse = await fetch(`${BASE_URL}/murid/avg-nilai/${id}`);
+            const catatanResponse = await fetch(`${BASE_URL}/murid/catatan/${id}`);
+            const feedbackResponse = await fetch(`${BASE_URL}/murid/feedback/${id}`);
+            const karyaResponse = await fetch(`${BASE_URL}/murid/karya/${id}`);
 
             if (!studentResponse.ok || !presensiResponse.ok || !avgNilaiResponse.ok || !catatanResponse.ok || !feedbackResponse.ok || !karyaResponse.ok) {
                 throw new Error('Failed to fetch student dashboard data');

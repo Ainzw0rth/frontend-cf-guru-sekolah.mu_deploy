@@ -152,7 +152,7 @@ const ActivityPage = () => {
     useEffect(() => {
         if (!activityId) { return; }
 
-        fetch('https://backend-sekolah-mu-development.vercel.app/kegiatan/percentage?id=' + activityId)
+        fetch(`${BASE_URL}/kegiatan/percentage?id=` + activityId)
             .then(response => response.json())
             .then(data => {
                 // Store the response data in the state variable

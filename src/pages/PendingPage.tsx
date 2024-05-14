@@ -1,11 +1,10 @@
 import cloudland from '../assets/cloud_land.svg';
 import Breadcrumb from "../components/Breadcrumb";
-import banner from '../assets/profile_banner.jpg';
+// import banner from '../assets/profile_banner.jpg';
 import { useEffect, useState } from 'react';
 import { Activity } from '../types/Activity';
 import { getTeacherId } from '../utils/authUtils';
-import { get } from 'http';
-
+import { BASE_URL } from '../const';
 
 const breadcrumb = [
     {label: 'Home', link: '/'},
@@ -20,7 +19,7 @@ const PendingPage = () => {
             try{
                 console.log(getTeacherId());
 
-                const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/tugastertunda/all?id_guru=${getTeacherId()}`);
+                const response = await fetch(`${BASE_URL}/tugastertunda/all?id_guru=${getTeacherId()}`);
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch pending tasks');

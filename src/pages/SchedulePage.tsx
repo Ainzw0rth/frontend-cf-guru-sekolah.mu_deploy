@@ -10,6 +10,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/id';
 import cloudland from '../assets/cloud_land.svg';
+import { BASE_URL } from "../const";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -28,7 +29,7 @@ const SchedulePage = () => {
             try {
                 const formattedDate = selectedDay?.format('YYYY-MM-DD');
                 console.log(formattedDate)
-                const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/kegiatan/tanggal?tanggal='${formattedDate}'`);
+                const response = await fetch(`${BASE_URL}/kegiatan/tanggal?tanggal='${formattedDate}'`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch kegiatans');
                 }

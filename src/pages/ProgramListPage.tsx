@@ -3,6 +3,7 @@ import ProgramCard from "../components/ProgramCard";
 import Pagination from "../components/Pagination";
 import { Program } from "../types/Program";
 import { Activity } from '../types/Activity';
+import { BASE_URL } from '../const';
 
 var programs: Program[] = [];
 var kegiatan: Activity[] = [];
@@ -36,7 +37,7 @@ const ProgramListPage = () => {
 
     const fetchPrograms = async () => {
         try {
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/program/guru/${idGuru}`);
+            const response = await fetch(`${BASE_URL}/program/guru/${idGuru}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch programs');
             }
@@ -62,7 +63,7 @@ const ProgramListPage = () => {
 
     const fetchActivities = async () => {
         try {
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/kegiatan/guru?id=${idGuru}`);
+            const response = await fetch(`${BASE_URL}/kegiatan/guru?id=${idGuru}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch activities');
             }

@@ -10,6 +10,8 @@ import ProgramCarousel from '../components/ProgramCarousel';
 import KegiatanCarousel from '../components/KegiatanCarousel';
 import KegiatanPendingTaskCarousel from '../components/KegiatanPendingTaskCarousel';
 import DashboardCarousel from '../components/DashboardCarousel';
+import { getTeacherId } from '../utils/authUtils';
+import { BASE_URL } from "../const";
 
 const thisDay = new Date().toLocaleDateString('id-ID', {
   weekday: 'long',
@@ -30,6 +32,7 @@ const HomePage = () => {
   const [kegiatans, setKegiatans] = useState<Activity[]>([]);
   const [kelas, setClasses] = useState(0);
   const [students, setStudents] = useState<Murid[]>([]);
+  const idGuru = getTeacherId();
 
   useEffect(() => {
     Promise.all([fetchPrograms(), fetchKegiatans(), fetchAClass()])
@@ -44,10 +47,10 @@ const HomePage = () => {
       fetchStudents();
     }
   }, [kelas]);
-
+  
   const fetchPrograms = async () => {
     try {
-      const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/program/guru/1`);
+      const response = await fetch(`${BASE_URL}/program/guru/${idGuru}`);
       if (!response.ok) {
         throw new Error('Failed to fetch programs');
       }
@@ -61,6 +64,7 @@ const HomePage = () => {
 
       const uniquePrograms: { [key: number]: Program } = {};
       data.data.forEach((programData: any) => {
+        console.log("PROGRAM DATA", programData);
         const id = programData.id_program;
         if (!uniquePrograms[id]) {
           uniquePrograms[id] = {
@@ -68,7 +72,7 @@ const HomePage = () => {
             title: programData.nama_program,
             semester: parseInt(programData.periode_belajar.split(" ")[1]),
             academic_year: programData.tahun_akademik,
-            imageUrl: 'https://via.placeholder.com/300',
+            imageUrl: programData.path_banner,
           };
         }
       });
@@ -85,7 +89,7 @@ const HomePage = () => {
   const fetchKegiatans = async () => {
     try {
       const tanggal = new Date().toISOString().split('T')[0];
-      const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/kegiatan/tanggal?tanggal='${tanggal}'`);
+      const response = await fetch(`${BASE_URL}/kegiatan/tanggal?tanggal='${tanggal}'`);
       if (!response.ok) {
         throw new Error('Failed to fetch kegiatans');
       }
@@ -116,7 +120,7 @@ const HomePage = () => {
 
   const fetchAClass = async () => {
     try {
-      const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/kelas?guru=1`);
+      const response = await fetch(`${BASE_URL}/kelas?guru=1`);
       if (!response.ok) {
         throw new Error('Failed to fetch class');
       }
@@ -138,7 +142,7 @@ const HomePage = () => {
     try {
       console.log("MASUK", kelas);
       if (kelas === 0) return;
-      const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid?kelas=${kelas}`);
+      const response = await fetch(`${BASE_URL}/murid?kelas=${kelas}`);
       console.log("DONE", response);
       if (!response.ok) {
         throw new Error('Failed to fetch students');
@@ -211,7 +215,7 @@ const HomePage = () => {
           <ProgramCarousel programs={programs} />
           <div className='flex justify-between items-center w-full my-4'>
             <h1 className='font-bold text-program-title text-text-100'>Dashboard Murid</h1>
-            <Link className='flex items-center font-bold text-persian-blue-500 text-body-1' to={'/program'}>
+            <Link className='flex items-center font-bold text-persian-blue-500 text-body-1' to={'/dashboard'}>
               Lihat Semua &gt;
             </Link>
           </div>
