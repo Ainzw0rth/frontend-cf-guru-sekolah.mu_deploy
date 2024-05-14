@@ -24,7 +24,7 @@ const StudentWorkPopUp: React.FC<StudentWorkPopupProps> = ({ studentData, activi
             const formData = new FormData();
             formData.append("file", file);
 
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/hasil_karya?kegiatan=${activityId}&murid=${studentWork.id}&guru=${teacherId}`, {
+            const response = await fetch(`http://localhost:3000/hasil_karya?jadwal=${activityId}&murid=${studentWork.id}&guru=${teacherId}`, {
                 method: 'PATCH',
                 body: formData,
             });

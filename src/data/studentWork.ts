@@ -32,24 +32,17 @@ export const fetchStudentWorkData = async (activityId: number) => {
         // Fetch student list in the activity
         const studentResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/kegiatan/murid/${activityId}`);
         const studentData = await studentResponse.json();
-
-        console.log("studentData :", studentData);
         
         // Fetch student's work data for the activity
         const studentWorkResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/hasil_karya?jadwal=${activityId}`);
         let studentWorkData = await studentWorkResponse.json();
         
-        console.log("studentWorkData :", studentWorkData);
-
         // Check all student ids
         const studentIds = studentData.data.map((student: any) => student.id_murid);
         const studentWorkIds = studentWorkData.data.map((item: any) => item.id_murid);
         
-        console.log("studentIds :", studentIds);
-        console.log("studentWorkIds :", studentWorkIds);
         const missingIds = studentIds.filter((id: any) => !studentWorkIds.includes(id));
-        console.log("missingIds :", missingIds);
-        
+
         // Create new student's work data for missing students
         if (missingIds.length > 0) {
             const id_jadwal = activityId;
@@ -80,13 +73,7 @@ export const fetchStudentWorkData = async (activityId: number) => {
         const formattedData = () => {
             try {
                 const formattedStudents = studentWorkData.data.map((item: any) => {
-
-                    console.log("studentData :", studentData);
-                    console.log("studentData.data :", studentData.data);
-                    console.log("item :", item);
-                    console.log("item.id_murid :", item.id_murid);
                     const student = studentData.data.find((student: any) => student.id_murid === item.id_murid);
-                    console.log("student", student);
                     return {
                         id: item.id_murid,
                         name: student ? student.nama_murid : `Murid ${item.id_murid}`,

@@ -59,7 +59,6 @@ const StudentWorkTab = ({ activityId, onStudentWorkDataChange }: StudentWorkTabP
         const fetchData = async () => {
             try {
                 const dataWork : StudentWorkData = await fetchStudentWorkData(activityId);
-                console.log("Get data:", dataWork);
                 setStudentWorkData(dataWork);
                 onStudentWorkDataChange(dataWork);
                 setIsLoading(false);
@@ -92,19 +91,13 @@ const StudentWorkTab = ({ activityId, onStudentWorkDataChange }: StudentWorkTabP
     const filterStudents = (searchTerm: string, filterStatus: string) => {
         if (!studentWorkData) return;
 
-        console.log("Student's Work:", studentWorkData);
-        console.log("Student's Work Student:", studentWorkData.students);
-
-
         const filteredStudents = studentWorkData.students.filter(student => {
-            console.log("Student:", student);
             return (
                 student.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
                 (filterStatus === "" || student.status === filterStatus)
             );
         });        
         
-        console.log("Filtered Students:", filteredStudents);
         setFilteredStudents(filteredStudents);
     };
 
