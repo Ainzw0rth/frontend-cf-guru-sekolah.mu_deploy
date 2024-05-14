@@ -101,8 +101,6 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
         setSelectedStudent(null);
     };
 
-    // console.log("evaluationData", evaluationData);
-
     return (
         <div className="flex flex-col mt-5 gap-5 w-5/6 mx-auto">
             <div className="flex items-center gap-3">

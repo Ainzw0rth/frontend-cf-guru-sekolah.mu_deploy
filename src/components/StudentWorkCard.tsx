@@ -22,8 +22,6 @@ const StudentWorkCard: React.FC<StudentWorkCardProps> = ({ student }) => {
     setIsPopUpOpen(false);
   };
 
-  console.log('IS POP UP OPEN:', isPopUpOpen);
-
   return (
     <div className="flex-1 cursor-pointer w-36 mr-4" onClick={openContent}>
       <div className="flex-none bg-neutral8 rounded-lg shadow-md active:bg-neutral6 relative" style={{ height: '150px' }}>

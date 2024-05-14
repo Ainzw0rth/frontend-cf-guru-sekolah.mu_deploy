@@ -57,14 +57,12 @@ const DashboardListPage = () => {
 
     const fetchClassStudent = async () => {
         try {
-            console.log('fetching students of class:', idKelas);
+            console.log('Fetching students of class:', idKelas);
             const response = await fetch(`${BASE_URL}/murid?kelas=${idKelas}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch student');
             }
             const data = await response.json();
-
-            console.log('data:', data);
 
             const muridData: Murid[] = data.data.map((studentData: any) => ({
                 id: studentData.id_murid,
@@ -133,8 +131,6 @@ const DashboardListPage = () => {
     const getClassOptions = () => {
         return kelas.map(k => k.name);
     };
-
-    console.log("Show murid:", filteredMurid);
 
     return (
         <div className='bg-neutral8 w-full justify-center items-center p-10'>

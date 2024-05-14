@@ -64,7 +64,6 @@ const HomePage = () => {
 
       const uniquePrograms: { [key: number]: Program } = {};
       data.data.forEach((programData: any) => {
-        console.log("PROGRAM DATA", programData);
         const id = programData.id_program;
         if (!uniquePrograms[id]) {
           uniquePrograms[id] = {
@@ -108,7 +107,6 @@ const HomePage = () => {
         topic: kegiatanData.nama_topik || '', 
         date: kegiatanData.tanggal || '',
         time: kegiatanData.waktu.slice(0, 5) || '',
-        imageUrl: 'https://via.placeholder.com/300',
         taskPercentage: Math.floor(Math.random() * (100 + 1)),
       }));
       setKegiatans(formattedKegiatans);
@@ -140,10 +138,8 @@ const HomePage = () => {
 
   const fetchStudents = async () => {
     try {
-      console.log("MASUK", kelas);
       if (kelas === 0) return;
       const response = await fetch(`${BASE_URL}/murid?kelas=${kelas}`);
-      console.log("DONE", response);
       if (!response.ok) {
         throw new Error('Failed to fetch students');
       }
@@ -154,7 +150,6 @@ const HomePage = () => {
         return;
       }
 
-      console.log("Data", data.data);
       let students = data.data.map((studentData: any) => ({
         id: studentData.id_murid,
         name: studentData.nama_murid,

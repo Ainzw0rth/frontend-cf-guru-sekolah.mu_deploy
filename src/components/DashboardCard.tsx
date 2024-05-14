@@ -8,7 +8,6 @@ interface DashboardCardProps {
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({ studentData, type }) => {
-  console.log("studentData", studentData);
   if (!type) { type = 0 }
   if (type === 1) {
     return (

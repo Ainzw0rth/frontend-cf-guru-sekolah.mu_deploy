@@ -49,7 +49,7 @@ const ProgramListPage = () => {
                 title: programData.nama_program,
                 semester: parseInt(programData.periode_belajar.split(" ")[1]),
                 academic_year: programData.tahun_akademik,
-                imageUrl: 'https://via.placeholder.com/300',
+                imageUrl: programData.path_banner,
             }));
 
             setFilteredPrograms(programs);
@@ -78,7 +78,6 @@ const ProgramListPage = () => {
                 topic: activityData.nama_topik,
                 date: activityData.tanggal.split('T')[0],
                 time: activityData.waktu,
-                imageUrl: 'https://via.placeholder.com/300',
                 taskPercentage: 0
             }));
 
@@ -209,8 +208,6 @@ const ProgramListPage = () => {
         return classOptions;
     };
 
-    console.log("filteredPrograms", filteredPrograms);
-    console.log("currentPrograms", currentPrograms);
     return (
         <div className='bg-neutral8 w-full justify-center items-center p-10'>
             <h1 className='font-bold text-program-title text-text-100 mb-5'>Daftar Program</h1>

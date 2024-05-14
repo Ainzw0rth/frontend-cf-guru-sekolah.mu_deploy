@@ -15,11 +15,6 @@ const DashboardPage = () => {
     const [dashboardData, setDashboardData] = useState<StudentDashboard>();
     const [isLoading, setIsLoading] = useState(true);
     const { id } = useParams<{ id: string }>();    
-    
-    const idMurid = parseInt(id || '');
-
-    console.log('id:', id);
-    console.log('idMurid:', idMurid);
 
     useEffect(() => {
         fetchStudentSummary();

@@ -61,7 +61,6 @@ const StudentPresenceChart = (props: PresenceChartProps) => {
         }
     }, [presenceSummary]);
     
-    console.log('presenceSummary:', presenceSummary);
     return (
         <div className="shadow-md rounded-md overflow-hidden border border-neutral4">
             <div className="bg-persian-blue5 text-neutral6 py-3 px-5 flex justify-between items-center">

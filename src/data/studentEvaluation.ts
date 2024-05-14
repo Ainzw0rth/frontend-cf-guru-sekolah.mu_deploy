@@ -6,16 +6,13 @@ export const fetchEvaluationData = async (activityId: number) => {
         // Fetch student list in the activity
         const studentResponse = await fetch(`${BASE_URL}/kegiatan/murid/${activityId}`);
         const studentData = await studentResponse.json();
-        // console.log("studentData", studentData);
         
         // Fetch evaluation data for the activity
         const evaluationResponse = await fetch(`${BASE_URL}/evaluasi?jadwal=${activityId}`);
         let evaluationData = await evaluationResponse.json();
         
         // Check all student ids
-        // console.log("studentData", studentData);
         const studentIds = studentData.data.map((student: any) => student.id_murid);
-        // console.log("studentIds", studentIds);
         const evaluationIds = evaluationData.data.map((item: any) => item.id_murid);
         
         const missingIds = studentIds.filter((id: any) => !evaluationIds.includes(id));
@@ -53,7 +50,6 @@ export const fetchEvaluationData = async (activityId: number) => {
             try {
                 const formattedStudents = evaluationData.data.map((item: any) => {
                     const student = studentData.data.find((student: any) => student.id_murid === item.id_murid);
-                    // console.log("student", student);
                     return {
                         id: item.id_murid,
                         name: student ? student.nama_murid : `Murid ${item.id_murid}`,
