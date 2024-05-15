@@ -15,7 +15,9 @@ export const updateBadges = async () => {
             'streakmaster': 2,
             'streakking': 3,
             'gocap': 4,
-            'cepek': 5
+            'cepek': 5,
+            'konsisten': 6,
+            'ambis': 7,
         };
         
         for (const [badgeType, badgeValue] of Object.entries(badgeTypes)) {
