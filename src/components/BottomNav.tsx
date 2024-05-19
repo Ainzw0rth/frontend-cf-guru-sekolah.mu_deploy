@@ -6,7 +6,6 @@ import studentImg from '../assets/nav/profile.png';
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-
 interface BottomNavItemProps {
     icon: string;
     url: string;
@@ -51,29 +50,28 @@ const BottomNav = () => {
 
     const location = useLocation();
     useEffect(() => {
-        if (location.pathname === '/') {
+        const path = location.pathname;
+        if (path === '/') {
             setActive(NAV.HOME);
-        } else if (location.pathname === '/program') {
+        } else if (path.startsWith('/program')) {
             setActive(NAV.PROGRAM);
-        } else if (location.pathname === '/schedule') {
+        } else if (path.startsWith('/schedule')) {
             setActive(NAV.SCHEDULE);
-        } else if (location.pathname === '/pending-task') {
+        } else if (path.startsWith('/pending-task')) {
             setActive(NAV.PENDING);
-        } else if (location.pathname === '/profile') {
+        } else if (path.startsWith('/profile')) {
             setActive(NAV.PROFILE);
         } else {
-            const updatedNavItemsUrls = navItemsUrls;
-            updatedNavItemsUrls[active] = location.pathname;
-            setNavItemsUrls(updatedNavItemsUrls);
+            setActive(-1); // No active item
         }
-    }, [location, active, navItemsUrls]);
+    }, [location]);
 
     const handleNavClick = (key: number) => {
         setActive(key);
         if (navItemsUrls[key] !== NAV_ORIGIN_URL.get(key)) {
-            const updatedNavItemsUrls = navItemsUrls;
+            const updatedNavItemsUrls = [...navItemsUrls];
             updatedNavItemsUrls[key] = NAV_ORIGIN_URL.get(key) as string;
-            setNavItemsUrls(navItemsUrls);
+            setNavItemsUrls(updatedNavItemsUrls);
         }
     }
 
@@ -85,11 +83,11 @@ const BottomNav = () => {
                     onClick={() => handleNavClick(NAV.HOME)} active={active === NAV.HOME}/>
                 <BottomNavItem icon={programImg} url={navItemsUrls[NAV.PROGRAM]} alt="Program Nav"
                     onClick={() => handleNavClick(NAV.PROGRAM)} active={active === NAV.PROGRAM}/>
-                <BottomNavItem icon={scheduleImg} url="/schedule" alt="Schedule Nav" 
+                <BottomNavItem icon={scheduleImg} url={navItemsUrls[NAV.SCHEDULE]} alt="Schedule Nav" 
                     onClick={() => handleNavClick(NAV.SCHEDULE)} active={active === NAV.SCHEDULE}/>
-                <BottomNavItem icon={pendingTaskImg} url="/pending-task" alt="Pending Task Nav" 
+                <BottomNavItem icon={pendingTaskImg} url={navItemsUrls[NAV.PENDING]} alt="Pending Task Nav" 
                     onClick={() => handleNavClick(NAV.PENDING)} active={active === NAV.PENDING}/>
-                <BottomNavItem icon={studentImg} url="/profile" alt="Profile Nav" 
+                <BottomNavItem icon={studentImg} url={navItemsUrls[NAV.PROFILE]} alt="Profile Nav" 
                     onClick={() => handleNavClick(NAV.PROFILE)} active={active === NAV.PROFILE}/>
             </ul>
         </nav>

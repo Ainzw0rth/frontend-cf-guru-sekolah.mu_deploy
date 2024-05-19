@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 import homeBackground from '../assets/home_background.png';
@@ -33,6 +33,7 @@ const HomePage = () => {
   const [kelas, setClasses] = useState(0);
   const [students, setStudents] = useState<Murid[]>([]);
   const idGuru = getTeacherId();
+  const navigate = useNavigate();
 
   useEffect(() => {
     Promise.all([fetchPrograms(), fetchKegiatans(), fetchAClass()])
@@ -166,6 +167,10 @@ const HomePage = () => {
     }
   }
 
+  const handleNavigate = (path: string) => {
+    navigate(path);
+  };
+
   return (
     <div className='bg-neutral8 bg-fixed bg-bottom bg-no-repeat h-svh w-full flex-col justify-center items-center max-[390px]:p-5 p-10 overflow-y-auto' style={{backgroundImage: `url(${homeBackground})`}}>
       {isLoading ? (
@@ -188,37 +193,37 @@ const HomePage = () => {
               <h1 className='font-bold text-program-title text-text-100'>Kegiatan Hari ini</h1>
               <p className='text-text-100'>{thisDay}</p>
             </div>
-            <Link className='flex items-center font-bold text-persian-blue-500 active:text-persian-blue4 text-body-1' to={'/Schedule'}>
+            <div className='flex items-center font-bold text-persian-blue-500 active:text-persian-blue4 text-body-1 cursor-pointer' onClick={() => handleNavigate('/schedule')}>
               <CalendarTodayIcon sx={{ width: 22 }} />
               <span className="ml-1">Lihat Jadwal</span>
-            </Link>
+            </div>
           </div>
           <KegiatanCarousel kegiatans={kegiatans} />
           <div className='flex justify-between items-center w-full my-4'>
             <h1 className='font-bold text-program-title text-text-100'>Tugas Tertunda</h1>
-            <Link className='flex items-center font-bold text-persian-blue-500 text-body-1' to={'/pending_task'}>
+            <div className='flex items-center font-bold text-persian-blue-500 text-body-1 cursor-pointer' onClick={() => handleNavigate('/pending-task')}>
               Lihat Semua &gt;
-            </Link>
+            </div>
           </div>
           <KegiatanPendingTaskCarousel kegiatans={kegiatans} />
           <div className='flex justify-between items-center w-full my-4'>
             <h1 className='font-bold text-program-title text-text-100'>Program</h1>
-            <Link className='flex items-center font-bold text-persian-blue-500 text-body-1' to={'/program'}>
+            <div className='flex items-center font-bold text-persian-blue-500 text-body-1 cursor-pointer' onClick={() => handleNavigate('/program')}>
               Lihat Semua &gt;
-            </Link>
+            </div>
           </div>
           <ProgramCarousel programs={programs} />
           <div className='flex justify-between items-center w-full my-4'>
             <h1 className='font-bold text-program-title text-text-100'>Dashboard Murid</h1>
-            <Link className='flex items-center font-bold text-persian-blue-500 text-body-1' to={'/dashboard'}>
+            <div className='flex items-center font-bold text-persian-blue-500 text-body-1 cursor-pointer' onClick={() => handleNavigate('/dashboard')}>
               Lihat Semua &gt;
-            </Link>
+            </div>
           </div>
           <DashboardCarousel students={students} />
         </>
       )}
     </div>
   );
-};  
+};
 
 export default HomePage;
