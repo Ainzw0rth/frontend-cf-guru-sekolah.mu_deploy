@@ -1,6 +1,5 @@
 export enum StudentWorkStatus {
     NOT_YET = 'Not Yet',
-    INCOMPLETE = 'Incomplete',
     COMPLETE = 'Complete',
 }
 

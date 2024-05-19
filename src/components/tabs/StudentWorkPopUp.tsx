@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StudentWork } from "../../types/StudentWork";
+import React, { useState, useEffect } from "react";
+import { StudentWork, StudentWorkStatus } from "../../types/StudentWork";
 import { BASE_URL } from "../../const";
 
 interface StudentWorkPopupProps {
@@ -7,12 +7,17 @@ interface StudentWorkPopupProps {
     activityId: number | undefined;
     teacherId: number | undefined;
     onClose: () => void;
+    onSave: (updatedStudent: StudentWork) => void;
 }
 
-const StudentWorkPopUp: React.FC<StudentWorkPopupProps> = ({ studentData, activityId, teacherId, onClose }) => {
-    const [studentWork] = useState<StudentWork>(studentData);
+const StudentWorkPopUp: React.FC<StudentWorkPopupProps> = ({ studentData, activityId, teacherId, onClose, onSave }) => {
+    const [studentWork, setStudentWork] = useState<StudentWork>(studentData);
     const [file, setFile] = useState<File | undefined>(undefined);
     const [isSaving, setIsSaving] = useState(false);
+
+    useEffect(() => {
+        setStudentWork(studentData);
+    }, [studentData]);
 
     const handleSubmit = async () => {
         try {
@@ -34,6 +39,8 @@ const StudentWorkPopUp: React.FC<StudentWorkPopupProps> = ({ studentData, activi
                 throw new Error('Failed to patch student\'s work');
             }
 
+            const updatedStudentWork = { ...studentWork, status: StudentWorkStatus.COMPLETE };
+            onSave(updatedStudentWork);
             onClose();
         } catch (error) {
             console.error("Error submitting student's work:", error);
@@ -55,7 +62,6 @@ const StudentWorkPopUp: React.FC<StudentWorkPopupProps> = ({ studentData, activi
         <div style={{ position: "fixed", top: "0", left: "0", width: "100%", height: "100%", backgroundColor: "rgba(0, 0, 0, 0.5)", zIndex: "1000" }}>
             <div className="popup" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", backgroundColor: "white", padding: "30px", borderRadius: "20px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", width: "80%" }}>
                 <div className="popup-content" style={{ textAlign: "center" }}>
-
                     <span className="close" onClick={handleClose} style={{ position: "absolute", top: "10px", right: "20px", cursor: "pointer", fontSize: "30px" }}>&times;</span>
 
                     <img src={studentWork.imgUrl} alt={studentWork.name} className="w-24 h-24 rounded-full mb-4 mx-auto" /> 
