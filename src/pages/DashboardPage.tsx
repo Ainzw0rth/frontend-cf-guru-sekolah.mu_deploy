@@ -104,7 +104,7 @@ const DashboardPage = () => {
             >
                 <div className='flex flex-col items-center'>
                     <img src={dashboardData?.identity?.path_profile} alt="Profile" className="w-32 h-32 rounded-full mb-3" />
-                    <p className="text-2xl font-semibold">{dashboardData?.identity?.name ?? 'No Name'}</p>
+                    <p className="text-2xl font-semibold">{dashboardData?.identity?.name ?? 'Loading...'}</p>
                 </div>
             </div>
             <div className='flex flex-col items-center'>

@@ -13,6 +13,7 @@ const DashboardListPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [idKelas, setIdKelas] = useState<number | null>(null);
     const [kelas, setKelas] = useState<Kelas[]>([]);
+    const [muridCache, setMuridCache] = useState<{ [key: number]: Murid[] }>({});
 
     const idGuru = getTeacherId();
 
@@ -29,9 +30,14 @@ const DashboardListPage = () => {
 
     useEffect(() => {
         if (idKelas !== null) {
-            fetchClassStudent();
+            if (muridCache[idKelas]) {
+                setFilteredMurid(muridCache[idKelas]);
+                setIsLoading(false);
+            } else {
+                fetchClassStudent();
+            }
         }
-    }, [idKelas]);
+    }, [idKelas, muridCache]);
 
     const fetchClass = async () => {
         try {
@@ -75,6 +81,10 @@ const DashboardListPage = () => {
 
             setIsLoading(false);
             setFilteredMurid(muridData);
+            setMuridCache(prevCache => ({
+                ...prevCache,
+                [idKelas!]: muridData
+            }));
         } catch (error) {
             console.error('Error fetching students of class:', error);
             setIsLoading(false);
@@ -101,11 +111,10 @@ const DashboardListPage = () => {
             filterMurid(searchTerm);
         } else {
             setIsLoading(true);
-            setFilteredMurid([]);
             fetchClassStudent();
         }
     };
-    
+
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             if (searchTerm.trim() !== "") {
@@ -113,19 +122,19 @@ const DashboardListPage = () => {
                 filterMurid(searchTerm);
             } else {
                 setIsLoading(true);
-                setFilteredMurid([]);
                 fetchClassStudent();
             }
         }
-    };    
+    };
 
     const filterMurid = (searchValue: string) => {
-        let filtered = filteredMurid.filter(item =>
-            item.name.toLowerCase().includes(searchValue.toLowerCase())
-        );
-        
-        setIsLoading(false);
-        setFilteredMurid(filtered);
+        if (idKelas !== null && muridCache[idKelas]) {
+            const filtered = muridCache[idKelas].filter(item =>
+                item.name.toLowerCase().includes(searchValue.toLowerCase())
+            );
+            setFilteredMurid(filtered);
+            setIsLoading(false);
+        }
     };
 
     const getClassOptions = () => {
@@ -153,27 +162,26 @@ const DashboardListPage = () => {
             {isLoading ? (
                 <p className="text-neutral9 italic">Loading...</p>
             ) : (
-            <>
-                <div className="flex flex-col mb-5 w-full mx-auto">
-                    <FormControl>
-                        <Select
-                            value={filterClass}
-                            onChange={handleClassFilterChange} 
-                            className="bg-cobalt6 rounded-full"
-                            style={{ lineHeight: '14px' }}
-                        >
-                            {getClassOptions().map((option, index) => (
-                                <MenuItem key={index} value={option}>
-                                    <Typography variant="body1" style={{ fontSize: '14px' }}>Kelas {option}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </div>
-                {filteredMurid.length === 0 ? (
-                    <p className="text-neutral9 italic">Murid tidak ditemukan</p>
-                ) : (
-                    <>
+                <>
+                    <div className="flex flex-col mb-5 w-full mx-auto">
+                        <FormControl>
+                            <Select
+                                value={filterClass}
+                                onChange={handleClassFilterChange} 
+                                className="bg-cobalt6 rounded-full"
+                                style={{ lineHeight: '14px' }}
+                            >
+                                {getClassOptions().map((option, index) => (
+                                    <MenuItem key={index} value={option}>
+                                        <Typography variant="body1" style={{ fontSize: '14px' }}>Kelas {option}</Typography>
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </div>
+                    {filteredMurid.length === 0 ? (
+                        <p className="text-neutral9 italic">Murid tidak ditemukan</p>
+                    ) : (
                         <div className='grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto'>
                             {filteredMurid.map((murid) => (
                                 <div key={murid.id} className="w-1/2">
@@ -181,9 +189,8 @@ const DashboardListPage = () => {
                                 </div>
                             ))}
                         </div>
-                    </>
-                )}
-            </>
+                    )}
+                </>
             )}
         </div>
     );
