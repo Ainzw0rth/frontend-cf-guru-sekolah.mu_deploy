@@ -119,6 +119,7 @@ const ActivityPage = () => {
 
     const [presenceData, setPresenceData] = useState<PresenceData | null>();
     const storePresenceData = (data : PresenceData | null) => {
+        // only get status data
         setPresenceData(data);
     }
 
@@ -156,7 +157,6 @@ const ActivityPage = () => {
             .then(response => response.json())
             .then(data => {
                 // Store the response data in the state variable
-                console.log(data.data[0]);
                 setTotalData(data.data[0].total_rows * 5);
                 setUnfinishedData(data.data[0].null_catatan_kehadiran*1 + data.data[0].null_penilaian*1 + data.data[0].null_catatan*1 + data.data[0].null_feedback*1 + data.data[0].null_id_karya*1);
             })

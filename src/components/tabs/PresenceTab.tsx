@@ -1,6 +1,7 @@
 import { PresenceClass, PresenceData, PresenceStatus, StudentPresence } from "../../types/Presence";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchPresenceData, savePresenceData } from "../../utils/presenceUtils";
+import BulkEditPresencePopUp from "./BulkEditPresencePopUp";
 
 const PresenceStatsCard = ({title, value} : {title: string, value: number}) => {
     return (
@@ -32,10 +33,17 @@ const PresenceStats = ({presenceClass} : {presenceClass : PresenceClass}) => {
 interface StudentPresenceCardProps {
     student: StudentPresence;
     onStatusChange: (studentId: number, newStatus: PresenceStatus) => void;
+    isSelectMode: boolean;
+    isSelected: boolean;
+    onSelectToggle: (studentId: number) => void;
 }
 
-const StudentPresenceCard = ({student, onStatusChange} : StudentPresenceCardProps) => {
+const StudentPresenceCard = ({student, onStatusChange, isSelectMode, isSelected, onSelectToggle} : StudentPresenceCardProps) => {
     const [status, setStatus] = useState(student.status);
+
+    useEffect(() => {
+        setStatus(student.status);
+    }, [student.status]);
 
     const toggleStatus = (newStatus : PresenceStatus) => {
         let appliedStatus = status;
@@ -48,7 +56,14 @@ const StudentPresenceCard = ({student, onStatusChange} : StudentPresenceCardProp
     }
 
     return (
-        <div className="flex flex-col w-full p-5 shadow-hard rounded-lg gap-3">
+        <div className="flex flex-col w-full p-5 shadow-hard rounded-lg gap-3 relative">
+            {
+                isSelectMode &&
+                <input 
+                    type="checkbox" className="absolute top-5 right-5 w-5 h-5"
+                    checked={isSelected} onChange={() => onSelectToggle(student.id)}
+                />
+            }
             <div className="flex items-center w-full gap-4">
                 <img src={student.imgUrl} alt={student.name} className="w-12 h-12 rounded-full"/>
                 <h3 className="text-text-100 text-heading-4 font-semibold">{student.name}</h3>
@@ -100,6 +115,9 @@ interface PresenceTabProps {
 const PresenceTab = (props : PresenceTabProps) => {
     const [isChangesSaved, setIsChangesSaved] = useState(true);
     const [changedIds, setChangedIds] = useState<number[]>([]);
+    const [isSelectMode, setIsSelectMode] = useState(false);
+    const [selectedStudent, setSelectedStudent] = useState<number[]>([]);
+    const [isPopUpOpen, setIsPopUpOpen] = useState(false);
 
     const handleStudentStatusChange = (studentId: number, newStatus: PresenceStatus) => {
         const newPresenceData = props.presenceData!
@@ -107,7 +125,10 @@ const PresenceTab = (props : PresenceTabProps) => {
         newPresenceData.students[studentIndex].status = newStatus;
         setIsChangesSaved(false);
         if (!changedIds.includes(studentId))
-            setChangedIds([...changedIds, studentId]);
+            setChangedIds(prev => {
+                const updated = [...prev, studentId];
+                return updated;
+            });
         props.onPresenceDataChange(newPresenceData);
     }
 
@@ -124,28 +145,93 @@ const PresenceTab = (props : PresenceTabProps) => {
         return <div>Loading...</div>;
     }
 
+    const onSelectAll = () => {
+        setSelectedStudent(props.presenceData!.students.map(student => student.id));
+        setIsSelectMode(!isSelectMode);
+    }
+
+    const onCancelSelect = () => {
+        setSelectedStudent([]);
+        setIsSelectMode(false);
+    }
+
+    const onItemSelectToggle = (studentId : number) => {
+        if (selectedStudent.includes(studentId)) {
+            setSelectedStudent(prevSelectedStudent => prevSelectedStudent.filter(id => id !== studentId));
+        } else {
+            setSelectedStudent(prevSelectedStudent => [...prevSelectedStudent, studentId]);
+        }
+    }
+
+    const onStartBulkEdit = () => {
+        setIsPopUpOpen(true);
+    }
+
+    const onBulkEditDone = (status: PresenceStatus) => {
+        selectedStudent.forEach(studentId => {
+            handleStudentStatusChange(studentId, status);
+        });
+        setSelectedStudent([]);
+        setIsSelectMode(false);
+        setIsPopUpOpen(false);
+    }
+
+    const onSaveChanges = () => {
+        savePresenceData(props.activityId, props.presenceData!, changedIds)
+            .then(() => {
+                setIsChangesSaved(true);
+                setIsSelectMode(false);
+                setChangedIds([]);
+                setSelectedStudent([]);
+            });
+    }
+
     const data : PresenceData = props.presenceData;
 
     return (
         <div className="flex flex-col mt-5 gap-5 w-5/6 mx-auto">
             <PresenceStats presenceClass={data}/>
             <button className="bg-persian-blue-500 text-neutral8 rounded-xl py-2 font-semibold disabled:opacity-50" disabled={isChangesSaved}
-                onClick={() => { 
-                    savePresenceData(props.activityId, data, changedIds).then(() => {
-                        setIsChangesSaved(true);
-                        setChangedIds([]);
-                    })
-                }}
+                onClick={onSaveChanges}
             >
                 Simpan
             </button>
+            <div className="flex justify-between items-end w-full gap-5">
+                <div className="flex flex-col gap-2">
+                    <h3 className="text-text-100 text-heading-4 font-semibold">Daftar Murid</h3>
+                    <a className="cursor-pointer underline underline-offset-1 text-indigo-700"
+                        onClick={
+                            isSelectMode ? onCancelSelect : onSelectAll
+                        }
+                    >
+                        {
+                            isSelectMode ? "Batalkan Pilihan" : "Pilih Semua"
+                        }
+                    </a>
+                </div>
+                {
+                isSelectMode &&
+                <a className="cursor-pointer underline underline-offset-1 text-indigo-700"
+                    onClick={onStartBulkEdit}
+                >
+                    Edit Terpilih
+                </a>
+                }
+            </div>
             {
                 data.students.map((student) => (
                     <StudentPresenceCard 
                         key={student.id} student={student}
                         onStatusChange={handleStudentStatusChange}    
+                        isSelected={selectedStudent.includes(student.id)}
+                        onSelectToggle={(studentId) => onItemSelectToggle(studentId) }
+                        isSelectMode={isSelectMode}
                     />
                 ))
+            }
+            {
+                isPopUpOpen &&
+                <BulkEditPresencePopUp onPopUpDone={onBulkEditDone}/>
             }
         </div>
     );

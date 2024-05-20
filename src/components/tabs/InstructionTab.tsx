@@ -1,10 +1,4 @@
-import { INSTRUCTION } from "../../data/activityInstruction";
 import { InstructionData } from "../../types/Instruction";
-
-const fetchInstructionData = (activityId: number) => {
-    console.log(`Fetching instruction data for activity ${activityId}`);
-    return INSTRUCTION;
-}
 
 const InstructionCard = ({title, content} : {title: string, content: string[]}) => {
     return (
@@ -33,7 +27,6 @@ interface InstructionTabProps {
 
 const InstructionTab = (props : InstructionTabProps) => {
     if (!props.instructionData) {
-        props.onInstructionDataChange(fetchInstructionData(props.activityId));
         return <div>Loading...</div>;
     }
     
