@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { StudentEvaluation } from "../../types/Evaluation";
 import { updateBadges } from "../../utils/badgeUtils";
@@ -8,9 +9,10 @@ interface EvaluationPopupProps {
     activityId: number | undefined;
     teacherId: number | undefined;
     onClose: () => void;
+    onSave: (updatedStudent: StudentEvaluation) => void;
 }
 
-const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activityId, teacherId, onClose }) => {
+const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activityId, teacherId, onClose, onSave }) => {
     const [evaluation, setEvaluation] = useState<StudentEvaluation>(studentData);
     const [tempEvaluation, setTempEvaluation] = useState<StudentEvaluation>(studentData);
     const [isSaving, setIsSaving] = useState(false);
@@ -30,6 +32,7 @@ const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activity
             setShowSuccess(true);
             setTimeout(() => {
                 setShowSuccess(false);
+                onSave(tempEvaluation);
                 onClose();
             }, 1000);
         } catch (error) {

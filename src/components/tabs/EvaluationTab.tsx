@@ -1,5 +1,5 @@
 import { fetchEvaluationData } from "../../data/studentEvaluation";
-import { EvaluationData, EvaluationStatus, StudentEvaluation, } from "../../types/Evaluation";
+import { EvaluationData, EvaluationStatus, StudentEvaluation } from "../../types/Evaluation";
 import EvaluationPopup from "./EvaluationPopUp";
 import { useState, useEffect } from "react";
 
@@ -39,27 +39,35 @@ interface EvaluationTabProps {
     onEvaluationDataChange: (data: EvaluationData) => void;
 }
 
-const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProps) => {
+const EvaluationTab = ({ activityId, evaluationData, onEvaluationDataChange }: EvaluationTabProps) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(!evaluationData);
     const [filteredStudents, setFilteredStudents] = useState<StudentEvaluation[]>([]);
-    const [evaluationData, setEvaluationData] = useState<EvaluationData>();
     const [selectedStudent, setSelectedStudent] = useState<StudentEvaluation | null>(null);
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const dataEval : EvaluationData = await fetchEvaluationData(activityId);
-                setEvaluationData(dataEval);
-                onEvaluationDataChange(dataEval);
-                setIsLoading(false);
-            } catch (error) {
-                console.error("Error fetching evaluation data:", error);
-            }
-        };
-        fetchData();
-    }, [activityId, onEvaluationDataChange]);    
+        if (!evaluationData || isSaving) {
+            setIsLoading(true);
+            setIsSaving(false);
+            fetchEvaluationData(activityId)
+                .then(dataEval => {
+                    onEvaluationDataChange(dataEval);
+                    setIsLoading(false);
+                })
+                .catch(error => {
+                    console.error("Error fetching evaluation data:", error);
+                    setIsLoading(false);
+                });
+        }
+    }, [activityId, evaluationData, onEvaluationDataChange]);
+
+    useEffect(() => {
+        if (evaluationData) {
+            filterStudents(searchTerm, filterStatus);
+        }
+    }, [evaluationData, searchTerm, filterStatus]);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
@@ -73,13 +81,6 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
         filterStudents(searchTerm, filterStatus);
     };
 
-    useEffect(() => {
-        if (evaluationData) {
-            filterStudents(searchTerm, filterStatus);
-        }
-    }, [evaluationData, searchTerm, filterStatus]);
-
-
     const filterStudents = (searchTerm: string, filterStatus: string) => {
         if (!evaluationData) return;
         
@@ -88,17 +89,27 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
                 student.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
                 (filterStatus === "" || student.status === filterStatus)
             );
-        });        
+        });
         
         setFilteredStudents(filteredStudents);
     };
 
     const handleStudentClick = (student: StudentEvaluation) => {
         setSelectedStudent(student);
-    };    
+    };
 
     const handleClosePopup = () => {
         setSelectedStudent(null);
+    };
+
+    const updateStudentEvaluation = (updatedStudent: StudentEvaluation) => {
+        if (evaluationData) {
+            const updatedStudents = evaluationData.students.map(student => 
+                student.id === updatedStudent.id ? updatedStudent : student
+            );
+            setIsSaving(true);
+            onEvaluationDataChange({ ...evaluationData, students: updatedStudents });
+        }
     };
 
     return (
@@ -156,6 +167,7 @@ const EvaluationTab = ({ activityId, onEvaluationDataChange }: EvaluationTabProp
                     activityId={evaluationData?.activityId} 
                     teacherId={evaluationData?.teacherId} 
                     onClose={handleClosePopup} 
+                    onSave={updateStudentEvaluation}
                 />
             )}
         </div>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StudentWorkStatus } from "../types/StudentWork";
 import { BASE_URL } from "../const";
 

@@ -1,28 +1,18 @@
-// import { fetchStudentWorkData } from "../../data/studentWork";
-// import { STUDENT_WORK } from "../../data/studentWork"
-import { StudentWorkData, StudentWorkStatus, StudentWork, } from "../../types/StudentWork";
+import { StudentWorkData, StudentWorkStatus, StudentWork } from "../../types/StudentWork";
 import StudentWorkPopUp from "./StudentWorkPopUp";
 import { useState, useEffect } from "react";
 import { fetchStudentWorkData } from "../../data/studentWork";
-
-
-// const fetchStudentWorkData = (activityId: number) => {
-//     console.log(`Fetching evaluation data for activity ${activityId}`);
-//     return STUDENT_WORK;
-// }
 
 interface StudentWorkCardProps {
     student: StudentWork;
     onClick: () => void;
 }
 
-const StudentWorkCard = ({student, onClick}: StudentWorkCardProps) => {
+const StudentWorkCard = ({ student, onClick }: StudentWorkCardProps) => {
     const getStatusClass = () => {
         switch (student.status) {
             case StudentWorkStatus.COMPLETE:
                 return 'bg-presence-green';
-            case StudentWorkStatus.INCOMPLETE:
-                return 'bg-presence-yellow';
             default:
                 return '';
         }
@@ -47,27 +37,35 @@ interface StudentWorkTabProps {
     onStudentWorkDataChange: (data: StudentWorkData) => void;
 }
 
-const StudentWorkTab = ({ activityId, onStudentWorkDataChange }: StudentWorkTabProps) => {
+const StudentWorkTab = ({ activityId, studentWorkData, onStudentWorkDataChange }: StudentWorkTabProps) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(!studentWorkData);
     const [filteredStudents, setFilteredStudents] = useState<StudentWork[]>([]);
-    const [studentWorkData, setStudentWorkData] = useState<StudentWorkData>();
     const [selectedStudent, setSelectedStudent] = useState<StudentWork | null>(null);
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const dataWork : StudentWorkData = await fetchStudentWorkData(activityId);
-                setStudentWorkData(dataWork);
-                onStudentWorkDataChange(dataWork);
-                setIsLoading(false);
-            } catch (error) {
-                console.error("Error fetching student's work data:", error);
-            }
-        };
-        fetchData();
-    }, [activityId, onStudentWorkDataChange]);    
+        if (!studentWorkData || isSaving) {
+            setIsLoading(true);
+            setIsSaving(false);
+            fetchStudentWorkData(activityId)
+                .then(dataWork => {
+                    onStudentWorkDataChange(dataWork);
+                    setIsLoading(false);
+                })
+                .catch(error => {
+                    console.error("Error fetching student's work data:", error);
+                    setIsLoading(false);
+                });
+        }
+    }, [activityId, studentWorkData, onStudentWorkDataChange]);
+
+    useEffect(() => {
+        if (studentWorkData) {
+            filterStudents(searchTerm, filterStatus);
+        }
+    }, [studentWorkData, searchTerm, filterStatus]);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
@@ -81,13 +79,6 @@ const StudentWorkTab = ({ activityId, onStudentWorkDataChange }: StudentWorkTabP
         filterStudents(searchTerm, filterStatus);
     };
 
-    useEffect(() => {
-        if (studentWorkData) {
-            filterStudents(searchTerm, filterStatus);
-        }
-    }, [studentWorkData, searchTerm, filterStatus]);
-
-
     const filterStudents = (searchTerm: string, filterStatus: string) => {
         if (!studentWorkData) return;
 
@@ -96,17 +87,27 @@ const StudentWorkTab = ({ activityId, onStudentWorkDataChange }: StudentWorkTabP
                 student.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
                 (filterStatus === "" || student.status === filterStatus)
             );
-        });        
-        
+        });
+
         setFilteredStudents(filteredStudents);
     };
 
     const handleStudentClick = (student: StudentWork) => {
         setSelectedStudent(student);
-    };    
+    };
 
     const handleClosePopup = () => {
         setSelectedStudent(null);
+    };
+
+    const updateStudentWork = (updatedStudent: StudentWork) => {
+        if (studentWorkData) {
+            const updatedStudents = studentWorkData.students.map(student =>
+                student.id === updatedStudent.id ? updatedStudent : student
+            );
+            setIsSaving(true);
+            onStudentWorkDataChange({ ...studentWorkData, students: updatedStudents });
+        }
     };
 
     return (
@@ -156,13 +157,14 @@ const StudentWorkTab = ({ activityId, onStudentWorkDataChange }: StudentWorkTabP
                     ))
                 )
             )}
-            
+
             {selectedStudent && (
                 <StudentWorkPopUp 
                     studentData={selectedStudent} 
                     activityId={studentWorkData?.activityId} 
                     teacherId={studentWorkData?.teacherId} 
                     onClose={handleClosePopup} 
+                    onSave={updateStudentWork}
                 />
             )}
         </div>

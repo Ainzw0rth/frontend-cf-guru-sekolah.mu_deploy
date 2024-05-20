@@ -42,8 +42,8 @@ const TAB = { INSTRUKSI: 0, MATERI: 1, PRESENSI: 2, EVALUASI: 3, HASIL_KARYA: 4 
 
 const generateTabElements = (
     activityId: number,
-    presenceData: PresenceData | undefined,
-    onPresenceDataChange: (data: PresenceData) => void,
+    presenceData: PresenceData | undefined | null,
+    onPresenceDataChange: (data: PresenceData | null) => void,
     evaluationData: EvaluationData | undefined,
     onEvaluationDataChange: (dataEval: EvaluationData) => void,
     instructionData: InstructionData | undefined,
@@ -117,8 +117,9 @@ const ActivityPage = () => {
     let activityId = -1;
     const [openTab, setOpenTab] = useState(TAB.INSTRUKSI);    
 
-    const [presenceData, setPresenceData] = useState<PresenceData>();
-    const storePresenceData = (data : PresenceData) => {
+    const [presenceData, setPresenceData] = useState<PresenceData | null>();
+    const storePresenceData = (data : PresenceData | null) => {
+        // only get status data
         setPresenceData(data);
     }
 
@@ -156,7 +157,6 @@ const ActivityPage = () => {
             .then(response => response.json())
             .then(data => {
                 // Store the response data in the state variable
-                console.log(data.data[0]);
                 setTotalData(data.data[0].total_rows * 5);
                 setUnfinishedData(data.data[0].null_catatan_kehadiran*1 + data.data[0].null_penilaian*1 + data.data[0].null_catatan*1 + data.data[0].null_feedback*1 + data.data[0].null_id_karya*1);
             })

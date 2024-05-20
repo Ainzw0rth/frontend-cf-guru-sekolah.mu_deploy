@@ -8,41 +8,7 @@ export const fetchEvaluationData = async (activityId: number) => {
         const studentData = await studentResponse.json();
         
         // Fetch evaluation data for the activity
-        const evaluationResponse = await fetch(`${BASE_URL}/evaluasi?jadwal=${activityId}`);
-        let evaluationData = await evaluationResponse.json();
-        
-        // Check all student ids
-        const studentIds = studentData.data.map((student: any) => student.id_murid);
-        const evaluationIds = evaluationData.data.map((item: any) => item.id_murid);
-        
-        const missingIds = studentIds.filter((id: any) => !evaluationIds.includes(id));
-        
-        // Create new evaluation data for missing students
-        if (missingIds.length > 0) {
-            const id_kegiatan = activityId;
-            const id_guru = studentData.data[0].id_guru;
-            
-            for (const id_murid of missingIds) {
-                await fetch(`${BASE_URL}/evaluasi`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        id_kegiatan,
-                        id_murid,
-                        presensi: null,
-                        nilai: null,
-                        catatan: null,
-                        feedback: null,
-                        id_guru
-                    })
-                });
-            }
-            
-            // Refetch evaluation data
-            evaluationData = await fetch(`${BASE_URL}/evaluasi?jadwal=${activityId}`).then(response => response.json());
-        }
+        const evaluationData = await fetch(`${BASE_URL}/evaluasi?jadwal=${activityId}`).then(response => response.json());
                 
         evaluationData.data.sort((a: any, b: any) => a.id_murid - b.id_murid);
 
