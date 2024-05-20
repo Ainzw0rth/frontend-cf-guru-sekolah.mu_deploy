@@ -140,7 +140,6 @@ const HomePage = () => {
         taskPercentage: kegiatanData.persentase_tugas,
       }));
       setKegiatans(formattedKegiatans);
-      setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
     }
