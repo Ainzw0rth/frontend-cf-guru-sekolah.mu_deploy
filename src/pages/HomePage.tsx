@@ -38,7 +38,7 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    Promise.all([fetchPrograms(), fetchKegiatans(), fetchAClass(), fetchPending()])
+    Promise.all([fetchPrograms(), fetchKegiatans(), fetchAClass(), fetchPending(), fetchProfile()])
       .catch(error => {
         console.error('Failed to fetch data', error);
         setIsLoading(false);
@@ -50,9 +50,35 @@ const HomePage = () => {
       fetchStudents();
     }
   }, [kelas]);
+
+  const fetchProfile = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(`${BASE_URL}/profil/${idGuru}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch profile');
+      }
+      const data = await response.json();
+
+      if (!data.data) {
+        setIsLoading(false);
+        return;
+      }
+
+      const profileData = data.data[0];
+
+      profile.name = profileData.nama_guru;
+      profile.email = profileData.email;
+      profile.photoUrl = profileData.path_foto_profil;
+
+    } catch (error) {
+      setIsLoading(false);
+    }
+  }
   
   const fetchPrograms = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch(`${BASE_URL}/program/guru/${idGuru}?count=5`);
       if (!response.ok) {
         throw new Error('Failed to fetch programs');
@@ -83,7 +109,6 @@ const HomePage = () => {
       const formattedPrograms = Object.values(uniquePrograms);
 
       setPrograms(formattedPrograms);
-      setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
     }
@@ -91,6 +116,7 @@ const HomePage = () => {
 
   const fetchKegiatans = async () => {
     try {
+      setIsLoading(true);
       const tanggal = new Date().toISOString().split('T')[0];
       const response = await fetch(`${BASE_URL}/kegiatan/tanggal?tanggal=${tanggal}&id=${idGuru}`);
       if (!response.ok) {
@@ -122,6 +148,7 @@ const HomePage = () => {
 
   const fetchAClass = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch(`${BASE_URL}/kelas?guru=${idGuru}`);
       if (!response.ok) {
         throw new Error('Failed to fetch class');
@@ -142,6 +169,7 @@ const HomePage = () => {
 
   const fetchStudents = async () => {
     try {
+      setIsLoading(true);
       if (kelas === 0) return;
       const response = await fetch(`${BASE_URL}/murid?kelas=${kelas}`);
       if (!response.ok) {
@@ -172,6 +200,7 @@ const HomePage = () => {
 
   const fetchPending = async () => {
     try {
+        setIsLoading(true);
         const response = await fetch(`${BASE_URL}/tugastertunda/all?id_guru=${idGuru}&count=5`);
 
         if (!response.ok) {
