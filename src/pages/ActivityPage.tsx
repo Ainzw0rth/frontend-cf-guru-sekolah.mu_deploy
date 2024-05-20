@@ -42,8 +42,8 @@ const TAB = { INSTRUKSI: 0, MATERI: 1, PRESENSI: 2, EVALUASI: 3, HASIL_KARYA: 4 
 
 const generateTabElements = (
     activityId: number,
-    presenceData: PresenceData | undefined,
-    onPresenceDataChange: (data: PresenceData) => void,
+    presenceData: PresenceData | undefined | null,
+    onPresenceDataChange: (data: PresenceData | null) => void,
     evaluationData: EvaluationData | undefined,
     onEvaluationDataChange: (dataEval: EvaluationData) => void,
     instructionData: InstructionData | undefined,
@@ -117,8 +117,8 @@ const ActivityPage = () => {
     let activityId = -1;
     const [openTab, setOpenTab] = useState(TAB.INSTRUKSI);    
 
-    const [presenceData, setPresenceData] = useState<PresenceData>();
-    const storePresenceData = (data : PresenceData) => {
+    const [presenceData, setPresenceData] = useState<PresenceData | null>();
+    const storePresenceData = (data : PresenceData | null) => {
         setPresenceData(data);
     }
 

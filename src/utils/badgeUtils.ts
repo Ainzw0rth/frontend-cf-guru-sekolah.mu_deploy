@@ -2,13 +2,11 @@ import { getTeacherId } from "./authUtils";
 import { BASE_URL } from "../const";
 
 export const updateBadges = async () => {
-    let idGuru = getTeacherId();
+    const idGuru = getTeacherId();
 
     if (!idGuru) {
         return;
     }
-
-    console.log('Updating badges for teacher with id', idGuru);
     try {
         const badgeTypes = {
             'streak': 1,
@@ -33,8 +31,6 @@ export const updateBadges = async () => {
             }
         
             const isQualifiedforBadge = await response.json();
-            
-            console.log("badgeType:", badgeType + ", qualified for badge: " + isQualifiedforBadge.data);
 
             if (isQualifiedforBadge.data == true) {
                 const responseUpdate = await fetch(`${BASE_URL}/badge/${badgeType}/${idGuru}`, { 

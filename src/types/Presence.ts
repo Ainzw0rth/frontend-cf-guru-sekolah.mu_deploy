@@ -21,9 +21,7 @@ export interface StudentPresenceResponse {
 }
 
 export interface PresenceClass {
-    classId: number;
-    classTitle: string;   
     students: StudentPresence[];
 }
 
-export type PresenceData = PresenceClass[];
+export type PresenceData = PresenceClass;

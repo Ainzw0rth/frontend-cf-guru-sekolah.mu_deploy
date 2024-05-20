@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -134,6 +135,7 @@ const HomePage = () => {
       console.log("GET A CLASS", data.data[0].id_kelas);
 
     } catch (error) {
+        console.error('Failed to fetch class', error);
     }
   }
 

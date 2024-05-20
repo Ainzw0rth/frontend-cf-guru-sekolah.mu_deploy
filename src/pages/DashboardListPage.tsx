@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FormControl, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 import { ChangeEvent, KeyboardEvent, useState, useEffect } from 'react';
 import { Murid } from "../types/Murid";

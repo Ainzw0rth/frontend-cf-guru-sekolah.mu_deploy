@@ -1,4 +1,3 @@
-import { FormControl, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { PresenceClass, PresenceData, PresenceStatus, StudentPresence } from "../../types/Presence";
 import { useState } from "react";
 import { fetchPresenceData, savePresenceData } from "../../utils/presenceUtils";
@@ -40,9 +39,7 @@ const StudentPresenceCard = ({student, onStatusChange} : StudentPresenceCardProp
 
     const toggleStatus = (newStatus : PresenceStatus) => {
         let appliedStatus = status;
-        if (status === newStatus) {
-            appliedStatus = PresenceStatus.NOT_YET;
-        } else {
+        if (status !== newStatus) {
             appliedStatus = newStatus;
         }
 
@@ -96,36 +93,32 @@ const StudentPresenceCard = ({student, onStatusChange} : StudentPresenceCardProp
 
 interface PresenceTabProps {
     activityId: number;
-    presenceData?: PresenceData;
-    onPresenceDataChange: (data: PresenceData) => void;
+    presenceData?: PresenceData | null;
+    onPresenceDataChange: (data: PresenceData | null) => void;
 }
 
 const PresenceTab = (props : PresenceTabProps) => {
-    const [selectedClass, setSelectedClass] = useState('0');
-    const handleSelectedClassChange = (e : SelectChangeEvent) => {
-        setSelectedClass(e.target.value);
-    }
-
     const [isChangesSaved, setIsChangesSaved] = useState(true);
     const [changedIds, setChangedIds] = useState<number[]>([]);
 
     const handleStudentStatusChange = (studentId: number, newStatus: PresenceStatus) => {
-        const newPresenceData = [...props.presenceData!];
-        const classIndex = parseInt(selectedClass);
-        const studentIndex = newPresenceData[classIndex].students.findIndex(student => student.id === studentId);
-        newPresenceData[classIndex].students[studentIndex].status = newStatus;
+        const newPresenceData = props.presenceData!
+        const studentIndex = newPresenceData.students.findIndex(student => student.id === studentId);
+        newPresenceData.students[studentIndex].status = newStatus;
         setIsChangesSaved(false);
         if (!changedIds.includes(studentId))
             setChangedIds([...changedIds, studentId]);
         props.onPresenceDataChange(newPresenceData);
     }
 
-    if (!props.presenceData || props.presenceData.length === 0) {
+    if (!props.presenceData) {
         fetchPresenceData(props.activityId)
-            .then(data => props.onPresenceDataChange(data))
+            .then(data => {
+                props.onPresenceDataChange(data);
+            })
             .catch(err => {
                 console.error(err);   
-                props.onPresenceDataChange([]);
+                props.onPresenceDataChange(null);
             });
         
         return <div>Loading...</div>;
@@ -135,20 +128,7 @@ const PresenceTab = (props : PresenceTabProps) => {
 
     return (
         <div className="flex flex-col mt-5 gap-5 w-5/6 mx-auto">
-            <FormControl>
-                <Select
-                    value={selectedClass}
-                    onChange={handleSelectedClassChange} 
-                    className="bg-cobalt6 rounded-full"
-                >
-                    {data?.map((presenceClass, index) => (
-                        <MenuItem key={index} value={index}>
-                            {presenceClass.classTitle}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-            <PresenceStats presenceClass={data[parseInt(selectedClass)]}/>
+            <PresenceStats presenceClass={data}/>
             <button className="bg-persian-blue-500 text-neutral8 rounded-xl py-2 font-semibold disabled:opacity-50" disabled={isChangesSaved}
                 onClick={() => { 
                     savePresenceData(props.activityId, data, changedIds).then(() => {
@@ -160,7 +140,7 @@ const PresenceTab = (props : PresenceTabProps) => {
                 Simpan
             </button>
             {
-                data[parseInt(selectedClass)].students.map((student) => (
+                data.students.map((student) => (
                     <StudentPresenceCard 
                         key={student.id} student={student}
                         onStatusChange={handleStudentStatusChange}    

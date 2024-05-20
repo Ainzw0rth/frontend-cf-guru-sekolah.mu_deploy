@@ -38,14 +38,12 @@ export const fetchPresenceData = async (activityId : number) => {
         const response = await fetch(`${BASE_URL}/presensi/${activityId}`);
         if (!response.ok) {
             console.error('Failed to fetch presence data ' + response.statusText);
-            return [];
+            return null;
         }
 
         const json = await response.json();
-        const presenceData : PresenceData = [
+        const presenceData : PresenceData =
             {
-                classId: 1,
-                classTitle: 'Kelas 1',
                 students: json.data.map((studentData: StudentPresenceResponse) => ({
                     id: studentData.id_murid,
                     name: studentData.nama_murid,
@@ -53,16 +51,15 @@ export const fetchPresenceData = async (activityId : number) => {
                     status: stringToPresenceStatus(studentData.catatan_kehadiran)
                 }))
             }
-        ]    
         return presenceData;
     } catch (error) {
         console.error('Failed to fetch presence data ' + error);
-        return [];
+        return null;
     }
 }
 
 export const savePresenceData = async (activityId: number, presenceData: PresenceData, changedIds: number[]) => {
-    const filtered = presenceData[0].students.filter(student => changedIds.includes(student.id));
+    const filtered = presenceData.students.filter(student => changedIds.includes(student.id));
     const sentData = filtered.map(student => ({
         id_murid: student.id,
         catatan_kehadiran: presenceStatusToString(student.status)
