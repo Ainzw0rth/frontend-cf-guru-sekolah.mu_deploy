@@ -32,10 +32,11 @@ const HomePage = () => {
   const [kegiatans, setKegiatans] = useState<Activity[]>([]);
   const [kelas, setClasses] = useState(0);
   const [students, setStudents] = useState<Murid[]>([]);
+  const [pending, setPending] = useState<Activity[]>([]);
   const idGuru = getTeacherId();
 
   useEffect(() => {
-    Promise.all([fetchPrograms(), fetchKegiatans(), fetchAClass()])
+    Promise.all([fetchPrograms(), fetchKegiatans(), fetchAClass(), fetchPending()])
       .catch(error => {
         console.error('Failed to fetch data', error);
         setIsLoading(false);
@@ -50,11 +51,12 @@ const HomePage = () => {
   
   const fetchPrograms = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/program/guru/${idGuru}`);
+      const response = await fetch(`${BASE_URL}/program/guru/${idGuru}?count=5`);
       if (!response.ok) {
         throw new Error('Failed to fetch programs');
       }
       const data = await response.json();
+      console.log(data);
 
       if (!data.data) {
         setPrograms([]);
@@ -88,7 +90,7 @@ const HomePage = () => {
   const fetchKegiatans = async () => {
     try {
       const tanggal = new Date().toISOString().split('T')[0];
-      const response = await fetch(`${BASE_URL}/kegiatan/tanggal?tanggal='${tanggal}'`);
+      const response = await fetch(`${BASE_URL}/kegiatan/tanggal?tanggal=${tanggal}&id=${idGuru}`);
       if (!response.ok) {
         throw new Error('Failed to fetch kegiatans');
       }
@@ -107,7 +109,7 @@ const HomePage = () => {
         topic: kegiatanData.nama_topik || '', 
         date: kegiatanData.tanggal || '',
         time: kegiatanData.waktu.slice(0, 5) || '',
-        taskPercentage: Math.floor(Math.random() * (100 + 1)),
+        taskPercentage: kegiatanData.persentase_tugas,
       }));
       setKegiatans(formattedKegiatans);
       setIsLoading(false);
@@ -130,7 +132,6 @@ const HomePage = () => {
       }
 
       setClasses(data.data[0].id_kelas);
-      console.log("GET A CLASS", data.data[0].id_kelas);
 
     } catch (error) {
     }
@@ -166,6 +167,47 @@ const HomePage = () => {
     }
   }
 
+  const fetchPending = async () => {
+    try {
+        const response = await fetch(`${BASE_URL}/tugastertunda/all?id_guru=${idGuru}&count=5`);
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch pending tasks');
+        }
+
+        const resJson = await response.json();
+
+        const formattedPendingTask = await Promise.all(resJson.data.map(async (kegiatanData: any) => {
+            let taskPercentage;
+            await fetch(`${BASE_URL}/kegiatan/percentage?id=${kegiatanData.id_kegiatan}`)
+            .then(response => response.json())
+            .then(data => {
+                let totalData = (data.data[0].total_rows * 5);
+                let unfinishedData = (data.data[0].null_catatan_kehadiran*1 + data.data[0].null_penilaian*1 + data.data[0].null_catatan*1 + data.data[0].null_feedback*1 + data.data[0].null_id_karya*1);
+                taskPercentage = Math.floor((((totalData ?? 1) -(unfinishedData ?? 0)) / (totalData ?? 1)) * 100)
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });;
+            return {
+                id: kegiatanData.id_kegiatan,
+                title: kegiatanData.nama_kegiatan,
+                class: kegiatanData.nama_kelas || '',
+                program: kegiatanData.nama_program || '',
+                topic: kegiatanData.nama_topik || '',
+                date: kegiatanData.tanggal || '',
+                time: kegiatanData.waktu.slice(0, 5) || '',
+                taskPercentage: taskPercentage ?? 0,
+            };
+        }));
+
+        setPending(formattedPendingTask);
+    } catch (error) {
+        console.error(error);
+    }
+  };
+
+
   return (
     <div className='bg-neutral8 bg-fixed bg-bottom bg-no-repeat h-svh w-full flex-col justify-center items-center max-[390px]:p-5 p-10 overflow-y-auto' style={{backgroundImage: `url(${homeBackground})`}}>
       {isLoading ? (
@@ -200,7 +242,7 @@ const HomePage = () => {
               Lihat Semua &gt;
             </Link>
           </div>
-          <KegiatanPendingTaskCarousel kegiatans={kegiatans} />
+          <KegiatanPendingTaskCarousel kegiatans={pending} />
           <div className='flex justify-between items-center w-full my-4'>
             <h1 className='font-bold text-program-title text-text-100'>Program</h1>
             <Link className='flex items-center font-bold text-persian-blue-500 text-body-1' to={'/program'}>

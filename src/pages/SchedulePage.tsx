@@ -11,6 +11,7 @@ import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/id';
 import cloudland from '../assets/cloud_land.svg';
 import { BASE_URL } from "../const";
+import { getTeacherId } from "../utils/authUtils";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -23,21 +24,17 @@ const breadcrumb = [
 const SchedulePage = () => {
     const [selectedDay, setSelectedDay] = useState<Dayjs | null>(dayjs().utc());
     const [kegiatans, setKegiatans] = useState<Activity[]>([]);
+    const idGuru = getTeacherId();
 
     useEffect(() => {
         const fetchKegiatans = async () => {
             try {
                 const formattedDate = selectedDay?.format('YYYY-MM-DD');
-                console.log(formattedDate)
-                const response = await fetch(`${BASE_URL}/kegiatan/tanggal?tanggal='${formattedDate}'`);
+                const response = await fetch(`${BASE_URL}/kegiatan/tanggal?tanggal=${formattedDate}&id=${idGuru}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch kegiatans');
                 }
                 const data = await response.json();
-
-                console.log(data)
-
-                console.log(data.data)
 
                 if (!data.data) { 
                     setKegiatans([]);
