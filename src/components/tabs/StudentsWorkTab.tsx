@@ -1,5 +1,5 @@
 import { StudentWorkData, StudentWorkStatus, StudentWork } from "../../types/StudentWork";
-import StudentWorkPopUp from "./StudentWorkPopUp";
+import StudentWorkTabPopUp from "./StudentWorkTabPopUp";
 import { useState, useEffect } from "react";
 import { fetchStudentWorkData } from "../../data/studentWork";
 
@@ -94,6 +94,7 @@ const StudentWorkTab = ({ activityId, studentWorkData, onStudentWorkDataChange }
 
     const handleStudentClick = (student: StudentWork) => {
         setSelectedStudent(student);
+        console.log('student', student);
     };
 
     const handleClosePopup = () => {
@@ -159,12 +160,13 @@ const StudentWorkTab = ({ activityId, studentWorkData, onStudentWorkDataChange }
             )}
 
             {selectedStudent && (
-                <StudentWorkPopUp 
+                <StudentWorkTabPopUp 
                     studentData={selectedStudent} 
                     activityId={studentWorkData?.activityId} 
                     teacherId={studentWorkData?.teacherId} 
                     onClose={handleClosePopup} 
                     onSave={updateStudentWork}
+                    onDelete={updateStudentWork}
                 />
             )}
         </div>

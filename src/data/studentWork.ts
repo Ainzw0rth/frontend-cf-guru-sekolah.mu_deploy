@@ -51,6 +51,7 @@ export const fetchStudentWorkData = async (activityId: number) => {
                     const student = studentData.data.find((student: any) => student.id_murid === item.id_murid);
                     return {
                         id: item.id_murid,
+                        id_work: item.id_karya,
                         name: student ? student.nama_murid : `Murid ${item.id_murid}`,
                         imgUrl: student.path_foto_profil,
                         work_name: item.nama_karya,

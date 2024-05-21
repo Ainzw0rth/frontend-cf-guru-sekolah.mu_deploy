@@ -5,6 +5,7 @@ export enum StudentWorkStatus {
 
 export interface StudentWork {
     id: number;
+    id_work: number;
     name: string;
     imgUrl: string;
     work_name: string;

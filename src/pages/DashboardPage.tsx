@@ -73,8 +73,8 @@ const DashboardPage = () => {
                     activity_name: karya.nama_kegiatan,
                     work_id: karya.id_karya,
                     work_name: karya.nama_karya,
-                    work_type: karya.jenis_karya,
-                    work_path: karya.path_karya
+                    work_type: karya.tipe_file,
+                    work_path: karya.file_path
                 }))
             };
             
