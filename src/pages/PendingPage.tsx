@@ -41,15 +41,28 @@ const PendingPage = () => {
 
                 console.log(resJson.data);
                 
-                const formattedPending = resJson.data.map((kegiatanData: any) => ({
-                    id: kegiatanData.id_kegiatan,
-                    title: kegiatanData.nama_kegiatan,
-                    class: kegiatanData.nama_kelas || '',
-                    program: kegiatanData.nama_program || '',
-                    topic: kegiatanData.nama_topik || '',
-                    date: kegiatanData.tanggal || '',
-                    time: kegiatanData.waktu.slice(0, 5) || '',
-                    taskPercentage: Math.floor(Math.random() * (100 + 1)),
+                const formattedPending = await Promise.all(resJson.data.map(async (kegiatanData: any) => {
+                    let taskPercentage;
+                    await fetch(`${BASE_URL}/kegiatan/percentage?id=${kegiatanData.id_kegiatan}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let totalData = (data.data[0].total_rows * 5);
+                        let unfinishedData = (data.data[0].null_catatan_kehadiran*1 + data.data[0].null_penilaian*1 + data.data[0].null_catatan*1 + data.data[0].null_feedback*1 + data.data[0].null_id_karya*1);
+                        taskPercentage = Math.floor((((totalData ?? 1) -(unfinishedData ?? 0)) / (totalData ?? 1)) * 100)
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });;
+                    return {
+                        id: kegiatanData.id_kegiatan,
+                        title: kegiatanData.nama_kegiatan,
+                        class: kegiatanData.nama_kelas || '',
+                        program: kegiatanData.nama_program || '',
+                        topic: kegiatanData.nama_topik || '',
+                        date: kegiatanData.tanggal || '',
+                        time: kegiatanData.waktu.slice(0, 5) || '',
+                        taskPercentage: taskPercentage ?? 0,
+                    };
                 }));
                 setPending(formattedPending);
 
@@ -67,7 +80,8 @@ const PendingPage = () => {
         backgroundRepeat: 'no-repeat',
         backgroundPosition: '0% 100%',
         backgroundSize: 'cover',
-        backgroundAttachment: 'fixed'
+        backgroundAttachment: 'fixed',
+        minHeight: '100vh'
         }}>
 
         <div className="sticky top-20 w-full z-50">
