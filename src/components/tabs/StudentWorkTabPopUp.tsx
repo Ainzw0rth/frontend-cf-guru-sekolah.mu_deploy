@@ -201,14 +201,14 @@ const StudentWorkTabPopUp: React.FC<StudentWorkPopupProps> = ({
             >
               {studentWork.work_name}
             </h2>
-            <button
+            {/* <button
               onClick={handleDelete}
               disabled={isSaving}
               className={`bg-red-500 text-white py-2 px-4 rounded-md text-sm font-semibold hover:bg-red-600 transition duration-300 mt-4
               ${ isSaving ? "opacity-50 cursor-not-allowed" : "" }`}
             >
               {isDeleting ? "Menghapus..." : "Hapus"}
-            </button>
+            </button> */}
           </div>
         ) : (
           <div className="popup-content-empty" style={{ textAlign: "center" }}>
