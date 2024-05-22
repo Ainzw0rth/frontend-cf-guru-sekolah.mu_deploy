@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import cloudland from '../assets/cloud_land.svg';
 import Breadcrumb from "../components/Breadcrumb";
 // import banner from '../assets/profile_banner.jpg';
@@ -11,15 +12,6 @@ const breadcrumb = [
     {label: 'Home', link: '/'},
     {label: 'Pending', link: `/Pending`}
 ];
-
-interface PendingPageProps {
-    id_jadwal: number;
-    nama_kegiatan: string;
-    tanggal: string;
-    waktu: string;
-}
-
-
 
 const PendingPage = () => {
     const [pending, setPending] = useState<Activity[]>([]);
@@ -46,13 +38,13 @@ const PendingPage = () => {
                     await fetch(`${BASE_URL}/kegiatan/percentage?id=${kegiatanData.id_kegiatan}`)
                     .then(response => response.json())
                     .then(data => {
-                        let totalData = (data.data[0].total_rows * 5);
-                        let unfinishedData = (data.data[0].null_catatan_kehadiran*1 + data.data[0].null_penilaian*1 + data.data[0].null_catatan*1 + data.data[0].null_feedback*1 + data.data[0].null_id_karya*1);
+                        const totalData = (data.data[0].total_rows * 5);
+                        const unfinishedData = (data.data[0].null_catatan_kehadiran*1 + data.data[0].null_penilaian*1 + data.data[0].null_catatan*1 + data.data[0].null_feedback*1 + data.data[0].null_id_karya*1);
                         taskPercentage = Math.floor((((totalData ?? 1) -(unfinishedData ?? 0)) / (totalData ?? 1)) * 100)
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                    });;
+                    });
                     return {
                         id: kegiatanData.id_kegiatan,
                         title: kegiatanData.nama_kegiatan,
