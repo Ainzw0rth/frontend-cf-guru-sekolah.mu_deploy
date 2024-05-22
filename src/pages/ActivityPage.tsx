@@ -16,7 +16,6 @@ import LinearProgress from '@mui/material/LinearProgress';
 import ProgramBanner from "../components/ProgramBanner";
 import { BASE_URL } from "../const";
 import { StudentWorkData } from "../types/StudentWork";
-import React from "react";
 
 // #region tab components
 interface ActivityTabItemProps {
@@ -207,13 +206,6 @@ const ActivityPage = () => {
         () => fetchData(activityId)
     );
 
-    const scrollToRef = React.useRef<HTMLDivElement | null>(null);
-    const scrollToTop = () => {
-        if (scrollToRef.current) {
-            scrollToRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
-      
     return (
     <div>
         <main className="flex flex-col">
