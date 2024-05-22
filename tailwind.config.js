@@ -107,6 +107,8 @@ export default {
             "presence-yellow": "#F0C006",
             "presence-blue": "#78A7D5",
             "presence-green": "#61BE6B",
+            "presence-complete": "#CEE9FE",
+            "presence-incomplete": "#FFEB9F"
         }
     },
   },
