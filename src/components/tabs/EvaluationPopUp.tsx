@@ -62,6 +62,10 @@ const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activity
     };
 
     const patchEvaluation = async (activityId: number, teacherId: number, data: any) => {
+        if (data.penilaian == "") data.penilaian = null;
+        if (data.feedback == "") data.feedback = null;
+        if (data.catatan == "") data.catatan = null;
+        
         try {
             const response = await fetch(`${BASE_URL}/evaluasi?jadwal=${activityId}&murid=${evaluation.id}`, {
                 method: 'PATCH',
