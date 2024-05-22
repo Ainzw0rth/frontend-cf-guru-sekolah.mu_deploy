@@ -39,6 +39,8 @@ const TaskCompletedNotifier: React.FC<TaskCompletedNotifierProps> = ({ idGuru })
             if (newPendingTask.length < prevPendingTaskLength) {
                 setTaskCompletedCount(prevPendingTaskLength - newPendingTask.length);
                 setOpen(true);
+                setShowConfetti(true);
+                setTimeout(() => setShowConfetti(false), 5000);
             }
             localStorage.setItem('pendingTaskLength', newPendingTask.length.toString());
         };
@@ -48,11 +50,7 @@ const TaskCompletedNotifier: React.FC<TaskCompletedNotifierProps> = ({ idGuru })
 
     const handleClose = () => {
         setOpen(false);
-    };
-
-    const handleConfettiClick = () => {
-        setShowConfetti(true);
-        setTimeout(() => setShowConfetti(false), 5000); // Hide Confetti after 5 seconds
+        setShowConfetti(false);
     };
 
     return (
@@ -68,9 +66,6 @@ const TaskCompletedNotifier: React.FC<TaskCompletedNotifierProps> = ({ idGuru })
                     sx={{ backgroundColor: '#5354d1', color: '#fff' }}
                     action={
                         <>
-                        <IconButton size="medium" color="inherit" onClick={handleConfettiClick}>
-                            <CelebrationIcon fontSize="medium" />
-                        </IconButton>
                         <IconButton size="medium" color="inherit" onClick={handleClose}>
                             <CloseIcon fontSize="medium" />
                         </IconButton>

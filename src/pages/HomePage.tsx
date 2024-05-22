@@ -15,6 +15,7 @@ import { getTeacherId } from '../utils/authUtils';
 import { BASE_URL } from "../const";
 import TaskCompletedNotifier from '../components/notifiers/TaskCompletedNotifier';
 import NewBadgeNotifier from '../components/notifiers/NewBadgeNotifier';
+import PendingTaskNotifier from '../components/notifiers/PendingTaskNotifiers';
 
 const thisDay = new Date().toLocaleDateString('id-ID', {
   weekday: 'long',
@@ -250,7 +251,8 @@ const HomePage = () => {
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <>
+        <div className='flex-col justify-center items-center'>
+          {idGuru !== null && <PendingTaskNotifier idGuru={parseInt(idGuru)} />}
           {idGuru !== null && <TaskCompletedNotifier idGuru={parseInt(idGuru)} />}
           {idGuru !== null && <NewBadgeNotifier idGuru={parseInt(idGuru)} />}
           <div className="flex items-center justify-left space-x-4 mb-5">
@@ -296,7 +298,7 @@ const HomePage = () => {
             </div>
           </div>
           <DashboardCarousel students={students} />
-        </>
+        </div>
       )}
     </div>
   );
