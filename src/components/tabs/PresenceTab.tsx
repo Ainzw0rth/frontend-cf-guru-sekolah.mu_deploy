@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { fetchPresenceData, savePresenceData } from "../../utils/presenceUtils";
 import BulkEditPresencePopUp from "./BulkEditPresencePopUp";
 import Toast from "../toasts/Toast";
+import ToastType from "../toasts/ToastType";
 
 const PresenceStatsCard = ({
   title,
@@ -168,12 +169,6 @@ interface PresenceTabProps {
   fetchData: () => void;
 }
 
-enum ToastType {
-  NONE = "None",
-  SAVING = "Saving",
-  SUCCESS = "Success",
-  FAILED = "Failed",
-}
 
 const PresenceTab = (props: PresenceTabProps) => {
   const [isChangesSaved, setIsChangesSaved] = useState(true);
