@@ -14,6 +14,7 @@ import DashboardCarousel from '../components/DashboardCarousel';
 import { getTeacherId } from '../utils/authUtils';
 import { BASE_URL } from "../const";
 import TaskCompletedNotifier from '../components/notifiers/TaskCompletedNotifier';
+import NewBadgeNotifier from '../components/notifiers/NewBadgeNotifier';
 
 const thisDay = new Date().toLocaleDateString('id-ID', {
   weekday: 'long',
@@ -251,6 +252,7 @@ const HomePage = () => {
       ) : (
         <>
           {idGuru !== null && <TaskCompletedNotifier idGuru={parseInt(idGuru)} />}
+          {idGuru !== null && <NewBadgeNotifier idGuru={parseInt(idGuru)} />}
           <div className="flex items-center justify-left space-x-4 mb-5">
             <Link to={'/Profile'}>
               <div className="w-12 h-12 rounded-full overflow-hidden">
