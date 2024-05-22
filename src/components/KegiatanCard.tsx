@@ -19,7 +19,7 @@ const KegiatanCard: React.FC<KegiatanCardProps> = ({ kegiatan }) => {
             </Link>
           </div>
           <div className="w-full">
-            <h2 className="text-lg font-semibold text-gray-800 mb-2 pt-1 truncate">{kegiatan.title}</h2>
+            <h2 className="text-lg font-semibold text-gray-800 mb-2 pt-1">{kegiatan.title}</h2>
             <div className='flex flex-wrap'>
               <Tag label={`${kegiatan.class}`} color="gamboge"/>
               <Tag label={`${kegiatan.program}`} color="mint" />
