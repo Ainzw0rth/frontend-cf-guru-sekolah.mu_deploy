@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { Activity } from '../types/Activity';
 import { getTeacherId } from '../utils/authUtils';
 import { BASE_URL } from '../const';
+import { Skeleton } from '@mui/material';
 
 const breadcrumb = [
     {label: 'Home', link: '/'},
@@ -69,28 +70,6 @@ const PendingPage = () => {
         fetchPending();
     }, []);
 
-    if (loading) {
-        return (
-            <div className='fixed w-screen h-screen flex flex-col' style={{
-                backgroundImage: `url(${cloudland})`,
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: '0% 100%',
-                backgroundSize: 'cover',
-                backgroundAttachment: 'fixed',
-                minHeight: '100vh',
-            }}>
-                <div className="fixed top-20 w-full z-50">
-                    <Breadcrumb items={breadcrumb} />
-                </div>
-                <div className='fixed top-0 left-0 w-screen h-screen flex items-center justify-center'>
-                    <div className="absolute inset-0 bg-neutral1 bg-opacity-20 flex items-center justify-center z-50">
-                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div className='justify-center fill' style={{
             backgroundImage: `url(${cloudland})`,
@@ -105,17 +84,26 @@ const PendingPage = () => {
                 <Breadcrumb items={breadcrumb} />
             </div>
             <div className="max-[390px]:p-5 p-10 flex-1">
-                {pending.length === 0 ? (
-                    <div className='fixed top-0 left-0 w-screen h-screen flex items-center justify-center'>
-                        <p className='my-24'>Tidak ada tugas yang tertunda! Selamat!</p>
-                    </div>
-                ) : (
+                {loading ? (
                     <div className="flex flex-col justify-center items-center my-4">
-                        {pending.map((kegiatan) => (
-                            <KegiatanPendingTaskCard key={kegiatan.id} kegiatan={kegiatan} />
-                        ))}
+                        <Skeleton variant="rounded" width={300} height={200} sx={{ marginTop: 1, marginBottom: 1}} />
+                        <Skeleton variant="rounded" width={300} height={200} sx={{ marginTop: 1, marginBottom: 1}} />
+                        <Skeleton variant="rounded" width={300} height={200} sx={{ marginTop: 1, marginBottom: 1}} />
                     </div>
-                )}
+                ):(
+                    pending.length === 0 ? (
+                        <div className='fixed top-0 left-0 w-screen h-screen flex items-center justify-center'>
+                            <p className='my-24'>Tidak ada tugas yang tertunda! Selamat!</p>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col justify-center items-center my-4">
+                            {pending.map((kegiatan) => (
+                                <KegiatanPendingTaskCard key={kegiatan.id} kegiatan={kegiatan} />
+                            ))}
+                        </div>
+                    )
+                )
+                }
             </div>
         </div>
 

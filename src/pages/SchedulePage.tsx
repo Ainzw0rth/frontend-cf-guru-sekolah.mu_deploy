@@ -13,6 +13,7 @@ import 'dayjs/locale/id';
 import cloudland from '../assets/cloud_land.svg';
 import { BASE_URL } from "../const";
 import { getTeacherId } from "../utils/authUtils";
+import { Skeleton } from '@mui/material';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -25,10 +26,12 @@ const breadcrumb = [
 const SchedulePage = () => {
     const [selectedDay, setSelectedDay] = useState<Dayjs | null>(dayjs().utc());
     const [kegiatans, setKegiatans] = useState<Activity[]>([]);
+    const [loading, setLoading] = useState(true);
     const idGuru = getTeacherId();
 
     useEffect(() => {
         const fetchKegiatans = async () => {
+            setLoading(true);
             try {
                 const formattedDate = selectedDay?.format('YYYY-MM-DD');
                 const response = await fetch(`${BASE_URL}/kegiatan/tanggal?tanggal=${formattedDate}&id=${idGuru}`);
@@ -58,6 +61,7 @@ const SchedulePage = () => {
             } catch (error) {
                 console.error('Failed to fetch kegiatans', error);
             }
+            setLoading(false);
         };
 
         if (selectedDay) {
@@ -79,17 +83,25 @@ const SchedulePage = () => {
                     />
                     <div className="bg-persian-blue-500 w-24 h-2 rounded-full my-5" />
                     <h1 className='font-bold text-program-title text-text-100'>{selectedDay?.locale('id').format('dddd, D MMMM YYYY')}</h1>
-                    {kegiatans.length === 0 ? (
-                        <div className="flex justify-center items-center my-4">
-                            <p className="my-24">Tidak ada kegiatan hari ini</p>
+                    {loading ? (
+                        <div className='flex flex-col justify-center items-center my-4'>
+                            <Skeleton variant="rounded" width={300} height={200} sx={{ marginTop: 1, marginBottom: 1}} />
+                            <Skeleton variant="rounded" width={300} height={200} sx={{ marginTop: 1, marginBottom: 1}} />
+                            <Skeleton variant="rounded" width={300} height={200} sx={{ marginTop: 1, marginBottom: 1}} />
                         </div>
                     ) : (
-                        <div className="flex flex-col justify-center items-center my-4">
-                            {kegiatans.map((kegiatan) => (
-                                <KegiatanCard key={kegiatan.id} kegiatan={kegiatan} />
-                            ))}
-                        </div>
-                    )}
+                        kegiatans.length === 0 ? (
+                            <div className="flex justify-center items-center my-4">
+                                <p className="my-24">Tidak ada kegiatan hari ini</p>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col justify-center items-center my-4">
+                                {kegiatans.map((kegiatan) => (
+                                    <KegiatanCard key={kegiatan.id} kegiatan={kegiatan} />
+                                ))}
+                            </div>
+                        )
+                    )}   
                 </div>
             </div>
         </LocalizationProvider>

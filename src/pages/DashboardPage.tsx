@@ -11,6 +11,7 @@ import StudentPresenceChart from '../components/StudentPresenceChart';
 import StudentWorkCarousel from '../components/StudentWorkCarousel';
 import StudentNote from '../components/StudentNote';
 import { BASE_URL } from '../const';
+import { Skeleton } from '@mui/material';
 
 const DashboardPage = () => {
     const [dashboardData, setDashboardData] = useState<StudentDashboard>();
@@ -104,13 +105,25 @@ const DashboardPage = () => {
                 style={{ backgroundImage: `url(${banner})` }}
             >
                 <div className='flex flex-col items-center'>
-                    <img src={dashboardData?.identity?.path_profile} alt="Profile" className="w-32 h-32 rounded-full mb-3" />
-                    <p className="text-2xl font-semibold">{dashboardData?.identity?.name ?? 'Loading...'}</p>
+                    {
+                        !dashboardData?.identity?.path_profile ? (
+                            <div>
+                                <Skeleton variant="circular" width={100} height={100} />
+                            </div>
+                        ) : (
+                            <img src={dashboardData?.identity?.path_profile} alt="Profile" className="w-32 h-32 rounded-full mb-3" />
+                        )
+                    }
+                    <p className="text-2xl font-semibold">{dashboardData?.identity?.name ?? <Skeleton variant="text" width={200} height={70}/>}</p>
                 </div>
             </div>
             <div className='flex flex-col items-center'>
                 {isLoading ? (
-                    <p className="text-neutral9 italic mt-10">Loading...</p>
+                    <div>
+                        <Skeleton variant="rounded" width={600} height={250} sx={{ marginTop: 2}}/>
+                        <Skeleton variant="rounded" width={600} height={250} sx={{ marginTop: 2}}/>
+                        <Skeleton variant="rounded" width={600} height={250} sx={{ marginTop: 2}}/>
+                    </div>
                 ) : (
                     <div className='items-center' style={{ width: '95%'}}>
                         {/* Identitas Murid */}

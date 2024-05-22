@@ -209,7 +209,14 @@ const ActivityPage = () => {
     return (
     <div>
         <main className="flex flex-col">
-            <ProgramBanner imgUrl={activityData.imgUrl} judul={activityData.title}/>
+            {
+                activityData.title === ''?(
+                    <ProgramBanner imgUrl={'src/assets/cloud_land.svg'} judul={activityData.title}/>
+                ):(
+                    <ProgramBanner imgUrl={activityData.imgUrl} judul={activityData.title}/>
+
+                )
+            }
             <nav className="flex px-5 overflow-auto whitespace-nowrap pb-4 gap-4">
                 <ActivityTabItem active={openTab == TAB.INSTRUKSI} title="Instruksi" onClick={() => setOpenTab(TAB.INSTRUKSI)}/>
                 <ActivityTabItem active={openTab == TAB.MATERI} title="Materi" onClick={() => setOpenTab(TAB.MATERI)}/>

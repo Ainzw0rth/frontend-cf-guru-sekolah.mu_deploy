@@ -6,6 +6,7 @@ import ProgramBanner from "../components/ProgramBanner";
 import Tag from "../components/Tag";
 import { BASE_URL } from "../const";
 import { useParams } from "react-router-dom";
+import { Skeleton } from "@mui/material";
 
 interface ProgramBasicData {
     id: number;
@@ -27,6 +28,7 @@ const ProgramDetailPage = () => {
     const [programData, setProgramData] = useState<ProgramBasicData>({id: -1, nama: '', tujuanPembelajaran: [], imgUrl: '', periodePembelajaran: ''});
     const [programCompetencies, setProgramCompetencies] = useState<ProgramCompetencies>([]);
     const [programActivities, setProgramActivities] = useState<ProgramActivities>([]);
+    const [loading, setLoading] = useState(true);
 
     const fetchProgramData = async (programId : number) : Promise<ProgramBasicData> => { 
         try {
@@ -93,6 +95,7 @@ const ProgramDetailPage = () => {
     }
 
     useEffect(() => {
+        setLoading(true);
         fetchProgramData(programId)
             .then(data => setProgramData(data))
             .catch(err => console.error(err));
@@ -104,6 +107,7 @@ const ProgramDetailPage = () => {
         fetchProgramActivities(programId)
             .then(data => setProgramActivities(data))
             .catch(err => console.error(err));
+        setLoading(false);
     }, [programId]);
 
     const breadcrumb = [
@@ -117,7 +121,17 @@ const ProgramDetailPage = () => {
     programId = parseInt(id);
 
     if (programData.id === -1) {
-        return <div>Loading...</div>;
+        return (
+            <div className='flex flex-col items-start justify-center mx-2'>
+                <Skeleton variant="rectangular" width='100%' height={260} sx={{marginTop: 12, alignSelf:'center'}}/>
+                <Skeleton variant="text" width={200} height={50} sx={{marginLeft: 2, marginTop: 2}}/>
+                <Skeleton variant="text" width={290} height={40} sx={{marginLeft: 2, marginTop: 2}}/>
+                <Skeleton variant="text" width={310} height={40} sx={{marginLeft: 2}}/>
+                <Skeleton variant="text" width={200} height={50} sx={{marginLeft: 2, marginTop: 2}}/>
+                <Skeleton variant="text" width={290} height={40} sx={{marginLeft: 2, marginTop: 2}}/>
+                <Skeleton variant="text" width={310} height={40} sx={{marginLeft: 2}}/>
+            </div>
+        );
     }
 
     return (

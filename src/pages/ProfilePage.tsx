@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import banner from '../assets/profile_banner.jpg';
 import { getTeacherId } from '../utils/authUtils';
 import { BASE_URL } from '../const';
+import { Skeleton } from '@mui/material';
 import { logout } from '../utils/authUtils';
 
 const TeacherProfile = () => {
@@ -29,7 +30,13 @@ const TeacherProfile = () => {
     }, []);
 
     if (!profile) {
-        return <div>Loading...</div>;
+        return (
+            <div className='flex flex-col items-center justify-center'>
+                <Skeleton variant="circular" width={120} height={120} />
+                <Skeleton variant="text" width={200} height={40} />
+            </div>
+        );
+
     }
 
     return (
@@ -42,9 +49,11 @@ const TeacherProfile = () => {
 
 const BadgesList = () => {
     const [badges, setBadges] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchBadges = async () => {
+            setLoading(true);
             const response = await fetch(`${BASE_URL}/profil/badges/${getTeacherId()}`, {
                 method: 'GET',
                 headers: {
@@ -58,13 +67,20 @@ const BadgesList = () => {
             
             const badgesData = await response.json();
             setBadges(badgesData);
+            setLoading(false);
         };
 
         fetchBadges();
     }, []);
 
-    if (!badges) {
-        return <div>Loading...</div>;
+    if (loading) {
+        return (
+            <div className="flex flex-col justify-center items-center mt-4">
+                <Skeleton variant="rounded" width={500} height={50} />
+                <Skeleton variant="rounded" width={500} height={50} />
+                <Skeleton variant="rounded" width={500} height={50} />
+            </div>
+        );
     }
 
     return (

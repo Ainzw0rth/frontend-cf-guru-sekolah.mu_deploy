@@ -16,6 +16,7 @@ import { BASE_URL } from "../const";
 import TaskCompletedNotifier from '../components/notifiers/TaskCompletedNotifier';
 import NewBadgeNotifier from '../components/notifiers/NewBadgeNotifier';
 import PendingTaskNotifier from '../components/notifiers/PendingTaskNotifiers';
+import { Skeleton } from '@mui/material';
 
 const thisDay = new Date().toLocaleDateString('id-ID', {
   weekday: 'long',
@@ -249,7 +250,24 @@ const HomePage = () => {
   return (
     <div className='bg-neutral8 bg-fixed bg-bottom bg-no-repeat h-svh w-full flex-col justify-center items-center max-[390px]:p-5 p-10 overflow-y-auto' style={{backgroundImage: `url(${homeBackground})`}}>
       {isLoading ? (
-        <p>Loading...</p>
+        <div>
+          <Skeleton variant="rounded" width={300} height={50} />
+          <div className='flex flex-row justify-between my-4 w-full'>
+            <Skeleton variant="rounded" width={250} height={50} />
+            <Skeleton variant="rounded" width={100} height={50} />
+          </div>
+          <div className='ms-6'>
+            <Skeleton variant="rounded" width={300} height={170} />
+          </div>
+          <div className='flex flex-row justify-between my-4 w-full'>
+            <Skeleton variant="rounded" width={250} height={50} />
+            <Skeleton variant="rounded" width={100} height={50} />
+          </div>
+          <div className='ms-6'>
+            <Skeleton variant="rounded" width={300} height={170} />
+          </div>
+        </div>
+        
       ) : (
         <div className='flex-col justify-center items-center'>
           {idGuru !== null && <PendingTaskNotifier idGuru={parseInt(idGuru)} />}

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FormControl, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
+import { FormControl, MenuItem, Select, SelectChangeEvent, Skeleton, Typography } from "@mui/material";
 import { ChangeEvent, KeyboardEvent, useState, useEffect } from 'react';
 import { Murid } from "../types/Murid";
 import { Kelas } from "../types/Kelas";
@@ -15,6 +15,7 @@ const DashboardListPage = () => {
     const [idKelas, setIdKelas] = useState<number | null>(null);
     const [kelas, setKelas] = useState<Kelas[]>([]);
     const [muridCache, setMuridCache] = useState<{ [key: number]: Murid[] }>({});
+    const [isLoadingInner, setIsLoadingInner] = useState(true);
 
     const idGuru = getTeacherId();
 
@@ -64,6 +65,7 @@ const DashboardListPage = () => {
 
     const fetchClassStudent = async () => {
         try {
+            setIsLoadingInner(true);
             console.log('Fetching students of class:', idKelas);
             const response = await fetch(`${BASE_URL}/murid?kelas=${idKelas}`);
             if (!response.ok) {
@@ -90,10 +92,11 @@ const DashboardListPage = () => {
             console.error('Error fetching students of class:', error);
             setIsLoading(false);
         }
+        setIsLoadingInner(false);
     };
 
     const handleClassFilterChange = (e: SelectChangeEvent<string>) => {
-        setIsLoading(true);
+        setIsLoadingInner(true);
         const selectedClass = e.target.value;
         setFilterClass(selectedClass);
         const selectedKelas = kelas.find(k => k.name === selectedClass);
@@ -142,6 +145,40 @@ const DashboardListPage = () => {
         return kelas.map(k => k.name);
     };
 
+    const LoadPlaceholder = () => {
+        return (
+            <div className="">
+                <Skeleton variant='text' width='100%' height={70} />
+                <div className='flex flex-row justify-start'>
+                    <Skeleton variant='text' width={150} height={30} sx={{marginRight:1}} />
+                    <Skeleton variant='text' width={50} height={30} />
+                </div>
+                <div className='grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-0 overflow-y-auto'>
+                    <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}} />
+                    <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                    <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                    <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                    <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                    <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                </div>
+            </div>
+        )
+    }
+
+    const LoadInnerPlaceholder = () => {
+        return (
+            <div className='grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-0 overflow-y-auto'>
+                <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}} />
+                <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+            </div>
+        );
+        
+    }
+
     return (
         <div className='bg-neutral8 w-full justify-center items-center p-10'>
             <h1 className='font-bold text-program-title text-text-100 mb-5'>Dashboard Murid</h1>
@@ -161,7 +198,7 @@ const DashboardListPage = () => {
                 </button>
             </div>
             {isLoading ? (
-                <p className="text-neutral9 italic">Loading...</p>
+                <LoadPlaceholder />
             ) : (
                 <>
                     <div className="flex flex-col mb-5 w-full mx-auto">
@@ -180,17 +217,23 @@ const DashboardListPage = () => {
                             </Select>
                         </FormControl>
                     </div>
-                    {filteredMurid.length === 0 ? (
-                        <p className="text-neutral9 italic">Murid tidak ditemukan</p>
-                    ) : (
-                        <div className='grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto'>
-                            {filteredMurid.map((murid) => (
-                                <div key={murid.id} className="w-1/2">
-                                    <DashboardCard studentData={murid} />
+                    {
+                        isLoadingInner ? (
+                            <LoadInnerPlaceholder />
+                        ):(
+                            filteredMurid.length === 0 ? (
+                                <p className="text-neutral9 italic">Murid tidak ditemukan</p>
+                            ) : (
+                                <div className='grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto'>
+                                    {filteredMurid.map((murid) => (
+                                        <div key={murid.id} className="w-1/2">
+                                            <DashboardCard studentData={murid} />
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    )}
+                            )
+                        )
+                    }
                 </>
             )}
         </div>
