@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import banner from '../assets/profile_banner.jpg';
 import { getTeacherId } from '../utils/authUtils';
 import { BASE_URL } from '../const';
+import { logout } from '../utils/authUtils';
 
 const TeacherProfile = () => {
     const [profile, setProfile] = useState(null);
@@ -76,6 +77,15 @@ const BadgesList = () => {
                     </div>
                 </div>
             ))}
+            <button 
+                onClick={() => {
+                    logout();
+                    window.location.href = '/';
+                }} 
+                className="bg-presence-red text-white font-semibold rounded-lg px-5 py-2 m-5 mb-10"
+            >
+                Logout
+            </button>
         </div>
     );
 };
