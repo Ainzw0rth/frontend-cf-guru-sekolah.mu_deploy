@@ -218,7 +218,7 @@ const ActivityPage = () => {
             <div className="pt-4 flex items-center mx-10 gap-10">
                 <LinearProgress
                     variant="determinate"
-                    value={Math.floor((((totalData ?? 1) -(unfinishedData ?? 0)) / (totalData ?? 1)) * 100)}
+                    value={Math.floor((((totalData ?? 0) -(unfinishedData ?? 0)) / (totalData ?? 1)) * 100)}
                     className='rounded-lg shadow-md flex-grow'
                     sx={{
                         height: '10px',
@@ -227,7 +227,7 @@ const ActivityPage = () => {
                         },
                     }}
                 />
-                <p className='text-text-100 text-right ml-2'>{Math.floor((((totalData ?? 1) -(unfinishedData ?? 0)) / (totalData ?? 1)) * 100)}%</p>
+                <p className='text-text-100 text-right ml-2'>{Math.floor((((totalData ?? 0) -(unfinishedData ?? 0)) / (totalData ?? 1)) * 100)}%</p>
             </div>
         </div>
     </div>
