@@ -28,7 +28,6 @@ const ProgramDetailPage = () => {
     const [programData, setProgramData] = useState<ProgramBasicData>({id: -1, nama: '', tujuanPembelajaran: [], imgUrl: '', periodePembelajaran: ''});
     const [programCompetencies, setProgramCompetencies] = useState<ProgramCompetencies>([]);
     const [programActivities, setProgramActivities] = useState<ProgramActivities>([]);
-    const [loading, setLoading] = useState(true);
 
     const fetchProgramData = async (programId : number) : Promise<ProgramBasicData> => { 
         try {
@@ -95,7 +94,6 @@ const ProgramDetailPage = () => {
     }
 
     useEffect(() => {
-        setLoading(true);
         fetchProgramData(programId)
             .then(data => setProgramData(data))
             .catch(err => console.error(err));
@@ -107,7 +105,6 @@ const ProgramDetailPage = () => {
         fetchProgramActivities(programId)
             .then(data => setProgramActivities(data))
             .catch(err => console.error(err));
-        setLoading(false);
     }, [programId]);
 
     const breadcrumb = [
