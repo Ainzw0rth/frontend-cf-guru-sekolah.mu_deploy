@@ -19,7 +19,7 @@ export const updateBadges = async () => {
         };
         
         for (const [badgeType, badgeValue] of Object.entries(badgeTypes)) {
-            const response = await fetch(`${BASE_URL}/badge/${badgeType}/${idGuru}`, {
+            const response = await fetch(`${BASE_URL}/profil/badges/${badgeType}/${idGuru}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
