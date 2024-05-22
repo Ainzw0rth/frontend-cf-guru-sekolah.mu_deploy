@@ -211,7 +211,7 @@ const ActivityPage = () => {
         <main className="flex flex-col">
             {
                 activityData.title === ''?(
-                    <ProgramBanner imgUrl={'src/assets/cloud_land.svg'} judul={activityData.title}/>
+                    <ProgramBanner imgUrl={'../assets/cloud_land.svg'} judul={"Loading..."}/>
                 ):(
                     <ProgramBanner imgUrl={activityData.imgUrl} judul={activityData.title}/>
 

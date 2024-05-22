@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { fetchStudentWorkData } from "../../data/studentWork";
 import ToastType from "../toasts/ToastType";
 import Toast from "../toasts/Toast";
+import { Skeleton } from "@mui/material";
 
 interface StudentWorkCardProps {
   student: StudentWork;
@@ -167,7 +168,14 @@ const StudentWorkTab = ({
         </select>
       </div>
       {isLoading ? (
-        <p className="text-neutral9 italic">Loading...</p>
+        <div>
+          <Skeleton variant="rounded" width="100%" height={70} sx={{marginBottom:2}}/>
+          <Skeleton variant="rounded" width="100%" height={70} sx={{marginBottom:2}}/>
+          <Skeleton variant="rounded" width="100%" height={70} sx={{marginBottom:2}}/>
+          <Skeleton variant="rounded" width="100%" height={70} sx={{marginBottom:2}}/>
+          <Skeleton variant="rounded" width="100%" height={70} sx={{marginBottom:2}}/>
+          <Skeleton variant="rounded" width="100%" height={70} sx={{marginBottom:2}}/>
+        </div>
       ) : filteredStudents.length === 0 ? (
         <p className="text-neutral9 italic">Siswa tidak ditemukan</p>
       ) : (

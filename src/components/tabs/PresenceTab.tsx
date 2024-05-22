@@ -9,6 +9,7 @@ import { fetchPresenceData, savePresenceData } from "../../utils/presenceUtils";
 import BulkEditPresencePopUp from "./BulkEditPresencePopUp";
 import Toast from "../toasts/Toast";
 import ToastType from "../toasts/ToastType";
+import { Skeleton } from "@mui/material";
 
 const PresenceStatsCard = ({
   title,
@@ -207,7 +208,28 @@ const PresenceTab = (props: PresenceTabProps) => {
         props.onPresenceDataChange(null);
       });
 
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <div className="flex flex-row items-center justify-center gap-6 my-7">
+          <Skeleton variant="rounded" width={80} height={80}/>
+          <Skeleton variant="rounded" width={80} height={80}/>
+          <Skeleton variant="rounded" width={80} height={80}/>
+          <Skeleton variant="rounded" width={80} height={80}/>
+          <Skeleton variant="rounded" width={80} height={80}/>
+        </div>
+        <div className="flex mb-4 items-center justify-center">
+          <Skeleton variant="rounded" width='80%' height={50}/>
+        </div>
+        <div className="flex flex-col items-center justify-center">
+          <Skeleton variant="rounded" width="80%" height={100} sx={{marginBottom:2}}/>
+          <Skeleton variant="rounded" width="80%" height={100} sx={{marginBottom:2}}/>
+          <Skeleton variant="rounded" width="80%" height={100} sx={{marginBottom:2}}/>
+          <Skeleton variant="rounded" width="80%" height={100} sx={{marginBottom:2}}/>
+          <Skeleton variant="rounded" width="80%" height={100} sx={{marginBottom:2}}/>
+          <Skeleton variant="rounded" width="80%" height={100} sx={{marginBottom:2}}/>
+        </div>
+      </div>
+    );
   }
 
   const onSelectAll = () => {

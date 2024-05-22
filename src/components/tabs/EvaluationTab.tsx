@@ -1,3 +1,4 @@
+import { Skeleton } from "@mui/material";
 import { fetchEvaluationData } from "../../data/studentEvaluation";
 import {
   EvaluationData,
@@ -174,7 +175,15 @@ const EvaluationTab = ({
         </select>
       </div>
       {isLoading ? (
-        <p className="text-neutral9 italic">Loading...</p>
+        <div>
+          <Skeleton variant="rounded" width="100%" height={70} sx={{marginBottom:2}}/>
+          <Skeleton variant="rounded" width="100%" height={70} sx={{marginBottom:2}}/>
+          <Skeleton variant="rounded" width="100%" height={70} sx={{marginBottom:2}}/>
+          <Skeleton variant="rounded" width="100%" height={70} sx={{marginBottom:2}}/>
+          <Skeleton variant="rounded" width="100%" height={70} sx={{marginBottom:2}}/>
+          <Skeleton variant="rounded" width="100%" height={70} sx={{marginBottom:2}}/>
+        </div>
+
       ) : filteredStudents.length === 0 ? (
         <p className="text-neutral9 italic">Siswa tidak ditemukan</p>
       ) : (
