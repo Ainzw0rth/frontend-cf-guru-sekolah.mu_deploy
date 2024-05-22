@@ -162,9 +162,10 @@ const StudentPresenceCard = ({
 };
 
 interface PresenceTabProps {
-  activityId: number;
-  presenceData?: PresenceData | null;
-  onPresenceDataChange: (data: PresenceData | null) => void;
+    activityId: number;
+    presenceData?: PresenceData | null;
+    onPresenceDataChange: (data: PresenceData | null) => void;
+    fetchData: () => void;
 }
 
 enum ToastType {
@@ -253,21 +254,15 @@ const PresenceTab = (props: PresenceTabProps) => {
     setIsPopUpOpen(false);
   };
 
-  const onSaveChanges = () => {
-    setActiveToast(ToastType.SAVING);
-    savePresenceData(props.activityId, props.presenceData!, changedIds).then(
-      () => {
-        setIsChangesSaved(true);
-        setIsSelectMode(false);
-        setChangedIds([]);
-        setSelectedStudent([]);
-        setActiveToast(ToastType.SUCCESS);
-      }
-    ).catch((e) => {
-      console.error(e);
-      setActiveToast(ToastType.FAILED);
-    });
-  };
+    const onSaveChanges = () => {
+        savePresenceData(props.activityId, props.presenceData!, changedIds)
+            .then(() => {
+                setIsChangesSaved(true);
+                setIsSelectMode(false);
+                setChangedIds([]);
+                setSelectedStudent([]);
+            });
+    }
 
   const data: PresenceData = props.presenceData;
 

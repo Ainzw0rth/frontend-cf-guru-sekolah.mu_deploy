@@ -37,9 +37,10 @@ interface EvaluationTabProps {
     activityId: number;
     evaluationData?: EvaluationData;
     onEvaluationDataChange: (data: EvaluationData) => void;
+    fetchData: () => void;
 }
 
-const EvaluationTab = ({ activityId, evaluationData, onEvaluationDataChange }: EvaluationTabProps) => {
+const EvaluationTab = ({ activityId, evaluationData, onEvaluationDataChange, fetchData }: EvaluationTabProps) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
     const [isLoading, setIsLoading] = useState(!evaluationData);
@@ -168,6 +169,7 @@ const EvaluationTab = ({ activityId, evaluationData, onEvaluationDataChange }: E
                     teacherId={evaluationData?.teacherId} 
                     onClose={handleClosePopup} 
                     onSave={updateStudentEvaluation}
+                    fetchData={fetchData}
                 />
             )}
         </div>

@@ -51,7 +51,8 @@ const generateTabElements = (
     materialData: MaterialData | undefined,
     onMaterialDataChange: (data: MaterialData) => void,
     studentWorkData: StudentWorkData | undefined,
-    onStudentWorkDataChange: (data: StudentWorkData) => void
+    onStudentWorkDataChange: (data: StudentWorkData) => void,
+    fetchData: () => void
 ) => {
     return [
         {
@@ -64,11 +65,11 @@ const generateTabElements = (
         },
         {
             id: TAB.PRESENSI, element: 
-                <PresenceTab activityId={activityId} onPresenceDataChange={(data) => onPresenceDataChange(data)} presenceData={presenceData}/>
+                <PresenceTab activityId={activityId} onPresenceDataChange={(data) => onPresenceDataChange(data)} presenceData={presenceData} fetchData={fetchData}/>
         },
         {
             id: TAB.EVALUASI, element: 
-                <EvaluationTab activityId={activityId} onEvaluationDataChange={(data) => onEvaluationDataChange(data)} evaluationData={evaluationData}/>
+                <EvaluationTab activityId={activityId} onEvaluationDataChange={(data) => onEvaluationDataChange(data)} evaluationData={evaluationData} fetchData={fetchData}/>
         },
         {
             id: TAB.HASIL_KARYA, element: 
@@ -149,36 +150,42 @@ const ActivityPage = () => {
 
     const [totalData, setTotalData] = useState<number | null>(null);
     const [unfinishedData, setUnfinishedData] = useState<number | null>(null);
+    const [progressValue, setProgressValue] = useState(0);
+
+    const fetchData = async (activityId: number) => {
+        if (!activityId) { return; }
+    
+        try {
+            const response = await fetch(`${BASE_URL}/kegiatan/percentage?id=` + activityId);
+            const data = await response.json();
+            setTotalData(data.data[0].total_rows * 4);
+            setUnfinishedData(data.data[0].null_catatan_kehadiran*1 + data.data[0].null_penilaian*1 + data.data[0].null_catatan*1 + data.data[0].null_feedback*1);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    
+        try {
+            const data = await fetchActivityData(activityId);
+            setActivityData(data);
+            setInstructionData({ 
+                instruksiMurid: data.instruksi_murid, 
+                instruksiGuru: data.instruksi_guru, 
+                tujuanPembelajaran: data.tujuan_pembelajaran 
+            });
+        } catch (err) {
+            console.error(err);
+            setActivityData({ title: '', imgUrl: '', instruksi_murid: [], instruksi_guru: [], tujuan_pembelajaran: [] });
+        }
+    }
+    
+    useEffect(() => {
+        fetchData(activityId);
+    }, [activityId]);
 
     useEffect(() => {
-        if (!activityId) { return; }
-
-        fetch(`${BASE_URL}/kegiatan/percentage?id=` + activityId)
-            .then(response => response.json())
-            .then(data => {
-                // Store the response data in the state variable
-                setTotalData(data.data[0].total_rows * 4);
-                setUnfinishedData(data.data[0].null_catatan_kehadiran*1 + data.data[0].null_penilaian*1 + data.data[0].null_catatan*1 + data.data[0].null_feedback*1);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-
-        fetchActivityData(activityId)
-            .then(data =>  {
-                setActivityData(data)
-                setInstructionData({ 
-                    instruksiMurid: data.instruksi_murid, 
-                    instruksiGuru: data.instruksi_guru, 
-                    tujuanPembelajaran: data.tujuan_pembelajaran 
-                });
-            }
-            )
-            .catch(err => {
-                console.error(err);
-                setActivityData({ title: '', imgUrl: '', instruksi_murid: [], instruksi_guru: [], tujuan_pembelajaran: [] });
-            });
-    }, [activityId]);
+        const value = Math.floor((((totalData ?? 0) - (unfinishedData ?? 0)) / (totalData ?? 1)) * 100);
+        setProgressValue(value);
+    }, [totalData, unfinishedData]); 
 
     const { id } = useParams();
     if (!id) { return <div>Invalid Activity ID</div>; }
@@ -195,7 +202,8 @@ const ActivityPage = () => {
         materialData,
         storeMaterialData,
         studentWorkData,
-        storeStudentWorkData
+        storeStudentWorkData,
+        () => fetchData(activityId)
     );
 
     return (
@@ -218,7 +226,7 @@ const ActivityPage = () => {
             <div className="pt-4 flex items-center mx-10 gap-10">
                 <LinearProgress
                     variant="determinate"
-                    value={Math.floor((((totalData ?? 0) - (unfinishedData ?? 0)) / (totalData ?? 1)) * 100)}
+                    value={progressValue}
                     className='rounded-lg shadow-md flex-grow'
                     sx={{
                         height: '10px',
@@ -227,7 +235,7 @@ const ActivityPage = () => {
                         },
                     }}
                 />
-                <p className='text-text-100 text-right ml-2'>{Math.floor((((totalData ?? 0) - (unfinishedData ?? 0)) / (totalData ?? 1)) * 100)}%</p>
+                <p className='text-text-100 text-right ml-2'>{progressValue}%</p>
             </div>
         </div>
     </div>

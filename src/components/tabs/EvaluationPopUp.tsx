@@ -10,9 +10,10 @@ interface EvaluationPopupProps {
     teacherId: number | undefined;
     onClose: () => void;
     onSave: (updatedStudent: StudentEvaluation) => void;
+    fetchData: () => void;
 }
 
-const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activityId, teacherId, onClose, onSave }) => {
+const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activityId, teacherId, onClose, onSave, fetchData }) => {
     const [evaluation, setEvaluation] = useState<StudentEvaluation>(studentData);
     const [tempEvaluation, setTempEvaluation] = useState<StudentEvaluation>(studentData);
     const [isSaving, setIsSaving] = useState(false);
@@ -34,6 +35,7 @@ const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activity
                 setShowSuccess(false);
                 onSave(tempEvaluation);
                 onClose();
+                fetchData();
             }, 1000);
         } catch (error) {
             console.error("Error submitting evaluation:", error);
@@ -60,6 +62,10 @@ const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activity
     };
 
     const patchEvaluation = async (activityId: number, teacherId: number, data: any) => {
+        if (data.penilaian == "") data.penilaian = null;
+        if (data.feedback == "") data.feedback = null;
+        if (data.catatan == "") data.catatan = null;
+        
         try {
             const response = await fetch(`${BASE_URL}/evaluasi?jadwal=${activityId}&murid=${evaluation.id}`, {
                 method: 'PATCH',
