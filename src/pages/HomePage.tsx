@@ -13,6 +13,7 @@ import KegiatanPendingTaskCarousel from '../components/KegiatanPendingTaskCarous
 import DashboardCarousel from '../components/DashboardCarousel';
 import { getTeacherId } from '../utils/authUtils';
 import { BASE_URL } from "../const";
+import TaskCompletedNotifier from '../components/notifiers/TaskCompletedNotifier';
 
 const thisDay = new Date().toLocaleDateString('id-ID', {
   weekday: 'long',
@@ -249,6 +250,7 @@ const HomePage = () => {
         <p>Loading...</p>
       ) : (
         <>
+          {idGuru !== null && <TaskCompletedNotifier idGuru={parseInt(idGuru)} />}
           <div className="flex items-center justify-left space-x-4 mb-5">
             <Link to={'/Profile'}>
               <div className="w-12 h-12 rounded-full overflow-hidden">

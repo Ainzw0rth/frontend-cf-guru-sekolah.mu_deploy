@@ -12,17 +12,19 @@ interface BottomNavItemProps {
     alt?: string;
     onClick: () => void;
     active: boolean;
+    label: string;
 }
 
 const BottomNavItem = (props: BottomNavItemProps) => {
     return (
-        <li>
-            <Link to={props.url} onClick={props.onClick}>
+        <li className={`flex flex-col items-center ${props.active ? 'text-blue-500' : 'text-gray-500'}`}>
+            <Link to={props.url} onClick={props.onClick} className="flex flex-col items-center">
                 <img 
                     src={props.icon} 
                     alt={props.alt ? props.alt : 'Nav Icon'} 
                     className={`h-12 p-1.5 ${props.active ? 'grayscale-0' : 'grayscale'}`}
                 />
+                <span className="text-xs">{props.label}</span>
             </Link>
         </li>
     );
@@ -80,15 +82,15 @@ const BottomNav = () => {
         <nav className="w-full h-24 shadow-hard-top rounded-t-3xl fixed bottom-0 bg-white max-w-screen-sm mx-auto">
             <ul className="h-full flex items-center justify-around">
                 <BottomNavItem icon={homeImg} url={navItemsUrls[NAV.HOME]} alt="Home Nav"
-                    onClick={() => handleNavClick(NAV.HOME)} active={active === NAV.HOME}/>
+                    onClick={() => handleNavClick(NAV.HOME)} active={active === NAV.HOME} label='Beranda'/>
                 <BottomNavItem icon={programImg} url={navItemsUrls[NAV.PROGRAM]} alt="Program Nav"
-                    onClick={() => handleNavClick(NAV.PROGRAM)} active={active === NAV.PROGRAM}/>
+                    onClick={() => handleNavClick(NAV.PROGRAM)} active={active === NAV.PROGRAM} label='Program'/>
                 <BottomNavItem icon={scheduleImg} url={navItemsUrls[NAV.SCHEDULE]} alt="Schedule Nav" 
-                    onClick={() => handleNavClick(NAV.SCHEDULE)} active={active === NAV.SCHEDULE}/>
+                    onClick={() => handleNavClick(NAV.SCHEDULE)} active={active === NAV.SCHEDULE} label='Jadwal'/>
                 <BottomNavItem icon={pendingTaskImg} url={navItemsUrls[NAV.PENDING]} alt="Pending Task Nav" 
-                    onClick={() => handleNavClick(NAV.PENDING)} active={active === NAV.PENDING}/>
+                    onClick={() => handleNavClick(NAV.PENDING)} active={active === NAV.PENDING} label='Tugas Tertunda'/>
                 <BottomNavItem icon={studentImg} url={navItemsUrls[NAV.PROFILE]} alt="Profile Nav" 
-                    onClick={() => handleNavClick(NAV.PROFILE)} active={active === NAV.PROFILE}/>
+                    onClick={() => handleNavClick(NAV.PROFILE)} active={active === NAV.PROFILE} label='Profil'/>
             </ul>
         </nav>
         <div className="h-28 w-full max-w-screen-sm mx-auto"/> {/* whitespace to get rid of elements hidden by bottom nav */}
