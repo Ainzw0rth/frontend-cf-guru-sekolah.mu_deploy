@@ -85,9 +85,9 @@ const BottomNav: React.FC<BottomNavProps> = ({ scrollToTop }) => {
     const [showButton, setShowButton] = useState(false);
     useEffect(() => {
         const checkScrollTop = () => {
-          if (!showButton && window.pageYOffset > 600){
+          if (!showButton && window.scrollY > 600){
             setShowButton(true);
-          } else if (showButton && window.pageYOffset <= 600){
+          } else if (showButton && window.scrollY <= 600){
             setShowButton(false);
           }
         };
@@ -100,8 +100,8 @@ const BottomNav: React.FC<BottomNavProps> = ({ scrollToTop }) => {
     <>
         <nav className="w-full h-24 shadow-hard-top rounded-t-3xl fixed bottom-0 bg-white max-w-screen-sm mx-auto">
             {showButton && (
-                <div className="w-full rounded-t-3xl fixed bottom-40 max-w-screen-sm mx-auto z-20 flex justify-end">
-                <button onClick={scrollToTop} className='w-12 h-12 bg-presence-blue shadow-soft rounded-3xl text-white font-bold'>↑</button>
+                <div className="w-full rounded-t-3xl fixed bottom-40 right-5 max-w-screen-sm mx-auto z-20 flex justify-end drop-shadow-lg">
+                    <button onClick={scrollToTop} className='w-12 h-12 bg-presence-blue shadow-soft rounded-3xl text-white font-bold'>▲</button>
                 </div>
             )}
 

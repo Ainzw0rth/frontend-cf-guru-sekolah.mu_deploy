@@ -8,14 +8,16 @@ interface KegiatanCardProps {
 }
 
 const endTime = (timeString: string) => {
-  const date = new Date(`2024-01-01T${timeString}:00`); // the date is just a template, it doesn't affect the results
+  const [hours, minutes] = timeString.split(':').map(Number);
+  
+  const date = new Date(Date.UTC(2024, 0, 1, hours, minutes));
+  
+  date.setUTCHours(date.getUTCHours() + 2);
 
-  date.setHours(date.getHours() + 2);
+  const hoursUTC = String(date.getUTCHours()).padStart(2, '0');
+  const minutesUTC = String(date.getUTCMinutes()).padStart(2, '0');
 
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-
-  return `${hours}:${minutes}`;
+  return `${hoursUTC}:${minutesUTC}`;
 };
 
 const KegiatanCard: React.FC<KegiatanCardProps> = ({ kegiatan }) => {

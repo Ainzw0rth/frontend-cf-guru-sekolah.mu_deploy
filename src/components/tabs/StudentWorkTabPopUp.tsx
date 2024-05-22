@@ -21,12 +21,12 @@ const StudentWorkTabPopUp: React.FC<StudentWorkPopupProps> = ({
   onSaveSuccess,
   onSaveFailed,
   onSaving,
-  onDelete,
+//   onDelete,
 }) => {
   const [studentWork, setStudentWork] = useState<StudentWork>(studentData);
   const [file, setFile] = useState<File | undefined>(undefined);
   const [isSaving, setIsSaving] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+//   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     setStudentWork(studentData);
@@ -80,32 +80,32 @@ const StudentWorkTabPopUp: React.FC<StudentWorkPopupProps> = ({
     setFile(file);
   };
 
-  const handleDelete = async () => {
-    try {
-      setIsDeleting(true);
-      const response = await fetch(
-        `${BASE_URL}/hasil_karya?id=${studentData.id_work}`,
-        {
-          method: "DELETE",
-        }
-      );
-      console.log("response", response);
-      if (!response.ok) {
-        throw new Error("Failed to delete student's work");
-      }
-      const updatedStudentWork = {
-        ...studentWork,
-        status: StudentWorkStatus.NOT_YET,
-        file: "",
-        file_type: "",
-      };
-      onDelete(updatedStudentWork);
-    } catch (error) {
-      console.error("Error deleting student's work:", error);
-    } finally {
-      setIsDeleting(false);
-    }
-  };
+//   const handleDelete = async () => {
+//     try {
+//       setIsDeleting(true);
+//       const response = await fetch(
+//         `${BASE_URL}/hasil_karya?id=${studentData.id_work}`,
+//         {
+//           method: "DELETE",
+//         }
+//       );
+//       console.log("response", response);
+//       if (!response.ok) {
+//         throw new Error("Failed to delete student's work");
+//       }
+//       const updatedStudentWork = {
+//         ...studentWork,
+//         status: StudentWorkStatus.NOT_YET,
+//         file: "",
+//         file_type: "",
+//       };
+//       onDelete(updatedStudentWork);
+//     } catch (error) {
+//       console.error("Error deleting student's work:", error);
+//     } finally {
+//       setIsDeleting(false);
+//     }
+//   };
 
   return (
     <div
