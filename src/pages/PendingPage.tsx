@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import { Activity } from '../types/Activity';
 import { getTeacherId } from '../utils/authUtils';
 import { BASE_URL } from '../const';
-import { delay } from 'framer-motion';
 
 const breadcrumb = [
     {label: 'Home', link: '/'},
