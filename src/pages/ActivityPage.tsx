@@ -157,8 +157,8 @@ const ActivityPage = () => {
             .then(response => response.json())
             .then(data => {
                 // Store the response data in the state variable
-                setTotalData(data.data[0].total_rows * 5);
-                setUnfinishedData(data.data[0].null_catatan_kehadiran*1 + data.data[0].null_penilaian*1 + data.data[0].null_catatan*1 + data.data[0].null_feedback*1 + data.data[0].null_id_karya*1);
+                setTotalData(data.data[0].total_rows * 4);
+                setUnfinishedData(data.data[0].null_catatan_kehadiran*1 + data.data[0].null_penilaian*1 + data.data[0].null_catatan*1 + data.data[0].null_feedback*1);
             })
             .catch(error => {
                 console.error('Error:', error);
