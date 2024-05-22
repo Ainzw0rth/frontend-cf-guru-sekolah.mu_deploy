@@ -85,7 +85,7 @@ const BadgesList = () => {
                     logout();
                     window.location.href = '/';
                 }} 
-                className="bg-presence-red text-white font-semibold rounded-lg px-5 py-2 m-5 mb-10"
+                className="bg-presence-red text-white text-lg font-semibold rounded-lg px-5 py-2 mb-10"
             >
                 Logout
             </button>
