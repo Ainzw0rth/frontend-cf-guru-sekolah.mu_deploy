@@ -150,7 +150,7 @@ const EvaluationPopup: React.FC<EvaluationPopupProps> = ({
               Feedback Murid:
             </label>
             <textarea
-              value={tempEvaluation.feedback}
+              value={tempEvaluation.feedback || ""}
               onChange={(e) =>
                 setTempEvaluation({
                   ...tempEvaluation,
@@ -167,7 +167,7 @@ const EvaluationPopup: React.FC<EvaluationPopupProps> = ({
               Catatan Internal:
             </label>
             <textarea
-              value={tempEvaluation.catatan}
+              value={tempEvaluation.catatan  || ""}
               onChange={(e) =>
                 setTempEvaluation({
                   ...tempEvaluation,
