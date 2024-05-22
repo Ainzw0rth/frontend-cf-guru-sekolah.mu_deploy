@@ -4,7 +4,6 @@ import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import SnackbarContent from '@mui/material/SnackbarContent';
 import CloseIcon from '@mui/icons-material/Close';
-import CelebrationIcon from '@mui/icons-material/Celebration';
 import { IconButton } from "@mui/material";
 import taskIconPath from '../../assets/task_icon.png';
 import Confetti from 'react-confetti'; // Import Confetti component
@@ -40,6 +39,8 @@ const TaskCompletedNotifier: React.FC<TaskCompletedNotifierProps> = ({ idGuru })
             if (newPendingTask.length < prevPendingTaskLength) {
                 setTaskCompletedCount(prevPendingTaskLength - newPendingTask.length);
                 setOpen(true);
+                setShowConfetti(true);
+                setTimeout(() => setShowConfetti(false), 5000);
             }
             localStorage.setItem('pendingTaskLength', newPendingTask.length.toString());
         };
@@ -49,11 +50,7 @@ const TaskCompletedNotifier: React.FC<TaskCompletedNotifierProps> = ({ idGuru })
 
     const handleClose = () => {
         setOpen(false);
-    };
-
-    const handleConfettiClick = () => {
-        setShowConfetti(true);
-        setTimeout(() => setShowConfetti(false), 5000); // Hide Confetti after 5 seconds
+        setShowConfetti(false);
     };
 
     return (
@@ -69,9 +66,6 @@ const TaskCompletedNotifier: React.FC<TaskCompletedNotifierProps> = ({ idGuru })
                     sx={{ backgroundColor: '#5354d1', color: '#fff' }}
                     action={
                         <>
-                        <IconButton size="medium" color="inherit" onClick={handleConfettiClick}>
-                            <CelebrationIcon fontSize="medium" />
-                        </IconButton>
                         <IconButton size="medium" color="inherit" onClick={handleClose}>
                             <CloseIcon fontSize="medium" />
                         </IconButton>

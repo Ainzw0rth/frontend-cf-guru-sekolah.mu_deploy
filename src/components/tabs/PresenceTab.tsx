@@ -111,7 +111,7 @@ const StudentPresenceCard = ({
       <div className="flex gap-2 w-full justify-between items-center">
         <button
           className={`w-1/2 py-1.5 px-2  border-presence-red border-2 
-                    font-semibold rounded-xl text-label-4
+                    font-semibold rounded-lg text-label-4
                     ${
                       status === PresenceStatus.ABSENT
                         ? "bg-presence-red text-white"
@@ -123,7 +123,7 @@ const StudentPresenceCard = ({
         </button>
         <button
           className={`w-1/2 py-1.5 px-2 border-presence-yellow border-2 
-                    font-semibold rounded-xl text-label-4
+                    font-semibold rounded-lg text-label-4
                     ${
                       status === PresenceStatus.SICK
                         ? "bg-presence-yellow text-white"
@@ -135,7 +135,7 @@ const StudentPresenceCard = ({
         </button>
         <button
           className={`w-1/2 py-1.5 px-2 border-presence-blue border-2 
-                    font-semibold rounded-xl text-label-4
+                    font-semibold rounded-lg text-label-4
                     ${
                       status === PresenceStatus.PERMITTED
                         ? "bg-presence-blue text-white"
@@ -147,7 +147,7 @@ const StudentPresenceCard = ({
         </button>
         <button
           className={`w-1/2 py-1.5 px-2 border-presence-green border-2 
-                    font-semibold rounded-xl text-label-4
+                    font-semibold rounded-lg text-label-4
                     ${
                       status === PresenceStatus.PRESENT
                         ? "bg-presence-green text-white"
@@ -168,7 +168,6 @@ interface PresenceTabProps {
   onPresenceDataChange: (data: PresenceData | null) => void;
   fetchData: () => void;
 }
-
 
 const PresenceTab = (props: PresenceTabProps) => {
   const [isChangesSaved, setIsChangesSaved] = useState(true);
@@ -251,18 +250,18 @@ const PresenceTab = (props: PresenceTabProps) => {
 
   const onSaveChanges = () => {
     setToastActive(ToastType.SAVING);
-    savePresenceData(props.activityId, props.presenceData!, changedIds).then(
-      () => {
+    savePresenceData(props.activityId, props.presenceData!, changedIds)
+      .then(() => {
         setIsChangesSaved(true);
         setIsSelectMode(false);
         setChangedIds([]);
         setSelectedStudent([]);
         setToastActive(ToastType.SUCCESS);
-      }
-    ).catch((e) => {
-      console.error(e);
-      setToastActive(ToastType.FAILED);
-    });
+      })
+      .catch((e) => {
+        console.error(e);
+        setToastActive(ToastType.FAILED);
+      });
   };
 
   const data: PresenceData = props.presenceData;

@@ -21,9 +21,9 @@ const StudentEvaluationCard = ({
   const getStatusClass = () => {
     switch (student.status) {
       case EvaluationStatus.COMPLETE:
-        return "bg-presence-green";
+        return "bg-presence-complete";
       case EvaluationStatus.INCOMPLETE:
-        return "bg-presence-yellow";
+        return "bg-presence-incomplete";
       default:
         return "";
     }
@@ -40,7 +40,7 @@ const StudentEvaluationCard = ({
           alt={student.name}
           className="w-8 h-8 rounded-full"
         />
-        <h3 className="text-text-100 text-paragraph-1 font-semibold">
+        <h3 className="text-text-100 text-body-3 font-semibold">
           {student.name}
         </h3>
       </div>
@@ -88,7 +88,7 @@ const EvaluationTab = ({
           setIsLoading(false);
         });
     }
-  }, [activityId]);
+  }, [activityId, evaluationData]);
 
   useEffect(() => {
     if (evaluationData) {
@@ -102,10 +102,6 @@ const EvaluationTab = ({
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFilterStatus(e.target.value);
-  };
-
-  const handleSearchClick = () => {
-    filterStudents(searchTerm, filterStatus);
   };
 
   const filterStudents = (searchTerm: string, filterStatus: string) => {
@@ -148,7 +144,7 @@ const EvaluationTab = ({
             placeholder="Cari Siswa"
             value={searchTerm}
             onChange={handleSearchChange}
-            className="border rounded-md p-2 w-full"
+            className="border rounded-md p-2 w-full text-lg"
             style={{
               border: "1px solid #1890ff",
               borderRadius: "8px",
@@ -156,24 +152,25 @@ const EvaluationTab = ({
             }}
           />
         </div>
-        <button
-          onClick={handleSearchClick}
-          className="bg-persian-blue-500 text-white py-3 rounded-md w-20 text-label-4 font-semibold"
-        >
-          Cari
-        </button>
       </div>
       <div>
         <select
           value={filterStatus}
           onChange={handleFilterChange}
-          className="filter-dropdown px-2 py-1 border bg-neutral5 rounded-md flex-auto"
-          style={{ fontSize: "0.8rem" }}
+          className="filter-dropdown px-2 py-1 border bg-neutral5 rounded-md flex-auto text-lg"
         >
-          <option value="">Status</option>
-          <option value={EvaluationStatus.NOT_YET}>Belum Dikerjakan</option>
-          <option value={EvaluationStatus.INCOMPLETE}>Belum Selesai</option>
-          <option value={EvaluationStatus.COMPLETE}>Selesai</option>
+          <option value="" className="text-xs">
+            Status
+          </option>
+          <option value={EvaluationStatus.NOT_YET} className="text-xs">
+            Belum Dikerjakan
+          </option>
+          <option value={EvaluationStatus.INCOMPLETE} className="text-xs">
+            Belum Selesai
+          </option>
+          <option value={EvaluationStatus.COMPLETE} className="text-xs">
+            Selesai
+          </option>
         </select>
       </div>
       {isLoading ? (

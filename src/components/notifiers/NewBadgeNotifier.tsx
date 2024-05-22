@@ -50,7 +50,8 @@ const NewBadgeNotifier: React.FC<NewBadgeNotifierProps> = ({ idGuru }) => {
             setNewBadges(newBadges);
             if (newBadges.length > 0) {
                 setOpen(true);
-                setShowConfetti(true);
+                setShowConfetti(true)
+                setTimeout(() => setShowConfetti(false), 5000);
             }
             localStorage.setItem('badges', JSON.stringify(currBadges));
         };
