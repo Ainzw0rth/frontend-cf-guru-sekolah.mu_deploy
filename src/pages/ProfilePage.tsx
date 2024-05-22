@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import banner from '../assets/profile_banner.jpg';
 import { getTeacherId } from '../utils/authUtils';
@@ -66,15 +67,17 @@ const BadgesList = () => {
     }
 
     return (
-        <div className='flex flex-col gap-8 mt-20'>
+        <div className='flex flex-col gap-5 my-7 mx-4'>
             {(badges as any).data && (badges as any).data.map((badge: any) => (
-                <div key={badge.id_badge} className='flex justify-center items-center gap-10 shadow-hard rounded-lg p-3 border-2'>
-                    <img src={badge.path_badge} alt="Badge" className="w-32 h-32 rounded-full ml-2" />
-                    <div className='flex flex-col gap-5 mr-2'>
+                <>
+                <div key={badge.id_badge} className='w-full flex justify-center items-center gap-5 shadow-hard rounded-lg p-3 border-2'>
+                    <img src={badge.path_badge} alt="Badge" className="w-24 h-24 ml-2 object-contain"/>
+                    <div className='flex flex-col gap-3'>
                         <p className="text-left text-2xl font-semibold">{badge.nama_badge}</p>
                         <p className="text-left text-body-3 text-neutral1 max-w-80">{badge.deskripsi}</p>
                     </div>
                 </div>
+                </>
             ))}
         </div>
     );
