@@ -10,9 +10,10 @@ interface EvaluationPopupProps {
     teacherId: number | undefined;
     onClose: () => void;
     onSave: (updatedStudent: StudentEvaluation) => void;
+    fetchData: () => void;
 }
 
-const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activityId, teacherId, onClose, onSave }) => {
+const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activityId, teacherId, onClose, onSave, fetchData }) => {
     const [evaluation, setEvaluation] = useState<StudentEvaluation>(studentData);
     const [tempEvaluation, setTempEvaluation] = useState<StudentEvaluation>(studentData);
     const [isSaving, setIsSaving] = useState(false);
@@ -34,6 +35,7 @@ const EvaluationPopup: React.FC<EvaluationPopupProps> = ({ studentData, activity
                 setShowSuccess(false);
                 onSave(tempEvaluation);
                 onClose();
+                fetchData();
             }, 1000);
         } catch (error) {
             console.error("Error submitting evaluation:", error);

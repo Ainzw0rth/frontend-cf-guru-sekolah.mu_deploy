@@ -110,6 +110,7 @@ interface PresenceTabProps {
     activityId: number;
     presenceData?: PresenceData | null;
     onPresenceDataChange: (data: PresenceData | null) => void;
+    fetchData: () => void;
 }
 
 const PresenceTab = (props : PresenceTabProps) => {
@@ -183,6 +184,7 @@ const PresenceTab = (props : PresenceTabProps) => {
                 setIsSelectMode(false);
                 setChangedIds([]);
                 setSelectedStudent([]);
+                props.fetchData();
             });
     }
 
