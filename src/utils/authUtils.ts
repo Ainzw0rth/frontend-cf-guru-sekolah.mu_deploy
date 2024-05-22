@@ -6,7 +6,6 @@
 import { BASE_URL } from "../const"
 
 export const isLoggedIn = () => {
-    localStorage.setItem('teacher_id', '1')
     return localStorage.getItem('teacher_id') !== null
 }
 
