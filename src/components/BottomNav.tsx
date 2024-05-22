@@ -46,7 +46,11 @@ const NAV_ORIGIN_URL = new Map([
     [NAV.PROFILE, '/profile']
 ]);
 
-const BottomNav = () => {
+interface BottomNavProps {
+    scrollToTop: () => void;
+}
+
+const BottomNav: React.FC<BottomNavProps> = ({ scrollToTop }) => {
     const [active, setActive] = useState(NAV.HOME);
     const [navItemsUrls, setNavItemsUrls] = useState(['/','/program','/schedule','/pending-task','/profile']);
 
@@ -80,6 +84,9 @@ const BottomNav = () => {
     return (
     <>
         <nav className="w-full h-24 shadow-hard-top rounded-t-3xl fixed bottom-0 bg-white max-w-screen-sm mx-auto">
+        <div className="w-full rounded-t-3xl fixed bottom-40 max-w-screen-sm mx-auto z-20 flex justify-end">
+            <button onClick={scrollToTop} className='w-12 h-12 bg-presence-blue shadow-soft rounded-3xl text-white font-bold'>↑</button>
+        </div>
             <ul className="h-full flex items-center justify-around">
                 <BottomNavItem icon={homeImg} url={navItemsUrls[NAV.HOME]} alt="Home Nav"
                     onClick={() => handleNavClick(NAV.HOME)} active={active === NAV.HOME} label='Beranda'/>

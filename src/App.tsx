@@ -48,7 +48,7 @@ const App = () => {
             <LoginLayout>
                 <LoginPage />
             </LoginLayout>
-        }
+        }        
         </>
     )}
 
