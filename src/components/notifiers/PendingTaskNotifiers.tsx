@@ -44,7 +44,7 @@ const PendingTaskNotifier: React.FC<PendingTaskNotifierProps> = ({ idGuru }) => 
             const unfeedbacked = fetchTasks(`/tugastertunda/unfeedbacked?id_guru=${idGuru}`, 'feedback');
 
             const currTime = new Date().getTime();
-            const eightHoursInMillis = 1000;
+            const eightHoursInMillis = 8 * 60 * 60 * 1000;
 
             let prevNextNotif: string | null = localStorage.getItem('nextNotif');
             let nextNotif: number;
@@ -72,7 +72,7 @@ const PendingTaskNotifier: React.FC<PendingTaskNotifierProps> = ({ idGuru }) => 
         };
 
         checkPendingTasks();
-        const interval = setInterval(checkPendingTasks, 1000); // Check every 5 minutes
+        const interval = setInterval(checkPendingTasks, 300000); // Check every 5 minutes
 
         return () => clearInterval(interval); // Clear interval on component unmount
     }, [idGuru]);

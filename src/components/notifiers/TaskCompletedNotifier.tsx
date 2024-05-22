@@ -4,7 +4,6 @@ import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import SnackbarContent from '@mui/material/SnackbarContent';
 import CloseIcon from '@mui/icons-material/Close';
-import CelebrationIcon from '@mui/icons-material/Celebration';
 import { IconButton } from "@mui/material";
 import taskIconPath from '../../assets/task_icon.png';
 import Confetti from 'react-confetti'; // Import Confetti component
