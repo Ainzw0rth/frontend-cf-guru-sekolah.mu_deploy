@@ -10,7 +10,7 @@ interface KegiatanCardProps {
 
 const KegiatanPendingTaskCard: React.FC<KegiatanCardProps> = ({ kegiatan }) => {
   const dateObject = new Date(kegiatan.date);
-  const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+//   const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
   const dateString = dateObject.toLocaleDateString('en-GB');
   return (
       <div>

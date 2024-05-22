@@ -162,17 +162,17 @@ const StudentPresenceCard = ({
 };
 
 interface PresenceTabProps {
-    activityId: number;
-    presenceData?: PresenceData | null;
-    onPresenceDataChange: (data: PresenceData | null) => void;
-    fetchData: () => void;
+  activityId: number;
+  presenceData?: PresenceData | null;
+  onPresenceDataChange: (data: PresenceData | null) => void;
+  fetchData: () => void;
 }
 
 enum ToastType {
   NONE = "None",
   SAVING = "Saving",
   SUCCESS = "Success",
-  FAILED = "Failed"
+  FAILED = "Failed",
 }
 
 const PresenceTab = (props: PresenceTabProps) => {
@@ -183,7 +183,7 @@ const PresenceTab = (props: PresenceTabProps) => {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
 
   // Toast
-  const [activeToast, setActiveToast] = useState<ToastType>(ToastType.NONE);
+  const [activeToast, setToastActive] = useState<ToastType>(ToastType.NONE);
 
   const handleStudentStatusChange = (
     studentId: number,
@@ -254,15 +254,21 @@ const PresenceTab = (props: PresenceTabProps) => {
     setIsPopUpOpen(false);
   };
 
-    const onSaveChanges = () => {
-        savePresenceData(props.activityId, props.presenceData!, changedIds)
-            .then(() => {
-                setIsChangesSaved(true);
-                setIsSelectMode(false);
-                setChangedIds([]);
-                setSelectedStudent([]);
-            });
-    }
+  const onSaveChanges = () => {
+    setToastActive(ToastType.SAVING);
+    savePresenceData(props.activityId, props.presenceData!, changedIds).then(
+      () => {
+        setIsChangesSaved(true);
+        setIsSelectMode(false);
+        setChangedIds([]);
+        setSelectedStudent([]);
+        setToastActive(ToastType.SUCCESS);
+      }
+    ).catch((e) => {
+      console.error(e);
+      setToastActive(ToastType.FAILED);
+    });
+  };
 
   const data: PresenceData = props.presenceData;
 
@@ -274,7 +280,7 @@ const PresenceTab = (props: PresenceTabProps) => {
         disabled={isChangesSaved || activeToast == ToastType.SAVING}
         onClick={onSaveChanges}
       >
-        { activeToast == ToastType.SAVING ? "Menyimpan" : "Simpan" }
+        {activeToast == ToastType.SAVING ? "Menyimpan" : "Simpan"}
       </button>
       <div className="flex justify-between items-end w-full gap-5">
         <div className="flex flex-col gap-2">
@@ -310,7 +316,7 @@ const PresenceTab = (props: PresenceTabProps) => {
       {isPopUpOpen && <BulkEditPresencePopUp onPopUpDone={onBulkEditDone} />}
       <Toast
         message="Berhasil Menyimpan Presensi!"
-        onClose={() => setActiveToast(ToastType.NONE)}
+        onClose={() => setToastActive(ToastType.NONE)}
         open={activeToast == ToastType.SUCCESS}
         severity="success"
         title="Success"
@@ -318,7 +324,7 @@ const PresenceTab = (props: PresenceTabProps) => {
       />
       <Toast
         message="Gagal Menyimpan Presensi!"
-        onClose={() => setActiveToast(ToastType.NONE)}
+        onClose={() => setToastActive(ToastType.NONE)}
         open={activeToast == ToastType.FAILED}
         severity="error"
         title="Failed"
@@ -326,7 +332,10 @@ const PresenceTab = (props: PresenceTabProps) => {
       />
       <Toast
         message="Menyimpan Presensi..."
-        onClose={() => setActiveToast(ToastType.NONE)}
+        onClose={() => {
+          setToastActive(ToastType.NONE);
+          console.log("loading");
+        }}
         open={activeToast == ToastType.SAVING}
         severity="info"
         title="Loading"
