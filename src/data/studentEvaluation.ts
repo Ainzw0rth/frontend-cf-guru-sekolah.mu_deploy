@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { EvaluationStatus } from "../types/Evaluation";
 import { BASE_URL } from "../const";
 

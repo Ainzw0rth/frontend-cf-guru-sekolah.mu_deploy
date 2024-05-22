@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';

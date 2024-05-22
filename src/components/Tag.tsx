@@ -22,7 +22,7 @@ const Tag = (props: TagProps) => {
     }
 
     let tagTypeClass = '';
-    let tagPadding = 'px-4';
+    let tagPadding = 'px-2';
     if (props.type === 1) {
         tagTypeClass = 'text-label-5';
         tagPadding = 'px-2';
@@ -32,7 +32,7 @@ const Tag = (props: TagProps) => {
 
 
     return (
-        <div className={`rounded-full w-fit max-[375px]:max-w-48 max-w-64 m-1 ${tagPadding} py-2 ${tagColorClass} ${textColorClass} font-bold flex justify-around items-center`}>
+        <div className={`rounded-full w-fit max-[375px]:max-w-48 max-w-64 m-0.5 ${tagPadding} py-2 ${tagColorClass} ${textColorClass} font-bold flex justify-around items-center`}>
           {props.icon && (
             <img 
                 src={props.icon} 

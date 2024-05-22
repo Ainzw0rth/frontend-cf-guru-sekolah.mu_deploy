@@ -59,8 +59,6 @@ export const fetchPresenceData = async (activityId : number) => {
 }
 
 export const savePresenceData = async (activityId: number, presenceData: PresenceData, changedIds: number[]) => {
-    console.log(changedIds);
-    console.log(presenceData);
     const filtered = presenceData.students.filter(student => changedIds.includes(student.id));
     const sentData = filtered.map(student => ({
         id_murid: student.id,

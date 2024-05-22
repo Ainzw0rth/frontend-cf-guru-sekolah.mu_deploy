@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import { IconButton, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
@@ -42,7 +43,7 @@ const NewBadgeNotifier: React.FC<NewBadgeNotifierProps> = ({ idGuru }) => {
             const prevBadgesJSON = localStorage.getItem('badges');
             const prevBadges = prevBadgesJSON ? JSON.parse(prevBadgesJSON) : currBadges;
             console.log("prevBadges", prevBadges);
-            let newBadges = currBadges.filter((currBadge: { id_badge: any; }) => (
+            const newBadges = currBadges.filter((currBadge: { id_badge: any; }) => (
                 !prevBadges.some((prevBadge: { id_badge: any; }) => prevBadge.id_badge === currBadge.id_badge)
             ));  
             console.log("newBadge", newBadges);
