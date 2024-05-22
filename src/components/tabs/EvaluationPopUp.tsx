@@ -38,6 +38,7 @@ const EvaluationPopup: React.FC<EvaluationPopupProps> = ({
       onSaving();
 
       if (!activityId || !teacherId) {
+        onSaveFailed();
         throw new Error("Activity ID or Teacher ID is missing");
       }
 

@@ -2,6 +2,8 @@ import { StudentWorkData, StudentWorkStatus, StudentWork } from "../../types/Stu
 import StudentWorkTabPopUp from "./StudentWorkTabPopUp";
 import { useState, useEffect } from "react";
 import { fetchStudentWorkData } from "../../data/studentWork";
+import ToastType from "../toasts/ToastType";
+import Toast from "../toasts/Toast";
 
 interface StudentWorkCardProps {
     student: StudentWork;
@@ -45,6 +47,9 @@ const StudentWorkTab = ({ activityId, studentWorkData, onStudentWorkDataChange }
     const [selectedStudent, setSelectedStudent] = useState<StudentWork | null>(null);
     const [isSaving, setIsSaving] = useState(false);
 
+    // Toast
+    const [activeToast, setToastActive] = useState<ToastType>(ToastType.NONE);
+
     useEffect(() => {
         if (!studentWorkData || isSaving) {
             setIsLoading(true);
@@ -59,7 +64,7 @@ const StudentWorkTab = ({ activityId, studentWorkData, onStudentWorkDataChange }
                     setIsLoading(false);
                 });
         }
-    }, [activityId, studentWorkData, onStudentWorkDataChange]);
+    }, [activityId, studentWorkData]);
 
     useEffect(() => {
         if (studentWorkData) {
@@ -165,10 +170,41 @@ const StudentWorkTab = ({ activityId, studentWorkData, onStudentWorkDataChange }
                     activityId={studentWorkData?.activityId} 
                     teacherId={studentWorkData?.teacherId} 
                     onClose={handleClosePopup} 
-                    onSave={updateStudentWork}
+                    onSaveSuccess={(data : StudentWork) => {
+                        updateStudentWork(data);
+                        setToastActive(ToastType.SUCCESS);
+                    }}
+                    onSaveFailed={() => setToastActive(ToastType.FAILED)}
+                    onSaving={() => setToastActive(ToastType.SAVING)}
                     onDelete={updateStudentWork}
                 />
             )}
+            <Toast
+                message="Berhasil Menyimpan Hasil Karya!"
+                onClose={() => setToastActive(ToastType.NONE)}
+                open={activeToast == ToastType.SUCCESS}
+                severity="success"
+                title="Success"
+                autoHideDuration={4000}
+            />
+            <Toast
+                message="Gagal Menyimpan Hasil Karya!"
+                onClose={() => setToastActive(ToastType.NONE)}
+                open={activeToast == ToastType.FAILED}
+                severity="error"
+                title="Failed"
+                autoHideDuration={4000}
+            />
+            <Toast
+                message="Menyimpan Hasil Karya..."
+                onClose={() => {
+                setToastActive(ToastType.NONE);
+                console.log("loading");
+                }}
+                open={activeToast == ToastType.SAVING}
+                severity="info"
+                title="Loading"
+            />
         </div>
     );
 }
