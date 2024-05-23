@@ -5,7 +5,6 @@ interface EmbeddedLinkProps {
 }
 
 const EmbeddedLink = (props : EmbeddedLinkProps) => {
-    console.log(props); 
     return (
         <div className="flex justify-center">
             <iframe

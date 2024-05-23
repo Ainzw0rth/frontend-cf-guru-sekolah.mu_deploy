@@ -17,6 +17,8 @@ import ProgramBanner from "../components/ProgramBanner";
 import { BASE_URL } from "../const";
 import { StudentWorkData } from "../types/StudentWork";
 
+import bg_path from '../assets/cloud_land.svg';
+
 // #region tab components
 interface ActivityTabItemProps {
     active: boolean;
@@ -211,7 +213,7 @@ const ActivityPage = () => {
         <main className="flex flex-col">
             {
                 activityData.title === ''?(
-                    <ProgramBanner imgUrl={'../assets/cloud_land.svg'} judul={"Loading..."}/>
+                    <ProgramBanner imgUrl={bg_path} judul={"Loading..."}/>
                 ):(
                     <ProgramBanner imgUrl={activityData.imgUrl} judul={activityData.title}/>
 

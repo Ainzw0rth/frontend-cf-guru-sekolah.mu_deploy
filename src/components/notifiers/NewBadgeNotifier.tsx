@@ -39,14 +39,11 @@ const NewBadgeNotifier: React.FC<NewBadgeNotifierProps> = ({ idGuru }) => {
     useEffect(() => {
         const fetchTasks = async () => {
             const currBadges = await fetchBadge(idGuru);
-            console.log("currBadges", currBadges);
             const prevBadgesJSON = localStorage.getItem('badges');
             const prevBadges = prevBadgesJSON ? JSON.parse(prevBadgesJSON) : currBadges;
-            console.log("prevBadges", prevBadges);
             const newBadges = currBadges.filter((currBadge: { id_badge: any; }) => (
                 !prevBadges.some((prevBadge: { id_badge: any; }) => prevBadge.id_badge === currBadge.id_badge)
             ));  
-            console.log("newBadge", newBadges);
             setNewBadges(newBadges);
             if (newBadges.length > 0) {
                 setOpen(true);

@@ -92,9 +92,6 @@ const DashboardPage = () => {
         { label: dashboardData?.identity?.name || 'Student', link: `/dashboard/${dashboardData?.identity?.id || ''}` }
     ];
     
-
-    console.log('dashboardData:', dashboardData);
-
     return (
         <div className='flex flex-col'>
             <Breadcrumb items={breadcrumb}/>

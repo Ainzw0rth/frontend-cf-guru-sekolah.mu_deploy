@@ -112,7 +112,6 @@ const StudentWorkTab = ({
 
   const handleStudentClick = (student: StudentWork) => {
     setSelectedStudent(student);
-    console.log("student", student);
   };
 
   const handleClosePopup = () => {
@@ -223,7 +222,6 @@ const StudentWorkTab = ({
         message="Menyimpan Hasil Karya..."
         onClose={() => {
           setToastActive(ToastType.NONE);
-          console.log("loading");
         }}
         open={activeToast == ToastType.SAVING}
         severity="info"

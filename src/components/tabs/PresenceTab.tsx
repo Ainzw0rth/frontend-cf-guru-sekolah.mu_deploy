@@ -350,7 +350,6 @@ const PresenceTab = (props: PresenceTabProps) => {
         message="Menyimpan Presensi..."
         onClose={() => {
           setToastActive(ToastType.NONE);
-          console.log("loading");
         }}
         open={activeToast == ToastType.SAVING}
         severity="info"

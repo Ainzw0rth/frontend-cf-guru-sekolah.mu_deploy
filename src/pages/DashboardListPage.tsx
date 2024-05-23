@@ -66,7 +66,6 @@ const DashboardListPage = () => {
     const fetchClassStudent = async () => {
         try {
             setIsLoadingInner(true);
-            console.log('Fetching students of class:', idKelas);
             const response = await fetch(`${BASE_URL}/murid?kelas=${idKelas}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch student');

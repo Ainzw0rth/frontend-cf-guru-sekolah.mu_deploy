@@ -48,10 +48,8 @@ export const updateBadges = async () => {
                     throw new Error('Failed to update badges');
                 }
             }
-        }
-        
-        console.log('Badges updated');
+        }    
     } catch (error) {
-        console.log('Failed to update badges');
+        console.error('Failed to update badges');
     }
 }

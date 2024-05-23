@@ -23,7 +23,6 @@ export const fetchStudentWorkData = async (activityId: number) => {
             const id_jadwal = activityId;
             const id_guru = studentData.data[0].id_guru;
             for (const id_murid of missingIds) {
-                console.log("id_murid :", id_murid);
                 await fetch(`${BASE_URL}/hasil_karya`, {
                     method: 'POST',
                     headers: {
@@ -42,7 +41,6 @@ export const fetchStudentWorkData = async (activityId: number) => {
             
             // Refetch student's work data
             studentWorkData = await fetch(`${BASE_URL}/hasil_karya?jadwal=${activityId}`).then(response => response.json());
-            console.log("studentWorkData1 :", studentWorkData);
         }
         
         const formattedData = () => {

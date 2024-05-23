@@ -22,20 +22,13 @@ const PendingPage = () => {
         const fetchPending = async () => {
             setLoading(true);
             try{
-                console.log(getTeacherId());
-
                 const response = await fetch(`${BASE_URL}/tugastertunda/all?id_guru=${getTeacherId()}`);
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch pending tasks');
                 }
 
-                console.log(response.status);
-
                 const resJson = await response.json();
-
-                console.log(resJson.data);
-                
                 const formattedPending = await Promise.all(resJson.data.map(async (kegiatanData: any) => {
                     let taskPercentage;
                     await fetch(`${BASE_URL}/kegiatan/percentage?id=${kegiatanData.id_kegiatan}`)

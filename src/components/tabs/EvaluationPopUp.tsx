@@ -61,14 +61,12 @@ const EvaluationPopup: React.FC<EvaluationPopupProps> = ({
   };
 
   const handlePenilaianChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("Handle Penilaian Change", e.target.value);
     const value = parseInt(e.target.value);
     setTempEvaluation({ ...tempEvaluation, penilaian: value });
 
     if (e.target.value === "" || (value >= 1 && value <= 100)) {
       setErrorMessage("");
     } else {
-      console.log("Error Penilaian");
       setErrorMessage("Penilaian harus kosong atau berada di antara 0 dan 100");
     }
   };

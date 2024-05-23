@@ -88,7 +88,6 @@ const HomePage = () => {
         throw new Error('Failed to fetch programs');
       }
       const data = await response.json();
-      console.log(data);
 
       if (!data.data) {
         setPrograms([]);

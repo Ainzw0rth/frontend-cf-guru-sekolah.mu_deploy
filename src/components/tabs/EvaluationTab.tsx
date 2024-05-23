@@ -231,7 +231,6 @@ const EvaluationTab = ({
         message="Menyimpan Evaluasi..."
         onClose={() => {
           setToastActive(ToastType.NONE);
-          console.log("loading");
         }}
         open={activeToast == ToastType.SAVING}
         severity="info"

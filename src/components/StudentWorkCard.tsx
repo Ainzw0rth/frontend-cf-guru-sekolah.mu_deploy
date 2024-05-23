@@ -14,12 +14,10 @@ const StudentWorkCard: React.FC<StudentWorkCardProps> = ({ student }) => {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
 
   const openContent = () => {
-    console.log('Open Content Function');
     setIsPopUpOpen(true);
   };
 
   const closeContent = () => {
-    console.log('Close Content Function');
     setIsPopUpOpen(false);
   };
 
