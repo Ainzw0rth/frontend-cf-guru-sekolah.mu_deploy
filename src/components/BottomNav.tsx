@@ -6,24 +6,25 @@ import studentImg from '../assets/nav/profile.png';
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-
 interface BottomNavItemProps {
     icon: string;
     url: string;
     alt?: string;
     onClick: () => void;
     active: boolean;
+    label: string;
 }
 
 const BottomNavItem = (props: BottomNavItemProps) => {
     return (
-        <li>
-            <Link to={props.url} onClick={props.onClick}>
+        <li className={`flex flex-col items-center ${props.active ? 'text-blue-500' : 'text-gray-500'}`}>
+            <Link to={props.url} onClick={props.onClick} className="flex flex-col items-center">
                 <img 
                     src={props.icon} 
                     alt={props.alt ? props.alt : 'Nav Icon'} 
                     className={`h-12 p-1.5 ${props.active ? 'grayscale-0' : 'grayscale'}`}
                 />
+                <span className="text-xs">{props.label}</span>
             </Link>
         </li>
     );
@@ -45,52 +46,76 @@ const NAV_ORIGIN_URL = new Map([
     [NAV.PROFILE, '/profile']
 ]);
 
-const BottomNav = () => {
+interface BottomNavProps {
+    scrollToTop: () => void;
+}
+
+const BottomNav: React.FC<BottomNavProps> = ({ scrollToTop }) => {
     const [active, setActive] = useState(NAV.HOME);
     const [navItemsUrls, setNavItemsUrls] = useState(['/','/program','/schedule','/pending-task','/profile']);
 
     const location = useLocation();
     useEffect(() => {
-        if (location.pathname === '/') {
+        const path = location.pathname;
+        if (path === '/') {
             setActive(NAV.HOME);
-        } else if (location.pathname === '/program') {
+        } else if (path.startsWith('/program')) {
             setActive(NAV.PROGRAM);
-        } else if (location.pathname === '/schedule') {
+        } else if (path.startsWith('/schedule')) {
             setActive(NAV.SCHEDULE);
-        } else if (location.pathname === '/pending-task') {
+        } else if (path.startsWith('/pending-task')) {
             setActive(NAV.PENDING);
-        } else if (location.pathname === '/profile') {
+        } else if (path.startsWith('/profile')) {
             setActive(NAV.PROFILE);
         } else {
-            const updatedNavItemsUrls = navItemsUrls;
-            updatedNavItemsUrls[active] = location.pathname;
-            setNavItemsUrls(updatedNavItemsUrls);
+            setActive(-1); // No active item
         }
-    }, [location, active, navItemsUrls]);
+    }, [location]);
 
     const handleNavClick = (key: number) => {
         setActive(key);
         if (navItemsUrls[key] !== NAV_ORIGIN_URL.get(key)) {
-            const updatedNavItemsUrls = navItemsUrls;
+            const updatedNavItemsUrls = [...navItemsUrls];
             updatedNavItemsUrls[key] = NAV_ORIGIN_URL.get(key) as string;
-            setNavItemsUrls(navItemsUrls);
+            setNavItemsUrls(updatedNavItemsUrls);
         }
     }
+
+    // for handling the scroll button
+    const [showButton, setShowButton] = useState(false);
+    useEffect(() => {
+        const checkScrollTop = () => {
+          if (!showButton && window.scrollY > 600){
+            setShowButton(true);
+          } else if (showButton && window.scrollY <= 600){
+            setShowButton(false);
+          }
+        };
+      
+        window.addEventListener('scroll', checkScrollTop);
+        return () => window.removeEventListener('scroll', checkScrollTop);
+      }, [showButton]);
 
     return (
     <>
         <nav className="w-full h-24 shadow-hard-top rounded-t-3xl fixed bottom-0 bg-white max-w-screen-sm mx-auto">
+            {showButton && (
+                <div className="w-full rounded-t-3xl fixed bottom-40 right-5 max-w-screen-sm mx-auto z-20 flex justify-end drop-shadow-lg">
+                    <button onClick={scrollToTop} className='w-12 h-12 bg-presence-blue shadow-soft rounded-3xl text-white font-bold'>▲</button>
+                </div>
+            )}
+
             <ul className="h-full flex items-center justify-around">
                 <BottomNavItem icon={homeImg} url={navItemsUrls[NAV.HOME]} alt="Home Nav"
-                    onClick={() => handleNavClick(NAV.HOME)} active={active === NAV.HOME}/>
+                    onClick={() => handleNavClick(NAV.HOME)} active={active === NAV.HOME} label='Beranda'/>
                 <BottomNavItem icon={programImg} url={navItemsUrls[NAV.PROGRAM]} alt="Program Nav"
-                    onClick={() => handleNavClick(NAV.PROGRAM)} active={active === NAV.PROGRAM}/>
-                <BottomNavItem icon={scheduleImg} url="/schedule" alt="Schedule Nav" 
-                    onClick={() => handleNavClick(NAV.SCHEDULE)} active={active === NAV.SCHEDULE}/>
-                <BottomNavItem icon={pendingTaskImg} url="/pending-task" alt="Pending Task Nav" 
-                    onClick={() => handleNavClick(NAV.PENDING)} active={active === NAV.PENDING}/>
-                <BottomNavItem icon={studentImg} url="/profile" alt="Profile Nav" 
-                    onClick={() => handleNavClick(NAV.PROFILE)} active={active === NAV.PROFILE}/>
+                    onClick={() => handleNavClick(NAV.PROGRAM)} active={active === NAV.PROGRAM} label='Program'/>
+                <BottomNavItem icon={scheduleImg} url={navItemsUrls[NAV.SCHEDULE]} alt="Schedule Nav" 
+                    onClick={() => handleNavClick(NAV.SCHEDULE)} active={active === NAV.SCHEDULE} label='Jadwal'/>
+                <BottomNavItem icon={pendingTaskImg} url={navItemsUrls[NAV.PENDING]} alt="Pending Task Nav" 
+                    onClick={() => handleNavClick(NAV.PENDING)} active={active === NAV.PENDING} label='Tugas Tertunda'/>
+                <BottomNavItem icon={studentImg} url={navItemsUrls[NAV.PROFILE]} alt="Profile Nav" 
+                    onClick={() => handleNavClick(NAV.PROFILE)} active={active === NAV.PROFILE} label='Profil'/>
             </ul>
         </nav>
         <div className="h-28 w-full max-w-screen-sm mx-auto"/> {/* whitespace to get rid of elements hidden by bottom nav */}

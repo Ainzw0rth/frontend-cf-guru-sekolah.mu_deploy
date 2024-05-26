@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { Activity } from "../types/Activity";
 import KegiatanCard from "../components/KegiatanCard";
@@ -10,6 +11,9 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/id';
 import cloudland from '../assets/cloud_land.svg';
+import { BASE_URL } from "../const";
+import { getTeacherId } from "../utils/authUtils";
+import { Skeleton } from '@mui/material';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -22,21 +26,19 @@ const breadcrumb = [
 const SchedulePage = () => {
     const [selectedDay, setSelectedDay] = useState<Dayjs | null>(dayjs().utc());
     const [kegiatans, setKegiatans] = useState<Activity[]>([]);
+    const [loading, setLoading] = useState(true);
+    const idGuru = getTeacherId();
 
     useEffect(() => {
         const fetchKegiatans = async () => {
+            setLoading(true);
             try {
                 const formattedDate = selectedDay?.format('YYYY-MM-DD');
-                console.log(formattedDate)
-                const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/kegiatan/tanggal?tanggal='${formattedDate}'`);
+                const response = await fetch(`${BASE_URL}/kegiatan/tanggal?tanggal=${formattedDate}&id=${idGuru}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch kegiatans');
                 }
                 const data = await response.json();
-
-                console.log(data)
-
-                console.log(data.data)
 
                 if (!data.data) { 
                     setKegiatans([]);
@@ -52,7 +54,6 @@ const SchedulePage = () => {
                     topic: kegiatanData.nama_topik || '', 
                     date: kegiatanData.tanggal || '',
                     time: kegiatanData.waktu.slice(0, 5) || '',
-                    imageUrl: 'https://via.placeholder.com/300',
                     taskPercentage: Math.floor(Math.random() * (100 + 1)),
                 }));
 
@@ -60,6 +61,7 @@ const SchedulePage = () => {
             } catch (error) {
                 console.error('Failed to fetch kegiatans', error);
             }
+            setLoading(false);
         };
 
         if (selectedDay) {
@@ -81,17 +83,25 @@ const SchedulePage = () => {
                     />
                     <div className="bg-persian-blue-500 w-24 h-2 rounded-full my-5" />
                     <h1 className='font-bold text-program-title text-text-100'>{selectedDay?.locale('id').format('dddd, D MMMM YYYY')}</h1>
-                    {kegiatans.length === 0 ? (
-                        <div className="flex justify-center items-center my-4">
-                            <p className="my-24">Tidak ada kegiatan hari ini</p>
+                    {loading ? (
+                        <div className='flex flex-col justify-center items-center my-4'>
+                            <Skeleton variant="rounded" width={300} height={200} sx={{ marginTop: 1, marginBottom: 1}} />
+                            <Skeleton variant="rounded" width={300} height={200} sx={{ marginTop: 1, marginBottom: 1}} />
+                            <Skeleton variant="rounded" width={300} height={200} sx={{ marginTop: 1, marginBottom: 1}} />
                         </div>
                     ) : (
-                        <div className="flex flex-col justify-center items-center my-4">
-                            {kegiatans.map((kegiatan) => (
-                                <KegiatanCard key={kegiatan.id} kegiatan={kegiatan} />
-                            ))}
-                        </div>
-                    )}
+                        kegiatans.length === 0 ? (
+                            <div className="flex justify-center items-center my-4">
+                                <p className="my-24">Tidak ada kegiatan hari ini</p>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col justify-center items-center my-4">
+                                {kegiatans.map((kegiatan) => (
+                                    <KegiatanCard key={kegiatan.id} kegiatan={kegiatan} />
+                                ))}
+                            </div>
+                        )
+                    )}   
                 </div>
             </div>
         </LocalizationProvider>

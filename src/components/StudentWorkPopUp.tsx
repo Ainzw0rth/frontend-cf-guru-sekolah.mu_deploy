@@ -1,6 +1,5 @@
 import React from 'react';
 import { StudentActivityKarya } from '../types/Evaluation';
-import PdfViewer from './PdfViewer';
 
 interface StudentWorkPopUpProps {
     student: StudentActivityKarya;
@@ -21,12 +20,10 @@ const StudentWorkPopUp: React.FC<StudentWorkPopUpProps> = ({ student, onClose })
                 </div>
                 <div className="popup-content" style={{ textAlign: "center", padding: "30px" }}>
                     <div className="bg-neutral3 flex justify-center items-center rounded-lg" style={{ height: '300px' }}>
-                        {student.work_type === 'Video' ? (
-                            <video src={student.work_path} controls/>
-                        ) : student.work_type === 'Image' ? (
+                        {['video/mp4', 'video/webm', 'video/ogg'].includes(student.work_type) ? (
+                            <video src={student.work_path} controls />
+                        ) : ['image/png', 'image/jpeg', 'image/gif', 'image/webp'].includes(student.work_type) ? (
                             <img src={student.work_path} alt={student.work_name} style={{ width: '90%', height: '90%', objectFit: 'cover' }} />
-                        ) : student.work_type === 'PDF' ? (
-                            <PdfViewer contentUrl={student.work_path} />
                         ) : (
                             <div>
                                 <p className='font-bold mb-5'>File tidak dapat ditampilkan</p>
@@ -36,7 +33,6 @@ const StudentWorkPopUp: React.FC<StudentWorkPopUpProps> = ({ student, onClose })
                             </div>
                         )}
                     </div>
-
                     <h2 className="text-lg font-semibold mt-4">{student.work_name}</h2>
                     <p className="text-sm text-gray-500 mt-2">{student.activity_name}</p>
                 </div>

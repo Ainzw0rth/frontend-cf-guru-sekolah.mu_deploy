@@ -11,6 +11,7 @@ import LoginPage from "./pages/LoginPage";
 import ActivityPage from "./pages/ActivityPage";
 import DashboardListPage from "./pages/DashboardListPage";
 import DashboardPage from "./pages/DashboardPage";
+import PendingPage from "./pages/PendingPage";
 
 // Components
 import RootLayout from "./layout/RootLayout";
@@ -29,7 +30,9 @@ const router = createBrowserRouter([
             {path: '/schedule', element: <SchedulePage/>},
             {path: '/activity/:id', element: <ActivityPage/>},
             {path: '/dashboard', element: <DashboardListPage/>},
-            {path: '/dashboard/:id', element: <DashboardPage/>}
+            {path: '/dashboard/:id', element: <DashboardPage/>},
+            {path: '/pending-task', element: <PendingPage/>},
+            {path: '/pending_task', element: <PendingPage/>}
         ]
     },
 ])
@@ -45,7 +48,7 @@ const App = () => {
             <LoginLayout>
                 <LoginPage />
             </LoginLayout>
-        }
+        }        
         </>
     )}
 

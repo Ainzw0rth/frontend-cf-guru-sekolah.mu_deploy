@@ -1,11 +1,11 @@
 export enum StudentWorkStatus {
     NOT_YET = 'Not Yet',
-    INCOMPLETE = 'Incomplete',
     COMPLETE = 'Complete',
 }
 
 export interface StudentWork {
     id: number;
+    id_work: number;
     name: string;
     imgUrl: string;
     work_name: string;

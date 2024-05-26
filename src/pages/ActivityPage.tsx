@@ -17,6 +17,8 @@ import ProgramBanner from "../components/ProgramBanner";
 import { BASE_URL } from "../const";
 import { StudentWorkData } from "../types/StudentWork";
 
+import bg_path from '../assets/cloud_land.svg';
+
 // #region tab components
 interface ActivityTabItemProps {
     active: boolean;
@@ -42,8 +44,8 @@ const TAB = { INSTRUKSI: 0, MATERI: 1, PRESENSI: 2, EVALUASI: 3, HASIL_KARYA: 4 
 
 const generateTabElements = (
     activityId: number,
-    presenceData: PresenceData | undefined,
-    onPresenceDataChange: (data: PresenceData) => void,
+    presenceData: PresenceData | undefined | null,
+    onPresenceDataChange: (data: PresenceData | null) => void,
     evaluationData: EvaluationData | undefined,
     onEvaluationDataChange: (dataEval: EvaluationData) => void,
     instructionData: InstructionData | undefined,
@@ -51,7 +53,8 @@ const generateTabElements = (
     materialData: MaterialData | undefined,
     onMaterialDataChange: (data: MaterialData) => void,
     studentWorkData: StudentWorkData | undefined,
-    onStudentWorkDataChange: (data: StudentWorkData) => void
+    onStudentWorkDataChange: (data: StudentWorkData) => void,
+    fetchData: () => void
 ) => {
     return [
         {
@@ -64,11 +67,11 @@ const generateTabElements = (
         },
         {
             id: TAB.PRESENSI, element: 
-                <PresenceTab activityId={activityId} onPresenceDataChange={(data) => onPresenceDataChange(data)} presenceData={presenceData}/>
+                <PresenceTab activityId={activityId} onPresenceDataChange={(data) => onPresenceDataChange(data)} presenceData={presenceData} fetchData={fetchData}/>
         },
         {
             id: TAB.EVALUASI, element: 
-                <EvaluationTab activityId={activityId} onEvaluationDataChange={(data) => onEvaluationDataChange(data)} evaluationData={evaluationData}/>
+                <EvaluationTab activityId={activityId} onEvaluationDataChange={(data) => onEvaluationDataChange(data)} evaluationData={evaluationData} fetchData={fetchData}/>
         },
         {
             id: TAB.HASIL_KARYA, element: 
@@ -117,8 +120,9 @@ const ActivityPage = () => {
     let activityId = -1;
     const [openTab, setOpenTab] = useState(TAB.INSTRUKSI);    
 
-    const [presenceData, setPresenceData] = useState<PresenceData>();
-    const storePresenceData = (data : PresenceData) => {
+    const [presenceData, setPresenceData] = useState<PresenceData | null>();
+    const storePresenceData = (data : PresenceData | null) => {
+        // only get status data
         setPresenceData(data);
     }
 
@@ -148,37 +152,42 @@ const ActivityPage = () => {
 
     const [totalData, setTotalData] = useState<number | null>(null);
     const [unfinishedData, setUnfinishedData] = useState<number | null>(null);
+    const [progressValue, setProgressValue] = useState(0);
+
+    const fetchData = async (activityId: number) => {
+        if (!activityId) { return; }
+    
+        try {
+            const response = await fetch(`${BASE_URL}/kegiatan/percentage?id=` + activityId);
+            const data = await response.json();
+            setTotalData(data.data[0].total_rows * 4);
+            setUnfinishedData(data.data[0].null_catatan_kehadiran*1 + data.data[0].null_penilaian*1 + data.data[0].null_catatan*1 + data.data[0].null_feedback*1);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    
+        try {
+            const data = await fetchActivityData(activityId);
+            setActivityData(data);
+            setInstructionData({ 
+                instruksiMurid: data.instruksi_murid, 
+                instruksiGuru: data.instruksi_guru, 
+                tujuanPembelajaran: data.tujuan_pembelajaran 
+            });
+        } catch (err) {
+            console.error(err);
+            setActivityData({ title: '', imgUrl: '', instruksi_murid: [], instruksi_guru: [], tujuan_pembelajaran: [] });
+        }
+    }
+    
+    useEffect(() => {
+        fetchData(activityId);
+    }, [activityId]);
 
     useEffect(() => {
-        if (!activityId) { return; }
-
-        fetch('https://backend-sekolah-mu-development.vercel.app/kegiatan/percentage?id=' + activityId)
-            .then(response => response.json())
-            .then(data => {
-                // Store the response data in the state variable
-                console.log(data.data[0]);
-                setTotalData(data.data[0].total_rows * 5);
-                setUnfinishedData(data.data[0].null_catatan_kehadiran*1 + data.data[0].null_penilaian*1 + data.data[0].null_catatan*1 + data.data[0].null_feedback*1 + data.data[0].null_id_karya*1);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-
-        fetchActivityData(activityId)
-            .then(data =>  {
-                setActivityData(data)
-                setInstructionData({ 
-                    instruksiMurid: data.instruksi_murid, 
-                    instruksiGuru: data.instruksi_guru, 
-                    tujuanPembelajaran: data.tujuan_pembelajaran 
-                });
-            }
-            )
-            .catch(err => {
-                console.error(err);
-                setActivityData({ title: '', imgUrl: '', instruksi_murid: [], instruksi_guru: [], tujuan_pembelajaran: [] });
-            });
-    }, [activityId]);
+        const value = Math.floor((((totalData ?? 0) - (unfinishedData ?? 0)) / (totalData ?? 1)) * 100);
+        setProgressValue(value);
+    }, [totalData, unfinishedData]); 
 
     const { id } = useParams();
     if (!id) { return <div>Invalid Activity ID</div>; }
@@ -195,13 +204,21 @@ const ActivityPage = () => {
         materialData,
         storeMaterialData,
         studentWorkData,
-        storeStudentWorkData
+        storeStudentWorkData,
+        () => fetchData(activityId)
     );
 
     return (
     <div>
         <main className="flex flex-col">
-            <ProgramBanner imgUrl={activityData.imgUrl} judul={activityData.title}/>
+            {
+                activityData.title === ''?(
+                    <ProgramBanner imgUrl={bg_path} judul={"Loading..."}/>
+                ):(
+                    <ProgramBanner imgUrl={activityData.imgUrl} judul={activityData.title}/>
+
+                )
+            }
             <nav className="flex px-5 overflow-auto whitespace-nowrap pb-4 gap-4">
                 <ActivityTabItem active={openTab == TAB.INSTRUKSI} title="Instruksi" onClick={() => setOpenTab(TAB.INSTRUKSI)}/>
                 <ActivityTabItem active={openTab == TAB.MATERI} title="Materi" onClick={() => setOpenTab(TAB.MATERI)}/>
@@ -218,7 +235,7 @@ const ActivityPage = () => {
             <div className="pt-4 flex items-center mx-10 gap-10">
                 <LinearProgress
                     variant="determinate"
-                    value={Math.floor((((totalData ?? 1) -(unfinishedData ?? 0)) / (totalData ?? 1)) * 100)}
+                    value={progressValue}
                     className='rounded-lg shadow-md flex-grow'
                     sx={{
                         height: '10px',
@@ -227,7 +244,7 @@ const ActivityPage = () => {
                         },
                     }}
                 />
-                <p className='text-text-100 text-right ml-2'>{Math.floor((((totalData ?? 1) -(unfinishedData ?? 0)) / (totalData ?? 1)) * 100)}%</p>
+                <p className='text-text-100 text-right ml-2'>{progressValue}%</p>
             </div>
         </div>
     </div>

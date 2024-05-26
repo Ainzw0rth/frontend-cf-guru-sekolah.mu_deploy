@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -9,154 +10,13 @@ import StudentIdentity from '../components/StudentIdentity';
 import StudentPresenceChart from '../components/StudentPresenceChart';
 import StudentWorkCarousel from '../components/StudentWorkCarousel';
 import StudentNote from '../components/StudentNote';
-
-/* TEMPORARY DATA
-const DASHBOARD_DATA: StudentDashboard = {
-    identity: 
-        {
-            id: 1,
-            name: 'John Doe',
-            gender: 'L',
-            birth_date: new Date('2000-01-01'),
-            nisn: '1234567890',
-            path_profile: 'https://i.pinimg.com/736x/c9/33/6f/c9336f3f0a0160c3e2d0e18c7d096b73.jpg',
-        },
-    presenceSummary: [
-        {
-            status: 'Hadir',
-            total: 10,
-        },
-        {
-            status: 'Sakit',
-            total: 2,
-        },
-        {
-            status: 'Izin',
-            total: 3,
-        },
-        {
-            status: 'Alpa',
-            total: 1,
-        },
-    ],
-    scoreSummary: 80,
-    activityCatatan: [
-        {
-            activity_id: 1,
-            activity_name: 'Pengenalan Hewan',
-            catatan: 'Lupa membawa buku',
-        },
-        {
-            activity_id: 2,
-            activity_name: 'Pengenalan Bentuk',
-            catatan: 'Tidak mengerjakan tugas',
-        },
-        {
-            activity_id: 3,
-            activity_name: 'Menggambar Pemandangan Desa',
-            catatan: 'Mengerjakan tugas dengan baik',
-        }
-    ],
-    activityFeedback: [
-        {
-            activity_id: 1,
-            activity_name: 'Pengenalan Hewan',
-            feedback: 'Jangan lupa membawa buku lagi ya',
-        },
-        {
-            activity_id: 2,
-            activity_name: 'Pengenalan Bentuk',
-            feedback: 'Lain kali lebih fokus mengerjakan tugas ya',
-        },
-        {
-            activity_id: 3,
-            activity_name: 'Menggambar Pemandangan Desa',
-            feedback: 'Good job! Keep it up!',
-        },
-        {
-            activity_id: 1,
-            activity_name: 'Pengenalan Hewan',
-            feedback: 'Jangan lupa membawa buku lagi ya',
-        },
-        {
-            activity_id: 2,
-            activity_name: 'Pengenalan Bentuk',
-            feedback: 'Lain kali lebih fokus mengerjakan tugas ya',
-        },
-        {
-            activity_id: 3,
-            activity_name: 'Menggambar Pemandangan Desa',
-            feedback: 'Good job! Keep it up!',
-        },
-        {
-            activity_id: 1,
-            activity_name: 'Pengenalan Hewan',
-            feedback: 'Jangan lupa membawa buku lagi ya',
-        },
-        {
-            activity_id: 2,
-            activity_name: 'Pengenalan Bentuk',
-            feedback: 'Lain kali lebih fokus mengerjakan tugas ya',
-        },
-        {
-            activity_id: 3,
-            activity_name: 'Menggambar Pemandangan Desa',
-            feedback: 'Good job! Keep it up!',
-        },
-        {
-            activity_id: 1,
-            activity_name: 'Pengenalan Hewan',
-            feedback: 'Jangan lupa membawa buku lagi ya',
-        },
-        {
-            activity_id: 2,
-            activity_name: 'Pengenalan Bentuk',
-            feedback: 'Lain kali lebih fokus mengerjakan tugas ya',
-        },
-        {
-            activity_id: 3,
-            activity_name: 'Menggambar Pemandangan Desa',
-            feedback: 'Good job! Keep it up!',
-        }
-    ],
-    activityKarya: [
-        {
-            activity_id: 1,
-            activity_name: 'Pengenalan Hewan',
-            work_id: 1,
-            work_name: 'Gambar Hewan',
-            work_type: 'Image',
-            work_path: '../src/assets/karya/Gambar Hewan Ani.jpg',
-        },
-        {
-            activity_id: 2,
-            activity_name: 'Pengenalan Bentuk',
-            work_id: 2,
-            work_name: 'Menceritakan Bentuk yang Pernah Dilihat',
-            work_type: 'PDF',
-            work_path: '../src/assets/karya/Bentuk di Lingkungan Ani.pdf',
-        },
-        {
-            activity_id: 3,
-            activity_name: 'Menggambar Pemandangan Desa',
-            work_id: 3,
-            work_name: 'Menggambar Pemandangan',
-            work_type: 'Video',
-            work_path: '../src/assets/karya/gambar pemandangan Ani.mp4',
-        }
-    ],
-};
-*/
+import { BASE_URL } from '../const';
+import { Skeleton } from '@mui/material';
 
 const DashboardPage = () => {
     const [dashboardData, setDashboardData] = useState<StudentDashboard>();
     const [isLoading, setIsLoading] = useState(true);
     const { id } = useParams<{ id: string }>();    
-    
-    const idMurid = parseInt(id || '');
-
-    console.log('id:', id);
-    console.log('idMurid:', idMurid);
 
     useEffect(() => {
         fetchStudentSummary();
@@ -166,12 +26,12 @@ const DashboardPage = () => {
         // setDashboardData(DASHBOARD_DATA);
         // setIsLoading(false);
         try {
-            const studentResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/${id}`);
-            const presensiResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/presensi/${id}`);
-            const avgNilaiResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/avg-nilai/${id}`);
-            const catatanResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/catatan/${id}`);
-            const feedbackResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/feedback/${id}`);
-            const karyaResponse = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid/karya/${id}`);
+            const studentResponse = await fetch(`${BASE_URL}/murid/${id}`);
+            const presensiResponse = await fetch(`${BASE_URL}/murid/presensi/${id}`);
+            const avgNilaiResponse = await fetch(`${BASE_URL}/murid/avg-nilai/${id}`);
+            const catatanResponse = await fetch(`${BASE_URL}/murid/catatan/${id}`);
+            const feedbackResponse = await fetch(`${BASE_URL}/murid/feedback/${id}`);
+            const karyaResponse = await fetch(`${BASE_URL}/murid/karya/${id}`);
 
             if (!studentResponse.ok || !presensiResponse.ok || !avgNilaiResponse.ok || !catatanResponse.ok || !feedbackResponse.ok || !karyaResponse.ok) {
                 throw new Error('Failed to fetch student dashboard data');
@@ -214,8 +74,8 @@ const DashboardPage = () => {
                     activity_name: karya.nama_kegiatan,
                     work_id: karya.id_karya,
                     work_name: karya.nama_karya,
-                    work_type: karya.jenis_karya,
-                    work_path: karya.path_karya
+                    work_type: karya.tipe_file,
+                    work_path: karya.file_path
                 }))
             };
             
@@ -232,9 +92,6 @@ const DashboardPage = () => {
         { label: dashboardData?.identity?.name || 'Student', link: `/dashboard/${dashboardData?.identity?.id || ''}` }
     ];
     
-
-    console.log('dashboardData:', dashboardData);
-
     return (
         <div className='flex flex-col'>
             <Breadcrumb items={breadcrumb}/>
@@ -245,13 +102,25 @@ const DashboardPage = () => {
                 style={{ backgroundImage: `url(${banner})` }}
             >
                 <div className='flex flex-col items-center'>
-                    <img src={dashboardData?.identity?.path_profile} alt="Profile" className="w-32 h-32 rounded-full mb-3" />
-                    <p className="text-2xl font-semibold">{dashboardData?.identity?.name ?? 'No Name'}</p>
+                    {
+                        !dashboardData?.identity?.path_profile ? (
+                            <div>
+                                <Skeleton variant="circular" width={100} height={100} />
+                            </div>
+                        ) : (
+                            <img src={dashboardData?.identity?.path_profile} alt="Profile" className="w-32 h-32 rounded-full mb-3" />
+                        )
+                    }
+                    <p className="text-2xl font-semibold">{dashboardData?.identity?.name ?? <Skeleton variant="text" width={200} height={70}/>}</p>
                 </div>
             </div>
             <div className='flex flex-col items-center'>
                 {isLoading ? (
-                    <p className="text-neutral9 italic mt-10">Loading...</p>
+                    <div>
+                        <Skeleton variant="rounded" width={600} height={250} sx={{ marginTop: 2}}/>
+                        <Skeleton variant="rounded" width={600} height={250} sx={{ marginTop: 2}}/>
+                        <Skeleton variant="rounded" width={600} height={250} sx={{ marginTop: 2}}/>
+                    </div>
                 ) : (
                     <div className='items-center' style={{ width: '95%'}}>
                         {/* Identitas Murid */}

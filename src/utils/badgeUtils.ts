@@ -1,24 +1,25 @@
 import { getTeacherId } from "./authUtils";
+import { BASE_URL } from "../const";
 
 export const updateBadges = async () => {
-    let idGuru = getTeacherId();
+    const idGuru = getTeacherId();
 
     if (!idGuru) {
         return;
     }
-
-    console.log('Updating badges for teacher with id', idGuru);
     try {
         const badgeTypes = {
             'streak': 1,
             'streakmaster': 2,
             'streakking': 3,
             'gocap': 4,
-            'cepek': 5
+            'cepek': 5,
+            'konsisten': 6,
+            'ambis': 7,
         };
         
         for (const [badgeType, badgeValue] of Object.entries(badgeTypes)) {
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/badge/${badgeType}/${idGuru}`, {
+            const response = await fetch(`${BASE_URL}/profil/badges/${badgeType}/${idGuru}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -30,11 +31,9 @@ export const updateBadges = async () => {
             }
         
             const isQualifiedforBadge = await response.json();
-            
-            console.log("badgeType:", badgeType + ", qualified for badge: " + isQualifiedforBadge.data);
 
             if (isQualifiedforBadge.data == true) {
-                const responseUpdate = await fetch(`https://backend-sekolah-mu-development.vercel.app/badge/${badgeType}/${idGuru}`, { 
+                const responseUpdate = await fetch(`${BASE_URL}/badge/${badgeType}/${idGuru}`, { 
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -49,10 +48,8 @@ export const updateBadges = async () => {
                     throw new Error('Failed to update badges');
                 }
             }
-        }
-        
-        console.log('Badges updated');
+        }    
     } catch (error) {
-        console.log('Failed to update badges');
+        console.error('Failed to update badges');
     }
 }

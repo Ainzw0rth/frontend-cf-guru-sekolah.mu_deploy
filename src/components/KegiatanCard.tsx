@@ -7,19 +7,32 @@ interface KegiatanCardProps {
   kegiatan: Activity;
 }
 
+const endTime = (timeString: string) => {
+  const [hours, minutes] = timeString.split(':').map(Number);
+  
+  const date = new Date(Date.UTC(2024, 0, 1, hours, minutes));
+  
+  date.setUTCHours(date.getUTCHours() + 2);
+
+  const hoursUTC = String(date.getUTCHours()).padStart(2, '0');
+  const minutesUTC = String(date.getUTCMinutes()).padStart(2, '0');
+
+  return `${hoursUTC}:${minutesUTC}`;
+};
+
 const KegiatanCard: React.FC<KegiatanCardProps> = ({ kegiatan }) => {
     return (
     <div>
       <div className='max-[375px]:w-64 w-80 mx-5 mb-5'>
         <div className="w-full flex-col bg-neutral8 rounded-lg shadow-md p-4">
           <div className="w-full flex justify-between items-center">
-            <Tag label={`${kegiatan.time}`} color="neutral" />
+            <Tag label={`${kegiatan.time} - ${endTime(kegiatan.time)}`} color="neutral" />
             <Link  className='flex items-center font-bold text-persian-blue-500 active:text-persian-blue4 text-body-1' to={`/activity/${kegiatan.id}`}>
                 Detail Kegiatan &gt;
             </Link>
           </div>
           <div className="w-full">
-            <h2 className="text-lg font-semibold text-gray-800 mb-2 pt-1 truncate">{kegiatan.title}</h2>
+            <h2 className="text-lg font-semibold text-gray-800 mb-2 pt-1">{kegiatan.title}</h2>
             <div className='flex flex-wrap'>
               <Tag label={`${kegiatan.class}`} color="gamboge"/>
               <Tag label={`${kegiatan.program}`} color="mint" />

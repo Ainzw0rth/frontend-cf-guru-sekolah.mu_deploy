@@ -1,8 +1,11 @@
-import { FormControl, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { FormControl, MenuItem, Select, SelectChangeEvent, Skeleton, Typography } from "@mui/material";
 import { ChangeEvent, KeyboardEvent, useState, useEffect } from 'react';
 import { Murid } from "../types/Murid";
 import { Kelas } from "../types/Kelas";
 import DashboardCard from '../components/DashboardCard';
+import { BASE_URL } from "../const";
+import { getTeacherId } from "../utils/authUtils";
 
 const DashboardListPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -11,8 +14,10 @@ const DashboardListPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [idKelas, setIdKelas] = useState<number | null>(null);
     const [kelas, setKelas] = useState<Kelas[]>([]);
+    const [muridCache, setMuridCache] = useState<{ [key: number]: Murid[] }>({});
+    const [isLoadingInner, setIsLoadingInner] = useState(true);
 
-    const idGuru = 1;
+    const idGuru = getTeacherId();
 
     useEffect(() => {
         fetchClass();
@@ -27,13 +32,18 @@ const DashboardListPage = () => {
 
     useEffect(() => {
         if (idKelas !== null) {
-            fetchClassStudent();
+            if (muridCache[idKelas]) {
+                setFilteredMurid(muridCache[idKelas]);
+                setIsLoading(false);
+            } else {
+                fetchClassStudent();
+            }
         }
-    }, [idKelas]);
+    }, [idKelas, muridCache]);
 
     const fetchClass = async () => {
         try {
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/kelas?guru=${idGuru}`);
+            const response = await fetch(`${BASE_URL}/kelas?guru=${idGuru}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch class');
             }
@@ -55,14 +65,12 @@ const DashboardListPage = () => {
 
     const fetchClassStudent = async () => {
         try {
-            console.log('fetching students of class:', idKelas);
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/murid?kelas=${idKelas}`);
+            setIsLoadingInner(true);
+            const response = await fetch(`${BASE_URL}/murid?kelas=${idKelas}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch student');
             }
             const data = await response.json();
-
-            console.log('data:', data);
 
             const muridData: Murid[] = data.data.map((studentData: any) => ({
                 id: studentData.id_murid,
@@ -75,14 +83,19 @@ const DashboardListPage = () => {
 
             setIsLoading(false);
             setFilteredMurid(muridData);
+            setMuridCache(prevCache => ({
+                ...prevCache,
+                [idKelas!]: muridData
+            }));
         } catch (error) {
             console.error('Error fetching students of class:', error);
             setIsLoading(false);
         }
+        setIsLoadingInner(false);
     };
 
     const handleClassFilterChange = (e: SelectChangeEvent<string>) => {
-        setIsLoading(true);
+        setIsLoadingInner(true);
         const selectedClass = e.target.value;
         setFilterClass(selectedClass);
         const selectedKelas = kelas.find(k => k.name === selectedClass);
@@ -101,11 +114,10 @@ const DashboardListPage = () => {
             filterMurid(searchTerm);
         } else {
             setIsLoading(true);
-            setFilteredMurid([]);
             fetchClassStudent();
         }
     };
-    
+
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             if (searchTerm.trim() !== "") {
@@ -113,26 +125,58 @@ const DashboardListPage = () => {
                 filterMurid(searchTerm);
             } else {
                 setIsLoading(true);
-                setFilteredMurid([]);
                 fetchClassStudent();
             }
         }
-    };    
+    };
 
     const filterMurid = (searchValue: string) => {
-        let filtered = filteredMurid.filter(item =>
-            item.name.toLowerCase().includes(searchValue.toLowerCase())
-        );
-        
-        setIsLoading(false);
-        setFilteredMurid(filtered);
+        if (idKelas !== null && muridCache[idKelas]) {
+            const filtered = muridCache[idKelas].filter(item =>
+                item.name.toLowerCase().includes(searchValue.toLowerCase())
+            );
+            setFilteredMurid(filtered);
+            setIsLoading(false);
+        }
     };
 
     const getClassOptions = () => {
         return kelas.map(k => k.name);
     };
 
-    console.log("Show murid:", filteredMurid);
+    const LoadPlaceholder = () => {
+        return (
+            <div className="">
+                <Skeleton variant='text' width='100%' height={70} />
+                <div className='flex flex-row justify-start'>
+                    <Skeleton variant='text' width={150} height={30} sx={{marginRight:1}} />
+                    <Skeleton variant='text' width={50} height={30} />
+                </div>
+                <div className='grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-0 overflow-y-auto'>
+                    <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}} />
+                    <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                    <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                    <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                    <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                    <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                </div>
+            </div>
+        )
+    }
+
+    const LoadInnerPlaceholder = () => {
+        return (
+            <div className='grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-0 overflow-y-auto'>
+                <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}} />
+                <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+            </div>
+        );
+        
+    }
 
     return (
         <div className='bg-neutral8 w-full justify-center items-center p-10'>
@@ -153,39 +197,43 @@ const DashboardListPage = () => {
                 </button>
             </div>
             {isLoading ? (
-                <p className="text-neutral9 italic">Loading...</p>
+                <LoadPlaceholder />
             ) : (
-            <>
-                <div className="flex flex-col mb-5 w-full mx-auto">
-                    <FormControl>
-                        <Select
-                            value={filterClass}
-                            onChange={handleClassFilterChange} 
-                            className="bg-cobalt6 rounded-full"
-                            style={{ lineHeight: '14px' }}
-                        >
-                            {getClassOptions().map((option, index) => (
-                                <MenuItem key={index} value={option}>
-                                    <Typography variant="body1" style={{ fontSize: '14px' }}>Kelas {option}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </div>
-                {filteredMurid.length === 0 ? (
-                    <p className="text-neutral9 italic">Murid tidak ditemukan</p>
-                ) : (
-                    <>
-                        <div className='grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto'>
-                            {filteredMurid.map((murid) => (
-                                <div key={murid.id} className="w-1/2">
-                                    <DashboardCard studentData={murid} />
+                <>
+                    <div className="flex flex-col mb-5 w-full mx-auto">
+                        <FormControl>
+                            <Select
+                                value={filterClass}
+                                onChange={handleClassFilterChange} 
+                                className="bg-cobalt6 rounded-full"
+                                style={{ lineHeight: '14px' }}
+                            >
+                                {getClassOptions().map((option, index) => (
+                                    <MenuItem key={index} value={option}>
+                                        <Typography variant="body1" style={{ fontSize: '14px' }}>Kelas {option}</Typography>
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </div>
+                    {
+                        isLoadingInner ? (
+                            <LoadInnerPlaceholder />
+                        ):(
+                            filteredMurid.length === 0 ? (
+                                <p className="text-neutral9 italic">Murid tidak ditemukan</p>
+                            ) : (
+                                <div className='grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto'>
+                                    {filteredMurid.map((murid) => (
+                                        <div key={murid.id} className="w-1/2">
+                                            <DashboardCard studentData={murid} />
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    </>
-                )}
-            </>
+                            )
+                        )
+                    }
+                </>
             )}
         </div>
     );

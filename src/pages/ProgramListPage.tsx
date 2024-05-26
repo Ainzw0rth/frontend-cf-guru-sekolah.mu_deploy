@@ -3,6 +3,9 @@ import ProgramCard from "../components/ProgramCard";
 import Pagination from "../components/Pagination";
 import { Program } from "../types/Program";
 import { Activity } from '../types/Activity';
+import { BASE_URL } from '../const';
+import { getTeacherId } from '../utils/authUtils';
+import { Skeleton } from '@mui/material';
 
 var programs: Program[] = [];
 var kegiatan: Activity[] = [];
@@ -19,7 +22,7 @@ const ProgramListPage = () => {
     const [isInitialFetch, setIsInitialFetch] = useState(true);
     
     const programsPerPage = 10;
-    const idGuru = 1;
+    const idGuru = getTeacherId();
 
     useEffect(() => {
         fetchPrograms();
@@ -36,7 +39,7 @@ const ProgramListPage = () => {
 
     const fetchPrograms = async () => {
         try {
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/program/guru/${idGuru}`);
+            const response = await fetch(`${BASE_URL}/program/guru/${idGuru}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch programs');
             }
@@ -47,7 +50,7 @@ const ProgramListPage = () => {
                 title: programData.nama_program,
                 semester: parseInt(programData.periode_belajar.split(" ")[1]),
                 academic_year: programData.tahun_akademik,
-                imageUrl: 'https://via.placeholder.com/300',
+                imageUrl: programData.path_banner,
             }));
 
             setFilteredPrograms(programs);
@@ -62,7 +65,7 @@ const ProgramListPage = () => {
 
     const fetchActivities = async () => {
         try {
-            const response = await fetch(`https://backend-sekolah-mu-development.vercel.app/kegiatan/guru?id=${idGuru}`);
+            const response = await fetch(`${BASE_URL}/kegiatan/guru?id=${idGuru}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch activities');
             }
@@ -76,7 +79,6 @@ const ProgramListPage = () => {
                 topic: activityData.nama_topik,
                 date: activityData.tanggal.split('T')[0],
                 time: activityData.waktu,
-                imageUrl: 'https://via.placeholder.com/300',
                 taskPercentage: 0
             }));
 
@@ -207,13 +209,25 @@ const ProgramListPage = () => {
         return classOptions;
     };
 
-    console.log("filteredPrograms", filteredPrograms);
-    console.log("currentPrograms", currentPrograms);
     return (
         <div className='bg-neutral8 w-full justify-center items-center p-10'>
             <h1 className='font-bold text-program-title text-text-100 mb-5'>Daftar Program</h1>
             {isLoading ? (
-                <p className="text-neutral9 italic">Loading...</p>
+                <div className="">
+                    <Skeleton variant='text' width='100%' height={70} />
+                    <div className='flex flex-row justify-start'>
+                        <Skeleton variant='text' width={150} height={30} sx={{marginRight:1}} />
+                        <Skeleton variant='text' width={50} height={30} />
+                    </div>
+                    <div className='grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-0 overflow-y-auto'>
+                        <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}} />
+                        <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                        <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                        <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                        <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                        <Skeleton variant='text' width={120} height={200} sx={{marginBottom:0, marginTop:0}}/>
+                    </div>
+                </div>
             ) : (
                 <>
                 <div className="flex flex-wrap mb-5">

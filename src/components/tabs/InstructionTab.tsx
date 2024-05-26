@@ -1,10 +1,5 @@
-import { INSTRUCTION } from "../../data/activityInstruction";
+import { Skeleton } from "@mui/material";
 import { InstructionData } from "../../types/Instruction";
-
-const fetchInstructionData = (activityId: number) => {
-    console.log(`Fetching instruction data for activity ${activityId}`);
-    return INSTRUCTION;
-}
 
 const InstructionCard = ({title, content} : {title: string, content: string[]}) => {
     return (
@@ -33,8 +28,15 @@ interface InstructionTabProps {
 
 const InstructionTab = (props : InstructionTabProps) => {
     if (!props.instructionData) {
-        props.onInstructionDataChange(fetchInstructionData(props.activityId));
-        return <div>Loading...</div>;
+        return (
+            <div className='flex flex-col items-start justify-center mx-2'>                <Skeleton variant="text" width={200} height={50} sx={{marginLeft: 2, marginTop: 2}}/>
+                <Skeleton variant="text" width={290} height={40} sx={{marginLeft: 2, marginTop: 2}}/>
+                <Skeleton variant="text" width={310} height={40} sx={{marginLeft: 2}}/>
+                <Skeleton variant="text" width={200} height={50} sx={{marginLeft: 2, marginTop: 2}}/>
+                <Skeleton variant="text" width={290} height={40} sx={{marginLeft: 2, marginTop: 2}}/>
+                <Skeleton variant="text" width={310} height={40} sx={{marginLeft: 2}}/>
+            </div>
+        );
     }
     
     const data : InstructionData = props.instructionData;
